@@ -96,8 +96,15 @@
   /* ---------- Page switching (Trang chủ / Giới thiệu) ---------- */
   const navHome = document.getElementById('navHome');
   const navAbout = document.getElementById('navAbout');
+    const footerAbout = document.getElementById('footerAbout');
+    footerAbout.addEventListener('click', (e) => {
+    e.preventDefault();
+    showPage('about');
+    });
+  const navHelp = document.getElementById('navHelp');
   const pageHome = document.getElementById('pageHome');
   const pageAbout = document.getElementById('pageAbout');
+  const pageHelp = document.getElementById('pageHelp');
 
   function showPage(page){
     pageHome.classList.toggle('hidden', page !== 'home');
