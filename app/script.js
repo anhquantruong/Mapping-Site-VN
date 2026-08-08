@@ -352,3 +352,58 @@
     goNext();
   });
   wfBack.addEventListener('click', goBack);
+
+/* ANIMATION COUNTUP CHO THÔNG TIN NHỮNG CON SỐ */
+
+function animateCounter(element) {
+  const target = Number(element.dataset.target);
+  const duration = 3000;
+  const startTime = performance.now();
+
+  function update(currentTime) {
+    const progress = Math.min(
+      (currentTime - startTime) / duration,
+      1
+    );
+
+    // Ease-out: nhanh lúc đầu, chậm dần về cuối
+    const easedProgress = 1 - Math.pow(1 - progress, 3);
+
+    const currentValue = Math.floor(target * easedProgress);
+
+    element.textContent = currentValue.toLocaleString('en-US');
+
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      element.textContent = target.toLocaleString('en-US');
+    }
+  }
+
+  requestAnimationFrame(update);
+}
+const statsSection = document.querySelector('.stats-section');
+
+if (statsSection) {
+  const observer = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+
+          document
+            .querySelectorAll('.counter')
+            .forEach(counter => {
+              animateCounter(counter);
+            });
+
+          observer.unobserve(statsSection);
+        }
+      });
+    },
+    {
+      threshold: 0.3
+    }
+  );
+
+  observer.observe(statsSection);
+}

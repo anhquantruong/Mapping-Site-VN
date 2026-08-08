@@ -722,3 +722,70 @@
   border-top: 1px solid var(--border);
   color: var(--ink);
 }
+
+/* NHỮNG CON SỐ */
+.stats-heading {
+  text-align: center;
+  margin-bottom: 42px;
+}
+
+.stats-heading h2 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--ink);
+  margin: 0;
+}
+.stats-section {
+  padding: 56px 24px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.stats-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-item {
+  flex: 1;
+  text-align: center;
+}
+
+.stat-number {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 560;
+  line-height: 1;
+  color: var(--plum);
+  margin-bottom: 10px;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 48px;
+  background: var(--border);
+}
+
+@media (max-width: 600px) {
+  .stats-wrap {
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .stat-divider {
+    width: 48px;
+    height: 1px;
+  }
+}
