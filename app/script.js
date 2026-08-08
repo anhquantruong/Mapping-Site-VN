@@ -39,8 +39,8 @@
 
   /* ---------- Hero typing animation ---------- */
   const HERO_TYPING_TEXT = {
-    vi: 'Không gian tìm kiếm sự hỗ trợ tâm lý an toàn.',
-    en: 'A safe, respectful space to find mental health support.',
+    vi: 'Không gian tìm kiếm sự hỗ trợ tâm lý an toàn bằng AI.',
+    en: 'A safe, respectful space to find mental health support through AI.',
   };
   const heroTypingVi = document.getElementById('heroTypingVi');
   const heroTypingEn = document.getElementById('heroTypingEn');
