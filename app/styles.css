@@ -697,3 +697,11 @@
     .wizard-footer{ padding: 16px 20px 20px; }
     .notice-card{ padding: 26px 20px 22px; }
   }
+
+.team-socials {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+}
