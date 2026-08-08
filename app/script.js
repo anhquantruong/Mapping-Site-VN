@@ -96,26 +96,61 @@
   /* ---------- Page switching (Trang chủ / Giới thiệu) ---------- */
   const navHome = document.getElementById('navHome');
   const navAbout = document.getElementById('navAbout');
-    const footerAbout = document.getElementById('footerAbout');
-    footerAbout.addEventListener('click', (e) => {
-    e.preventDefault();
-    showPage('about');
-    });
   const navHelp = document.getElementById('navHelp');
+  const navPractice = document.getElementById('navPractice');
   const pageHome = document.getElementById('pageHome');
   const pageAbout = document.getElementById('pageAbout');
   const pageHelp = document.getElementById('pageHelp');
+  const pagePractice = document.getElementById('pagePractice');
+  const footerAbout = document.getElementById('footerAbout');
+      footerAbout.addEventListener('click', (e) => {
+      e.preventDefault();
+      showPage('about');
+      });
+  const footerPractice = document.getElementById('footerPractice');
+      footerPractice.addEventListener('click', (e) => {
+      e.preventDefault();
+      showPage('practice');
+      });
+  const footerHelp = document.getElementById('footerHelp');
+      footerHelp.addEventListener('click', (e) => {
+      e.preventDefault();
+      showPage('help');
+      });
+  const footerHome = document.getElementById('footerHome');
+      footerHome.addEventListener('click', (e) => {
+      e.preventDefault();
+      showPage('home');
+      });
 
-  function showPage(page){
-    pageHome.classList.toggle('hidden', page !== 'home');
-    pageAbout.classList.toggle('hidden', page !== 'about');
-    navHome.classList.toggle('active', page === 'home');
-    navAbout.classList.toggle('active', page === 'about');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    if(page === 'home') typeHeroTitle(body.getAttribute('data-lang') || 'vi');
+function showPage(page) {
+  pageHome.classList.toggle('hidden', page !== 'home');
+  pageAbout.classList.toggle('hidden', page !== 'about');
+  pageHelp.classList.toggle('hidden', page !== 'help');
+  pagePractice.classList.toggle('hidden', page !== 'practice');
+
+  // Xóa active khỏi tất cả nav trước
+  navHome.classList.remove('active');
+  navAbout.classList.remove('active');
+  navHelp.classList.remove('active');
+  navPractice.classList.remove('active');
+
+  // Chỉ thêm active cho trang hiện tại
+  if (page === 'home') navHome.classList.add('active');
+  if (page === 'about') navAbout.classList.add('active');
+  if (page === 'help') navHelp.classList.add('active');
+  if (page === 'practice') navPractice.classList.add('active');
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  if (page === 'home') {
+    typeHeroTitle(body.getAttribute('data-lang') || 'vi');
   }
+}
   navHome.addEventListener('click', () => showPage('home'));
   navAbout.addEventListener('click', () => showPage('about'));
+  navHelp.addEventListener('click', () => showPage('help'));
+  navPractice.addEventListener('click', () => showPage('practice'));
 
   /* ---------- Notification popup ----------
      Nội dung để trống, chỉnh trực tiếp trong khối
@@ -407,4 +442,20 @@ if (statsSection) {
   );
 
   observer.observe(statsSection);
+}
+
+const footer = document.querySelector('.site-footer');
+const wordmark = document.querySelector('.wordmark');
+
+if (footer && wordmark) {
+  const footerObserver = new IntersectionObserver(
+    ([entry]) => {
+      wordmark.classList.toggle('footer-visible', entry.isIntersecting);
+    },
+    {
+      threshold: 0.7
+    }
+  );
+
+  footerObserver.observe(footer);
 }

@@ -15,12 +15,10 @@
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 />
 <body data-theme="light" data-lang="vi">
-
   <nav class="navbar">
-    <a class="wordmark" href="#" aria-label="MappingSiteVN — trang chủ">
-      <span>MappingSiteVN</span>
+    <a class="wordmark" href="#" aria-label="MappingSiteVN">
+      <img src="https://cdn.phototourl.com/member/2026-08-08-de7cbd2f-c5aa-45f2-b2b8-fb311c0b8a4a.png" alt="MappingSiteVN">
     </a>
-
     <div class="nav-links">
       <button class="nav-item active" id="navHome" type="button">
         <span lang-el="vi">Trang chủ</span><span lang-el="en">Home</span>
@@ -28,7 +26,10 @@
       <button class="nav-item" id="navAbout" type="button">
         <span lang-el="vi">Giới thiệu</span><span lang-el="en">About</span>
       </button>
-      <button class="nav-item" id="navAbout" type="button">
+      <button class="nav-item" id="navPractice" type="button">
+        <span lang-el="vi">Bài tập</span><span lang-el="en">Practice</span>
+      </button>
+      <button class="nav-item" id="navHelp" type="button">
         <span lang-el="vi">Trợ giúp</span><span lang-el="en">Help center</span>
       </button>
 
@@ -68,7 +69,7 @@
       <div class="lang-toggle" id="langToggle">
         <div class="lang-pill"></div>
         <button id="viBtn" class="active" type="button">🇻🇳</button>
-        <button id="enBtn" type="button">🇺🇸</button>
+        <button id="enBtn" type="button">🇬🇧</button>
       </div>
     </div>
   </nav>
@@ -82,7 +83,6 @@
       <h1 class="hero-title" id="heroTitle">
         <span class="typing-line" lang-el="vi">
           <span class="typing-text" id="heroTypingVi"></span><span class="typing-cursor" aria-hidden="true"></span>
-        </span>
         <span class="typing-line" lang-el="en">
           <span class="typing-text" id="heroTypingEn"></span><span class="typing-cursor" aria-hidden="true"></span>
         </span>
@@ -160,6 +160,48 @@
 </section>
   </main>
 
+  <main class="page hidden" id="pageHelp">
+  <div class="about-wrap">
+    <div class="about-eyebrow">
+      <span lang-el="vi">Trợ giúp</span>
+      <span lang-el="en">Help center</span>
+    </div>
+
+    <h1 class="about-h1">
+        <span lang-el="vi">Hướng dẫn sử dụng</span>
+        <span lang-el="en">Instructions</span>
+      </h1>
+
+      <p class="about-intro">
+        <span lang-el="vi">MappingSiteVN là dự án phi lợi nhuận kết nối người cần hỗ trợ tâm lý với các cơ sở tham vấn, bác sĩ và chuyên gia phù hợp trên khắp Việt Nam. Chúng mình tin rằng ai cũng xứng đáng được tiếp cận dịch vụ chăm sóc sức khoẻ tinh thần một cách an toàn, dễ dàng và không bị phán xét — đặc biệt là những nhóm dễ tổn thương như LGBTQ+, người sống chung với HIV, trẻ em, và nạn nhân của bạo lực hay buôn bán người. Đây là đoạn giới thiệu mẫu, bạn thay bằng nội dung chính thức sau nhé.</span>
+        <span lang-el="en">MappingSiteVN is a non-profit project that connects people seeking mental health support with the right clinics, doctors, and specialists across Vietnam. We believe everyone deserves safe, easy, judgment-free access to mental healthcare — especially vulnerable groups such as the LGBTQ+ community, people living with HIV, children, and survivors of violence or trafficking. This is placeholder copy — swap in your final text later.</span>
+      </p>
+
+    <!-- nội dung page -->
+
+  </div>
+</main>
+  <main class="page hidden" id="pagePractice">
+  <div class="about-wrap">
+    <div class="about-eyebrow">
+      <span lang-el="vi">Bài tập tâm lý</span>
+      <span lang-el="en">Mental therapy practice</span>
+    </div>
+
+    <h1 class="about-h1">
+        <span lang-el="vi">Các bài tập tâm lý cơ bản</span>
+        <span lang-el="en">Instructions</span>
+      </h1>
+
+      <p class="about-intro">
+        <span lang-el="vi">MappingSiteVN là dự án phi lợi nhuận kết nối người cần hỗ trợ tâm lý với các cơ sở tham vấn, bác sĩ và chuyên gia phù hợp trên khắp Việt Nam. Chúng mình tin rằng ai cũng xứng đáng được tiếp cận dịch vụ chăm sóc sức khoẻ tinh thần một cách an toàn, dễ dàng và không bị phán xét — đặc biệt là những nhóm dễ tổn thương như LGBTQ+, người sống chung với HIV, trẻ em, và nạn nhân của bạo lực hay buôn bán người. Đây là đoạn giới thiệu mẫu, bạn thay bằng nội dung chính thức sau nhé.</span>
+        <span lang-el="en">MappingSiteVN is a non-profit project that connects people seeking mental health support with the right clinics, doctors, and specialists across Vietnam. We believe everyone deserves safe, easy, judgment-free access to mental healthcare — especially vulnerable groups such as the LGBTQ+ community, people living with HIV, children, and survivors of violence or trafficking. This is placeholder copy — swap in your final text later.</span>
+      </p>
+
+    <!-- nội dung page -->
+
+    </div>
+  </main>
   <main class="page hidden" id="pageAbout">
     <div class="about-wrap">
 
@@ -268,13 +310,21 @@
           A safe and respectful space to find mental health support
           suited to individual needs.
         </span>
+        <br><br>
+        <span lang-el="vi">
+          ❗️Khuyến cáo: Thông tin trên MappingSiteVN chỉ nhằm mục đích tham khảo và
+        không thay thế tư vấn trực tiếp từ chuyên gia.
+        </span>
+        <span lang-el="en">
+          ❗️Caution: Information on MappingSiteVN is for reference only and does not
+        replace direct consultation with a qualified professional.
+        </span>
       </p>
 
       <div class="footer-contact">
         <p>
           <strong>
-            <span lang-el="vi">Email:</span>
-            <span lang-el="en">Email:</span>
+            <span>Email:</span>
           </strong>
           <a href="mailto:YOUR_EMAIL@example.com">
             hello@mappingsitevn.com
@@ -320,25 +370,21 @@
     <div class="footer-column">
 
       <h3>
-        <span lang-el="vi">Dịch vụ</span>
-        <span lang-el="en">Services</span>
+        <span lang-el="vi">Về MappingSiteVN</span>
+        <span lang-el="en">About MappingSiteVN</span>
       </h3>
-
-      <a href="#">
-        <span lang-el="vi">Tìm cơ sở tham vấn</span>
-        <span lang-el="en">Find mental health services</span>
+      <a href="#" id="footerAbout">
+        <span lang-el="vi">Giới thiệu</span>
+        <span lang-el="en">About us</span>
       </a>
-
-      <a href="#">
-        <span lang-el="vi">Tìm kiếm theo nhu cầu</span>
-        <span lang-el="en">Search by needs</span>
+      <a href="#" id="footerHome">
+        <span lang-el="vi">Các bài tập thư giãn</span>
+        <span lang-el="en">Mental therapy practices</span>
       </a>
-
-      <a href="#">
-        <span lang-el="vi">Khám phá các cơ sở</span>
-        <span lang-el="en">Explore facilities</span>
+      <a href="#" id="footerPractice">
+        <span lang-el="vi">Các bài tập thư giãn</span>
+        <span lang-el="en">Mental therapy practices</span>
       </a>
-
     </div>
 
 
@@ -350,7 +396,7 @@
         <span lang-el="en">Guidance & Support</span>
       </h3>
 
-      <a href="">
+      <a href="#" id="footerHelp">
         <span lang-el="vi">Cách sử dụng MappingSiteVN</span>
         <span lang-el="en">How MappingSiteVN works</span>
       </a>
@@ -364,23 +410,27 @@
         <span lang-el="vi">Lưu ý về thông tin</span>
         <span lang-el="en">Information disclaimer</span>
       </a>
-
     </div>
 
+  <div class="footer-partners">
 
-    <!-- COLUMN 4: VỀ DỰ ÁN -->
-    <div class="footer-column">
-
-      <h3>
-  <a href="#" id="footerAbout">
-    <span lang-el="vi">Về MappingSiteVN</span>
-    <span lang-el="en">About MappingSiteVN</span>
+  <a
+    href="URL_LOGO_1"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Đơn vị 1"
+  >
+    <img src="https://cdn.phototourl.com/member/2026-08-08-de7cbd2f-c5aa-45f2-b2b8-fb311c0b8a4a.png" alt="Đơn vị 1">
   </a>
-</h3>
-    </div>
-  </div>
-
-
+  <a
+    href="URL_LOGO_2"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Đơn vị 2"
+  >
+    <img src="https://cdn.phototourl.com/member/2026-08-08-62fe99d2-4708-45ce-a122-aa4e48b33222.png" alt="Đơn vị 2">
+  </a>
+</div>
   <!-- BOTTOM -->
   <div class="footer-bottom">
 
@@ -391,19 +441,6 @@
       <span lang-el="vi">Bảo lưu mọi quyền.</span>
       <span lang-el="en">All rights reserved.</span>
     </p>
-
-    <p class="footer-disclaimer">
-      <span lang-el="vi">
-        Thông tin trên MappingSiteVN chỉ nhằm mục đích tham khảo và
-        không thay thế tư vấn trực tiếp từ chuyên gia.
-      </span>
-
-      <span lang-el="en">
-        Information on MappingSiteVN is for reference only and does not
-        replace direct consultation with a qualified professional.
-      </span>
-    </p>
-
   </div>
 
 </footer>

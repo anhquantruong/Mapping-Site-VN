@@ -3,20 +3,61 @@
    ========================================================= */
 
 .site-footer {
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  color: var(--ink);
+  position: relative;
+  background: #ffffff;
+  color: #000000;
+}
+
+/* Logo bảo trợ */
+.footer-partners {
+  position: absolute;
+  top: 40px;
+  left: 80px;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.footer-partners img {
+  width: auto;
+  height: 80px;
+  object-fit: contain;
+}
+
+/* Footer luôn trắng/đen */
+.site-footer .footer-wordmark,
+.site-footer .footer-column h3,
+.site-footer .footer-contact strong {
+  color: #000000;
+}
+
+.site-footer .footer-description,
+.site-footer .footer-contact p,
+.site-footer .footer-contact a,
+.site-footer .footer-column a,
+.site-footer .footer-bottom p {
+  color: #000000;
+}
+
+.site-footer .footer-socials a {
+  color: #000000;
+  border-color: #000000;
+}
+
+.site-footer .footer-disclaimer {
+  color: #000000 !important;
 }
 /* MAIN FOOTER */
 
 .footer-main {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 64px 48px 52px;
+  padding: 150px 48px 100px;
 
   display: grid;
-  grid-template-columns: 2fr 1fr 1.2fr 1fr;
-  gap: 56px;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 80px;
 }
 
 
@@ -121,19 +162,21 @@
 
 .footer-column a:hover {
   color: var(--plum);
+  border-color: var(--plum);
 }
 
 
 /* BOTTOM */
 
 .footer-bottom {
-  border-top: 1px solid var(--border);
+  grid-column: 1 / -1;
 
-  padding: 22px 48px 26px;
+  border-top: 1px solid var(--border);
+  padding: 10px 10px 10px;
 
   text-align: center;
+  background: #ffffff;
 }
-
 .footer-bottom p {
   margin: 0;
   color: var(--ink-soft);
@@ -184,3 +227,5 @@
   }
 
 }
+
+

@@ -7,8 +7,8 @@
     --plum: #4A3B52;
     --coral: #E07C5F;
     --teal: #5F8A81;
-    --border: rgba(43,42,46,0.10);
-    --shadow: rgba(43,42,46,0.12);
+    --border: rgba(60,42,46,0.10);
+    --shadow: rgba(60,42,46,0.12);
     --nav-h: 64px;
     --font-scale: 1;
   }
@@ -21,7 +21,7 @@
     --plum: #C9A9D6;
     --coral: #F0A183;
     --teal: #8FBAAF;
-    --border: rgba(255,255,255,0.10);
+    --border: rgba(400,400,400,0.10);
     --shadow: rgba(0,0,0,0.35);
   }
 
@@ -53,33 +53,21 @@
     overflow: visible; /* allows wordmark to spill below */
   }
 
-  .wordmark {
-    position: relative;
-    display: flex;
-    align-items: flex-start;
-    height: 100%;
-    text-decoration: none;
-    -webkit-tap-highlight-color: transparent;
-    z-index: 10;
-  }
+.wordmark img {
+  width: 150px;
+  height: auto;
+  display: block;
+  transform: translateY(50px);
+}
 
-  .wordmark span {
-    font-family: 'Fraunces', serif;
-    font-weight: 560;
-    font-style: normal;
-    font-size: clamp(1.7rem, 1.7vw, 2.3rem);
-    line-height: 1;
-    letter-spacing: -0.01em;
+.wordmark {
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
 
-    margin-top: calc(var(--nav-h) * 0.30);
-
-  color: var(--ink);
-  filter: drop-shadow(0 6px 10px var(--shadow));
-  transition: filter .3s ease;
-
-  /* Cho chữ được phép vượt khỏi navbar */
-  position: relative;
-  z-index: 20;
+.wordmark.footer-visible {
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
 }
 
   .nav-links{
@@ -216,18 +204,31 @@
     padding-top: var(--nav-h);
     box-sizing: border-box;
 }
-  .hero::before{
-    content:"";
-    position:absolute;
-    width: 480px; height:480px;
-    border-radius:50%;
-    background: radial-gradient(circle, var(--teal) 0%, transparent 70%);
-    opacity: 0.14;
-    top: -120px; left: 50%;
-    transform: translateX(-50%);
-    filter: blur(10px);
-    pointer-events:none;
-  }
+.hero::before {
+  content: "";
+  position: absolute;
+
+  width: 650px;
+  height: 650px;
+
+  border-radius: 50%;
+
+  background: radial-gradient(
+    circle,
+    var(--teal) 0%,
+    rgba(91, 180, 174, 0.45) 35%,
+    transparent 72%
+  );
+
+  opacity: 0.22;
+
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  filter: blur(18px);
+  pointer-events: none;
+}
   .hero-eyebrow{
     font-size: 0.82rem;
     font-weight: 600;
@@ -235,11 +236,13 @@
     text-transform: uppercase;
     color: var(--teal);
     margin-bottom: 14px;
+
+    transform: translateY(-25px);
   }
   .hero h1{
     font-family:'Fraunces', serif;
-    font-weight: 500;
-    font-size: clamp(1.8rem, 4.2vw, 2.8rem);
+    font-weight: 700;
+    font-size: clamp(2.0rem, 4.5vw, 3.0rem);
     line-height: 1.25;
     max-width: 620px;
     margin: 0 0 14px;
@@ -707,20 +710,32 @@
 
 .team-socials {
   display: flex;
-  justify-content: center;
+  flex-direction: row;
   align-items: center;
+  justify-content: center;
   gap: 10px;
-  margin-top: 16px;
 }
 
-/* =========================================================
-   FOOTER
-   ========================================================= */
+.team-socials a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-.site-footer {
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  color: var(--ink);
+  width: 36px;
+  height: 36px;
+
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1;
+
+  text-decoration: none;
+
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.team-socials a:hover {
+  color: var(--plum);
+  transform: translateY(-2px);
 }
 
 /* NHỮNG CON SỐ */
