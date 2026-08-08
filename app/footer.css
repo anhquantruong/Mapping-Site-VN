@@ -1,0 +1,16 @@
+/* ============ COPYRIGHT BAR ============ */
+  .copyright-bar{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    color: var(--ink-soft);
+    text-align: center;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    z-index: 80;
+  }
+
+  
