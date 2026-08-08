@@ -366,17 +366,18 @@ function animateCounter(element) {
       1
     );
 
-    // Ease-out: nhanh lúc đầu, chậm dần về cuối
+    // Chạy nhanh lúc đầu, chậm dần về cuối
     const easedProgress = 1 - Math.pow(1 - progress, 3);
 
-    const currentValue = Math.floor(target * easedProgress);
+    // Làm tròn thành số nguyên, không có "." hay ","
+    const currentValue = Math.round(target * easedProgress);
 
-    element.textContent = currentValue.toLocaleString('en-US');
+    element.textContent = currentValue;
 
     if (progress < 1) {
       requestAnimationFrame(update);
     } else {
-      element.textContent = target.toLocaleString('en-US');
+      element.textContent = Math.round(target);
     }
   }
 
