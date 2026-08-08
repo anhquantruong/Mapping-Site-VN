@@ -60,11 +60,9 @@ const groundingExit =
 // COMPLETION SOUND
 // =========================================================
 
-// THAY URL NÀY BẰNG URL AUDIO CỦA BẠN
-
-const groundingCompleteSound = new Audio(
-  'https://www.myinstants.com/en/instant/duolingo-completed-lesson-48481/?utm_source=copy&utm_medium=share'
-);
+// MP3 nằm trong folder practice
+const groundingCompleteSound =
+  new Audio('practice/duolingo-completed-lesson.mp3');
 
 groundingCompleteSound.preload = 'auto';
 groundingCompleteSound.volume = 0.5;
@@ -171,7 +169,21 @@ let groundingEndTime = null;
 
 let groundingReturnTimeout = null;
 
-const GROUNDING_STEP_DURATION = 2 * 1000;
+
+// =========================================================
+// TIMER DURATION
+// =========================================================
+
+// ĐANG TEST
+// 1 giây mỗi bước
+
+const GROUNDING_STEP_DURATION = 1 * 1000;
+
+
+// Khi hoàn thành test xong,
+// đổi thành:
+//
+// const GROUNDING_STEP_DURATION = 60 * 1000;
 
 
 // =========================================================
@@ -182,19 +194,35 @@ if (openGrounding && groundingExercise) {
 
   openGrounding.addEventListener('click', () => {
 
+    clearInterval(groundingTimerId);
+    clearTimeout(groundingReturnTimeout);
+
+    groundingCurrentStep = 0;
+
+
+    // Hide Practice
     if (practicePage) {
       practicePage.classList.add('hidden');
     }
 
+
+    // Show Grounding
     groundingExercise.classList.remove('hidden');
 
+
+    // Reset states
     groundingIntro.classList.remove('hidden');
 
     groundingSession.classList.add('hidden');
 
     groundingComplete.classList.add('hidden');
 
-    groundingCurrentStep = 0;
+
+    // Reset progress
+    if (groundingProgressBar) {
+      groundingProgressBar.style.width = '0%';
+    }
+
 
     window.scrollTo({
       top: 0,
@@ -207,7 +235,7 @@ if (openGrounding && groundingExercise) {
 
 
 // =========================================================
-// UPDATE STEP
+// UPDATE CURRENT STEP
 // =========================================================
 
 function updateGroundingStep() {
@@ -218,13 +246,19 @@ function updateGroundingStep() {
   if (!step) return;
 
 
+  // Step counter
+
   groundingStep.textContent =
     `${groundingCurrentStep + 1} / ${groundingSteps.length}`;
 
 
+  // Number
+
   groundingNumber.textContent =
     step.number;
 
+
+  // Sense
 
   groundingSense.innerHTML = `
     <span lang-el="vi">${step.senseVi}</span>
@@ -232,11 +266,15 @@ function updateGroundingStep() {
   `;
 
 
+  // Title
+
   groundingTitle.innerHTML = `
     <span lang-el="vi">${step.titleVi}</span>
     <span lang-el="en">${step.titleEn}</span>
   `;
 
+
+  // Instruction
 
   groundingInstruction.innerHTML = `
     <span lang-el="vi">${step.instructionVi}</span>
@@ -244,9 +282,13 @@ function updateGroundingStep() {
   `;
 
 
+  // Progress
+
   groundingProgressBar.style.width =
     `${(groundingCurrentStep / groundingSteps.length) * 100}%`;
 
+
+  // Start timer
 
   startGroundingTimer();
 
@@ -299,30 +341,34 @@ function startGroundingTimer() {
 
       clearInterval(groundingTimerId);
 
-
-      groundingTimer.textContent =
-        '0:00';
+      groundingTimer.textContent = '0:00';
 
 
-      // ---------------------------------------------------
+      // ===================================================
       // LAST STEP
-      // ---------------------------------------------------
+      // ===================================================
 
       if (
         groundingCurrentStep >=
         groundingSteps.length - 1
       ) {
 
+        // Fill progress completely
+
+        groundingProgressBar.style.width = '100%';
+
+
+        // Finish exercise
+
         finishGrounding();
 
         return;
-
       }
 
 
-      // ---------------------------------------------------
+      // ===================================================
       // NEXT STEP
-      // ---------------------------------------------------
+      // ===================================================
 
       groundingCurrentStep++;
 
@@ -333,8 +379,12 @@ function startGroundingTimer() {
   }
 
 
+  // Run immediately
+
   updateTimer();
 
+
+  // Update every 250ms
 
   groundingTimerId =
     setInterval(updateTimer, 250);
@@ -343,7 +393,7 @@ function startGroundingTimer() {
 
 
 // =========================================================
-// START ACTUAL EXERCISE
+// START EXERCISE
 // =========================================================
 
 if (groundingStart) {
@@ -351,10 +401,49 @@ if (groundingStart) {
   groundingStart.addEventListener('click', () => {
 
     clearInterval(groundingTimerId);
+    clearTimeout(groundingReturnTimeout);
 
 
     groundingCurrentStep = 0;
 
+
+    // =====================================================
+    // PREPARE AUDIO
+    // =====================================================
+    //
+    // Safari may block audio that has never been activated
+    // by a user interaction.
+    //
+    // We briefly play it silently here ONLY to unlock it.
+    // The user will NOT hear the sound at this point.
+    //
+
+    groundingCompleteSound.volume = 0;
+
+    groundingCompleteSound.currentTime = 0;
+
+    groundingCompleteSound.play()
+      .then(() => {
+
+        groundingCompleteSound.pause();
+
+        groundingCompleteSound.currentTime = 0;
+
+        // Restore actual volume
+        groundingCompleteSound.volume = 0.5;
+
+      })
+      .catch(() => {
+
+        // Restore volume even if unlock fails
+        groundingCompleteSound.volume = 0.5;
+
+      });
+
+
+    // =====================================================
+    // SHOW SESSION
+    // =====================================================
 
     groundingIntro.classList.add('hidden');
 
@@ -362,6 +451,8 @@ if (groundingStart) {
 
     groundingSession.classList.remove('hidden');
 
+
+    // Start first step
 
     updateGroundingStep();
 
@@ -377,37 +468,370 @@ if (groundingStart) {
 
 
 // =========================================================
+// CONFETTI
+// =========================================================
+
+function launchConfetti() {
+
+  // Remove existing confetti canvas
+  // in case something is still there.
+
+  const oldCanvas =
+    document.getElementById('groundingConfetti');
+
+  if (oldCanvas) {
+    oldCanvas.remove();
+  }
+
+
+  // Create canvas
+
+  const canvas =
+    document.createElement('canvas');
+
+  canvas.id =
+    'groundingConfetti';
+
+
+  // Canvas styling
+
+  canvas.style.position =
+    'fixed';
+
+  canvas.style.inset =
+    '0';
+
+  canvas.style.width =
+    '100vw';
+
+  canvas.style.height =
+    '100vh';
+
+  canvas.style.pointerEvents =
+    'none';
+
+  canvas.style.zIndex =
+    '9999';
+
+
+  document.body.appendChild(canvas);
+
+
+  // Context
+
+  const ctx =
+    canvas.getContext('2d');
+
+
+  // Canvas size
+
+  function resizeCanvas() {
+
+    canvas.width =
+      window.innerWidth;
+
+    canvas.height =
+      window.innerHeight;
+
+  }
+
+
+  resizeCanvas();
+
+
+  // =======================================================
+  // CONFETTI PARTICLES
+  // =======================================================
+
+  const pieces = [];
+
+  const particleCount = 120;
+
+
+  for (
+    let i = 0;
+    i < particleCount;
+    i++
+  ) {
+
+    pieces.push({
+
+      x:
+        Math.random() *
+        canvas.width,
+
+      y:
+        -20 -
+        Math.random() *
+        canvas.height *
+        0.3,
+
+      width:
+        6 +
+        Math.random() *
+        6,
+
+      height:
+        8 +
+        Math.random() *
+        8,
+
+      speedY:
+        3 +
+        Math.random() *
+        4,
+
+      speedX:
+        (Math.random() - 0.5) * 3,
+
+      rotation:
+        Math.random() *
+        Math.PI,
+
+      rotationSpeed:
+        (Math.random() - 0.5) * 0.2,
+
+      gravity:
+        0.08 +
+        Math.random() * 0.05,
+
+      opacity: 1
+
+    });
+
+  }
+
+
+  // =======================================================
+  // COLORS
+  // =======================================================
+
+  const colors = [
+
+    '#7B4B7A',
+
+    '#3F8F8C',
+
+    '#D8A84E',
+
+    '#E58B8B',
+
+    '#6B7280'
+
+  ];
+
+
+  // =======================================================
+  // ANIMATION
+  // =======================================================
+
+  let animationFrame = null;
+
+  const startTime =
+    performance.now();
+
+
+  function animate(now) {
+
+    const elapsed =
+      now - startTime;
+
+
+    ctx.clearRect(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+
+    pieces.forEach(
+      (piece, index) => {
+
+        // Gravity
+
+        piece.speedY +=
+          piece.gravity;
+
+
+        // Movement
+
+        piece.y +=
+          piece.speedY;
+
+        piece.x +=
+          piece.speedX;
+
+
+        // Rotation
+
+        piece.rotation +=
+          piece.rotationSpeed;
+
+
+        // Fade near end
+
+        if (elapsed > 2200) {
+
+          piece.opacity =
+            Math.max(
+              0,
+              1 -
+                (elapsed - 2200) /
+                800
+            );
+
+        }
+
+
+        // Draw
+
+        ctx.save();
+
+
+        ctx.translate(
+          piece.x,
+          piece.y
+        );
+
+
+        ctx.rotate(
+          piece.rotation
+        );
+
+
+        ctx.globalAlpha =
+          piece.opacity;
+
+
+        ctx.fillStyle =
+          colors[
+            index % colors.length
+          ];
+
+
+        ctx.fillRect(
+          -piece.width / 2,
+          -piece.height / 2,
+          piece.width,
+          piece.height
+        );
+
+
+        ctx.restore();
+
+      }
+    );
+
+
+    // Continue animation
+
+    if (elapsed < 5000) {
+
+      animationFrame =
+        requestAnimationFrame(
+          animate
+        );
+
+    }
+
+    // Finish
+
+    else {
+
+      if (animationFrame) {
+
+        cancelAnimationFrame(
+          animationFrame
+        );
+
+      }
+
+
+      window.removeEventListener(
+        'resize',
+        resizeCanvas
+      );
+
+
+      canvas.remove();
+
+    }
+
+  }
+
+
+  window.addEventListener(
+    'resize',
+    resizeCanvas
+  );
+
+
+  requestAnimationFrame(
+    animate
+  );
+
+}
+
+
+// =========================================================
 // COMPLETE EXERCISE
 // =========================================================
 
 function finishGrounding() {
 
-  clearInterval(groundingTimerId);
+  clearInterval(
+    groundingTimerId
+  );
 
 
-  // -------------------------------------------------------
-  // PLAY COMPLETION SOUND
-  // -------------------------------------------------------
+  // =====================================================
+  // CONFETTI
+  // =====================================================
 
-  groundingCompleteSound.currentTime = 0;
-
-  groundingCompleteSound.play().catch(error => {
-
-    console.log(
-      'Completion sound could not play:',
-      error
-    );
-
-  });
+  launchConfetti();
 
 
-  // -------------------------------------------------------
+  // =====================================================
+  // COMPLETION SOUND
+  // =====================================================
+
+  groundingCompleteSound.volume =
+    0.5;
+
+  groundingCompleteSound.currentTime =
+    0;
+
+
+  groundingCompleteSound.play()
+    .then(() => {
+
+      console.log(
+        '🔊 Completion sound played'
+      );
+
+    })
+    .catch((error) => {
+
+      console.error(
+        '❌ Completion sound failed:',
+        error
+      );
+
+    });
+
+
+  // =====================================================
   // SHOW COMPLETION PAGE
-  // -------------------------------------------------------
+  // =====================================================
 
-  groundingSession.classList.add('hidden');
+  groundingSession.classList.add(
+    'hidden'
+  );
 
-  groundingComplete.classList.remove('hidden');
+  groundingComplete.classList.remove(
+    'hidden'
+  );
 
 
   window.scrollTo({
@@ -416,31 +840,69 @@ function finishGrounding() {
   });
 
 
-  // -------------------------------------------------------
+  // =====================================================
   // RETURN TO PRACTICE AFTER 3 SECONDS
-  // -------------------------------------------------------
+  // =====================================================
 
-  clearTimeout(groundingReturnTimeout);
+  clearTimeout(
+    groundingReturnTimeout
+  );
 
 
   groundingReturnTimeout =
     setTimeout(() => {
 
-      groundingComplete.classList.add('hidden');
+      // Hide completion
 
-      groundingExercise.classList.add('hidden');
+      groundingComplete.classList.add(
+        'hidden'
+      );
 
+
+      // Hide Grounding
+
+      groundingExercise.classList.add(
+        'hidden'
+      );
+
+
+      // Show Practice
 
       if (practicePage) {
-        practicePage.classList.remove('hidden');
+
+        practicePage.classList.remove(
+          'hidden'
+        );
+
       }
 
+
+      // Reset state
 
       groundingCurrentStep = 0;
 
 
-      groundingIntro.classList.remove('hidden');
+      groundingIntro.classList.remove(
+        'hidden'
+      );
 
+
+      groundingSession.classList.add(
+        'hidden'
+      );
+
+
+      // Reset progress
+
+      if (groundingProgressBar) {
+
+        groundingProgressBar.style.width =
+          '0%';
+
+      }
+
+
+      // Back to top
 
       window.scrollTo({
         top: 0,
@@ -448,7 +910,7 @@ function finishGrounding() {
       });
 
 
-    }, 3000);
+    }, 5000);
 
 }
 
@@ -459,36 +921,101 @@ function finishGrounding() {
 
 if (groundingExit) {
 
-  groundingExit.addEventListener('click', () => {
+  groundingExit.addEventListener(
+    'click',
+    () => {
 
-    clearInterval(groundingTimerId);
+      // Stop timer
 
-    clearTimeout(groundingReturnTimeout);
-
-
-    groundingCurrentStep = 0;
-
-
-    groundingExercise.classList.add('hidden');
-
-    groundingSession.classList.add('hidden');
-
-    groundingComplete.classList.add('hidden');
-
-    groundingIntro.classList.remove('hidden');
+      clearInterval(
+        groundingTimerId
+      );
 
 
-    if (practicePage) {
-      practicePage.classList.remove('hidden');
+      // Cancel return timer
+
+      clearTimeout(
+        groundingReturnTimeout
+      );
+
+
+      // Reset step
+
+      groundingCurrentStep = 0;
+
+
+      // Stop completion sound
+
+      groundingCompleteSound.pause();
+
+      groundingCompleteSound.currentTime =
+        0;
+
+
+      // Remove confetti if present
+
+      const confetti =
+        document.getElementById(
+          'groundingConfetti'
+        );
+
+      if (confetti) {
+        confetti.remove();
+      }
+
+
+      // Hide Grounding
+
+      groundingExercise.classList.add(
+        'hidden'
+      );
+
+
+      groundingSession.classList.add(
+        'hidden'
+      );
+
+
+      groundingComplete.classList.add(
+        'hidden'
+      );
+
+
+      // Reset Intro
+
+      groundingIntro.classList.remove(
+        'hidden'
+      );
+
+
+      // Reset progress
+
+      if (groundingProgressBar) {
+
+        groundingProgressBar.style.width =
+          '0%';
+
+      }
+
+
+      // Show Practice
+
+      if (practicePage) {
+
+        practicePage.classList.remove(
+          'hidden'
+        );
+
+      }
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+
     }
-
-
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-
-  });
+  );
 
 }
 
@@ -499,28 +1026,82 @@ if (groundingExit) {
 
 if (groundingRestart) {
 
-  groundingRestart.addEventListener('click', () => {
+  groundingRestart.addEventListener(
+    'click',
+    () => {
 
-    clearInterval(groundingTimerId);
-
-    clearTimeout(groundingReturnTimeout);
-
-
-    groundingCurrentStep = 0;
-
-
-    groundingComplete.classList.add('hidden');
-
-    groundingIntro.classList.remove('hidden');
-
-    groundingSession.classList.add('hidden');
+      clearInterval(
+        groundingTimerId
+      );
 
 
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
+      clearTimeout(
+        groundingReturnTimeout
+      );
 
-  });
+
+      // Reset step
+
+      groundingCurrentStep = 0;
+
+
+      // Stop sound
+
+      groundingCompleteSound.pause();
+
+      groundingCompleteSound.currentTime =
+        0;
+
+
+      // Remove confetti
+
+      const confetti =
+        document.getElementById(
+          'groundingConfetti'
+        );
+
+      if (confetti) {
+        confetti.remove();
+      }
+
+
+      // Hide completion
+
+      groundingComplete.classList.add(
+        'hidden'
+      );
+
+
+      // Show intro
+
+      groundingIntro.classList.remove(
+        'hidden'
+      );
+
+
+      // Hide session
+
+      groundingSession.classList.add(
+        'hidden'
+      );
+
+
+      // Reset progress
+
+      if (groundingProgressBar) {
+
+        groundingProgressBar.style.width =
+          '0%';
+
+      }
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+
+    }
+  );
 
 }
