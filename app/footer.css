@@ -53,7 +53,7 @@
 .footer-main {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 150px 48px 100px;
+  padding: 150px 30px 100px;
 
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;

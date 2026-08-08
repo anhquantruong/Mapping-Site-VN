@@ -1,13 +1,32 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MappingSiteVN</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="footer.css">
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>MappingSiteVN</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="footer.css">
+  <link rel="stylesheet" href="feedback.css">
+  <link rel="stylesheet" href="practice/grounding.css">
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+  >
 
 </head>
 <link
@@ -27,7 +46,7 @@
         <span lang-el="vi">Giới thiệu</span><span lang-el="en">About</span>
       </button>
       <button class="nav-item" id="navPractice" type="button">
-        <span lang-el="vi">Bài tập</span><span lang-el="en">Practice</span>
+        <span lang-el="vi">Bài tập sức khoẻ tinh thần</span><span lang-el="en">Mental wellness exercise</span>
       </button>
       <button class="nav-item" id="navHelp" type="button">
         <span lang-el="vi">Trợ giúp</span><span lang-el="en">Help center</span>
@@ -176,32 +195,682 @@
         <span lang-el="vi">MappingSiteVN là dự án phi lợi nhuận kết nối người cần hỗ trợ tâm lý với các cơ sở tham vấn, bác sĩ và chuyên gia phù hợp trên khắp Việt Nam. Chúng mình tin rằng ai cũng xứng đáng được tiếp cận dịch vụ chăm sóc sức khoẻ tinh thần một cách an toàn, dễ dàng và không bị phán xét — đặc biệt là những nhóm dễ tổn thương như LGBTQ+, người sống chung với HIV, trẻ em, và nạn nhân của bạo lực hay buôn bán người. Đây là đoạn giới thiệu mẫu, bạn thay bằng nội dung chính thức sau nhé.</span>
         <span lang-el="en">MappingSiteVN is a non-profit project that connects people seeking mental health support with the right clinics, doctors, and specialists across Vietnam. We believe everyone deserves safe, easy, judgment-free access to mental healthcare — especially vulnerable groups such as the LGBTQ+ community, people living with HIV, children, and survivors of violence or trafficking. This is placeholder copy — swap in your final text later.</span>
       </p>
+  
+  <section class="feedback-section">
+
+  <!-- BÊN TRÁI -->
+  <div class="feedback-intro">
+
+    <h2>
+      <span lang-el="vi">
+        Cùng chúng mình<br>
+        hoàn thiện MappingSiteVN.
+      </span>
+
+      <span lang-el="en">
+        Help us make<br>
+        MappingSiteVN better.
+      </span>
+    </h2>
+
+    <p>
+      <span lang-el="vi">
+        Một lời góp ý nhỏ có thể giúp chúng mình
+        tạo ra trải nghiệm tốt hơn cho mọi người.
+      </span>
+
+      <span lang-el="en">
+        A small piece of feedback can help us
+        create a better experience for everyone.
+      </span>
+    </p>
+
+  </div>
+
+
+  <!-- BÊN PHẢI: FORM -->
+  <form class="feedback-form" id="feedbackForm">
+
+    <div class="feedback-field">
+      <label for="feedbackName">
+        <span lang-el="vi">Tên</span>
+        <span lang-el="en">Name</span>
+      </label>
+
+      <input
+        type="text"
+        id="feedbackName"
+        name="name"
+        placeholder="Nguyễn Văn A"
+        required
+      >
+    </div>
+
+
+    <div class="feedback-field">
+      <label for="feedbackEmail">
+        <span lang-el="vi">Email</span>
+        <span lang-el="en">Email</span>
+      </label>
+
+      <input
+        type="email"
+        id="feedbackEmail"
+        name="email"
+        placeholder="you@example.com"
+      >
+    </div>
+
+
+    <div class="feedback-field">
+      <label for="feedbackType">
+        <span lang-el="vi">Chủ đề</span>
+        <span lang-el="en">Topic</span>
+      </label>
+
+      <select id="feedbackType" name="type" required>
+        <option value="" disabled selected>
+          Chọn một chủ đề
+        </option>
+
+        <option value="website">
+          Website
+        </option>
+
+        <option value="search">
+          Tìm kiếm cơ sở / Clinic search
+        </option>
+
+        <option value="content">
+          Nội dung / Content
+        </option>
+
+        <option value="technical">
+          Lỗi kỹ thuật / Technical issue
+        </option>
+
+        <option value="other">
+          Khác / Other
+        </option>
+      </select>
+    </div>
+
+
+    <div class="feedback-field">
+      <label for="feedbackMessage">
+        <span lang-el="vi">Góp ý của bạn</span>
+        <span lang-el="en">Your feedback</span>
+      </label>
+
+      <textarea
+        id="feedbackMessage"
+        name="message"
+        rows="4"
+        placeholder="Chia sẻ với chúng mình..."
+        required
+      ></textarea>
+    </div>
+
+
+    <!-- NÚT SUBMIT VẪN Ở TRONG FORM -->
+    <div class="feedback-actions">
+
+      <span class="feedback-note">
+        <span lang-el="vi">
+          Góp ý về website và trải nghiệm sử dụng.
+        </span>
+
+        <span lang-el="en">
+          Feedback about the website and your experience.
+        </span>
+      </span>
+
+      <button
+        class="feedback-submit"
+        type="submit"
+      >
+        <span lang-el="vi">Gửi</span>
+        <span lang-el="en">Send</span>
+
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+
+    </div>
+
+  </form>
+
+
+  <!-- SUCCESS: NẰM NGOÀI FORM -->
+  <div
+    class="feedback-success hidden"
+    id="feedbackSuccess"
+  >
+
+    <div class="feedback-success-mark">
+      <i class="fa-solid fa-check"></i>
+    </div>
+
+    <span class="feedback-success-eyebrow">
+      <span lang-el="vi">ĐÃ GỬI</span>
+      <span lang-el="en">SUBMITTED</span>
+    </span>
+
+    <h2>
+      <span lang-el="vi">Cảm ơn bạn.</span>
+      <span lang-el="en">Thank you.</span>
+    </h2>
+
+    <p>
+      <span lang-el="vi">
+        Góp ý của bạn đã được ghi nhận và sẽ giúp
+        chúng mình cải thiện MappingSiteVN.
+      </span>
+
+      <span lang-el="en">
+        Your feedback has been received and will help
+        us improve MappingSiteVN.
+      </span>
+    </p>
+
+    <button
+      type="button"
+      class="feedback-again"
+      id="feedbackAgain"
+    >
+      <span lang-el="vi">Gửi góp ý khác</span>
+      <span lang-el="en">Send another response</span>
+    </button>
+
+  </div>
+
+</section>
 
     <!-- nội dung page -->
 
   </div>
 </main>
-  <main class="page hidden" id="pagePractice">
-  <div class="about-wrap">
-    <div class="about-eyebrow">
-      <span lang-el="vi">Bài tập tâm lý</span>
-      <span lang-el="en">Mental therapy practice</span>
-    </div>
+<main class="page hidden" id="pagePractice">
 
-    <h1 class="about-h1">
-        <span lang-el="vi">Các bài tập tâm lý cơ bản</span>
-        <span lang-el="en">Instructions</span>
+  <section class="practice-page">
+
+    <div class="practice-header">
+
+      <span class="practice-eyebrow">
+        <span lang-el="vi">THỰC HÀNH</span>
+        <span lang-el="en">PRACTICE</span>
+      </span>
+
+      <h1>
+        <span lang-el="vi">
+          Một vài phút<br>
+          cho chính mình.
+        </span>
+
+        <span lang-el="en">
+          A few minutes<br>
+          for yourself.
+        </span>
       </h1>
 
-      <p class="about-intro">
-        <span lang-el="vi">MappingSiteVN là dự án phi lợi nhuận kết nối người cần hỗ trợ tâm lý với các cơ sở tham vấn, bác sĩ và chuyên gia phù hợp trên khắp Việt Nam. Chúng mình tin rằng ai cũng xứng đáng được tiếp cận dịch vụ chăm sóc sức khoẻ tinh thần một cách an toàn, dễ dàng và không bị phán xét — đặc biệt là những nhóm dễ tổn thương như LGBTQ+, người sống chung với HIV, trẻ em, và nạn nhân của bạo lực hay buôn bán người. Đây là đoạn giới thiệu mẫu, bạn thay bằng nội dung chính thức sau nhé.</span>
-        <span lang-el="en">MappingSiteVN is a non-profit project that connects people seeking mental health support with the right clinics, doctors, and specialists across Vietnam. We believe everyone deserves safe, easy, judgment-free access to mental healthcare — especially vulnerable groups such as the LGBTQ+ community, people living with HIV, children, and survivors of violence or trafficking. This is placeholder copy — swap in your final text later.</span>
+      <p>
+        <span lang-el="vi">
+          Những bài thực hành đơn giản giúp bạn
+          chậm lại, chú ý đến hiện tại và kết nối
+          với chính mình.
+        </span>
+
+        <span lang-el="en">
+          Simple exercises to help you slow down,
+          reconnect with the present, and check in
+          with yourself.
+        </span>
       </p>
 
-    <!-- nội dung page -->
+    </div>
+
+
+    <!-- EXERCISE CARDS -->
+
+    <div class="practice-grid">
+
+      <!-- GROUNDING -->
+
+      <article class="practice-card">
+
+        <div class="practice-card-number">
+          01
+        </div>
+
+        <div class="practice-card-content">
+
+          <span class="practice-card-label">
+            <span lang-el="vi">3 phút</span>
+            <span lang-el="en">3 min</span>
+          </span>
+
+          <h2>
+            <span lang-el="vi">
+              Grounding 5–4–3–2–1
+            </span>
+
+            <span lang-el="en">
+              5–4–3–2–1 Grounding
+            </span>
+          </h2>
+
+          <p>
+            <span lang-el="vi">
+              Đưa sự chú ý trở lại hiện tại
+              thông qua năm giác quan.
+            </span>
+
+            <span lang-el="en">
+              Bring your attention back to the
+              present through your five senses.
+            </span>
+          </p>
+
+          <button
+            type="button"
+            class="practice-card-button"
+            id="openGrounding"
+          >
+            <span lang-el="vi">Bắt đầu</span>
+            <span lang-el="en">Begin</span>
+
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+
+        </div>
+
+      </article>
+
+
+      <!-- PLACEHOLDER CARD -->
+
+      <article class="practice-card practice-card-placeholder">
+
+        <div class="practice-card-number">
+          02
+        </div>
+
+        <div class="practice-card-content">
+
+          <span class="practice-card-label">
+            <span lang-el="vi">Sắp có</span>
+            <span lang-el="en">Coming soon</span>
+          </span>
+
+          <h2>
+            <span lang-el="vi">
+              Thở chậm
+            </span>
+
+            <span lang-el="en">
+              Slow Breathing
+            </span>
+          </h2>
+
+          <p>
+            <span lang-el="vi">
+              Một bài thực hành đơn giản
+              để tập trung vào nhịp thở.
+            </span>
+
+            <span lang-el="en">
+              A simple practice for focusing
+              on your breathing.
+            </span>
+          </p>
+
+        </div>
+
+      </article>
+
+
+      <article class="practice-card practice-card-placeholder">
+
+        <div class="practice-card-number">
+          03
+        </div>
+
+        <div class="practice-card-content">
+
+          <span class="practice-card-label">
+            <span lang-el="vi">Sắp có</span>
+            <span lang-el="en">Coming soon</span>
+          </span>
+
+          <h2>
+            <span lang-el="vi">
+              Body Scan
+            </span>
+
+            <span lang-el="en">
+              Body Scan
+            </span>
+          </h2>
+
+          <p>
+            <span lang-el="vi">
+              Chậm lại và nhận biết những
+              cảm giác trong cơ thể.
+            </span>
+
+            <span lang-el="en">
+              Slow down and notice sensations
+              throughout your body.
+            </span>
+          </p>
+
+        </div>
+
+      </article>
 
     </div>
-  </main>
+
+</section>
+
+
+<!-- =====================================================
+     GROUNDING EXERCISE
+     ===================================================== -->
+
+<section
+  class="grounding-exercise hidden"
+  id="groundingExercise"
+>
+  <button
+  type="button"
+  class="grounding-exit"
+  id="groundingExit"
+>
+  <i class="fa-solid fa-xmark"></i>
+
+  <span lang-el="vi">Thoát</span>
+  <span lang-el="en">Exit</span>
+</button>
+
+  <!-- INTRO -->
+
+  <div
+    class="grounding-intro"
+    id="groundingIntro"
+  >
+
+    <span class="grounding-eyebrow">
+
+      <span lang-el="vi">
+        BÀI TẬP 01 · GROUNDING
+      </span>
+
+      <span lang-el="en">
+        EXERCISE 01 · GROUNDING
+      </span>
+
+    </span>
+
+
+    <h2>
+      5–4–3–2–1
+    </h2>
+
+
+    <p class="grounding-lead">
+
+      <span lang-el="vi">
+        Một bài tập grounding đơn giản giúp bạn
+        đưa sự chú ý trở lại với hiện tại.
+      </span>
+
+      <span lang-el="en">
+        A simple grounding exercise that helps
+        bring your attention back to the present.
+      </span>
+
+    </p>
+
+
+    <div class="grounding-instructions">
+
+      <h3>
+
+        <span lang-el="vi">
+          Trước khi bắt đầu
+        </span>
+
+        <span lang-el="en">
+          Before you begin
+        </span>
+
+      </h3>
+
+
+      <ul>
+
+        <li>
+          <span lang-el="vi">
+            Ngồi hoặc đứng ở một vị trí thoải mái.
+          </span>
+
+          <span lang-el="en">
+            Sit or stand somewhere comfortable.
+          </span>
+        </li>
+
+
+        <li>
+          <span lang-el="vi">
+            Quan sát chậm môi trường xung quanh.
+          </span>
+
+          <span lang-el="en">
+            Slowly notice your surroundings.
+          </span>
+        </li>
+
+
+        <li>
+          <span lang-el="vi">
+            Không cần phải làm đúng hay hoàn hảo.
+          </span>
+
+          <span lang-el="en">
+            There is no need to do this perfectly.
+          </span>
+        </li>
+
+
+        <li>
+          <span lang-el="vi">
+            Bạn có thể dừng bất cứ lúc nào.
+          </span>
+
+          <span lang-el="en">
+            You can stop at any time.
+          </span>
+        </li>
+
+      </ul>
+
+    </div>
+
+
+    <p class="grounding-duration">
+
+      <span lang-el="vi">
+        Thời lượng dự kiến · 5 phút
+      </span>
+
+      <span lang-el="en">
+        Estimated duration · 5 minutes
+      </span>
+
+    </p>
+
+
+    <button
+      type="button"
+      class="grounding-start"
+      id="groundingStart"
+    >
+
+      <span lang-el="vi">
+        Bắt đầu
+      </span>
+
+      <span lang-el="en">
+        Begin
+      </span>
+
+      <i class="fa-solid fa-arrow-right"></i>
+
+    </button>
+
+  </div>
+
+
+  <!-- SESSION -->
+
+  <div
+    class="grounding-session hidden"
+    id="groundingSession"
+  >
+
+    <div class="grounding-progress">
+
+      <span id="groundingStep">
+        1 / 5
+      </span>
+
+
+      <div class="grounding-progress-track">
+
+        <div
+          class="grounding-progress-bar"
+          id="groundingProgressBar"
+        ></div>
+
+      </div>
+
+
+      <span id="groundingTimer">
+        1:00
+      </span>
+
+    </div>
+
+
+    <div class="grounding-content">
+
+      <span
+        class="grounding-number"
+        id="groundingNumber"
+      >
+        5
+      </span>
+
+
+      <span
+        class="grounding-sense"
+        id="groundingSense"
+      ></span>
+
+
+      <h2 id="groundingTitle"></h2>
+
+
+      <p id="groundingInstruction"></p>
+
+
+      <!-- RIVE SẼ ĐỂ Ở ĐÂY SAU -->
+
+      <div
+        class="grounding-animation"
+        id="groundingAnimation"
+      ></div>
+
+
+    </div>
+  </div>
+
+
+  <!-- COMPLETE -->
+
+  <div
+    class="grounding-complete hidden"
+    id="groundingComplete"
+  >
+
+    <div class="grounding-complete-mark">
+
+      <i class="fa-solid fa-check"></i>
+
+    </div>
+
+
+    <span class="grounding-complete-eyebrow">
+
+      <span lang-el="vi">
+        HOÀN THÀNH
+      </span>
+
+      <span lang-el="en">
+        COMPLETE
+      </span>
+
+    </span>
+
+
+    <h2>
+
+      <span lang-el="vi">
+        Bạn đã hoàn thành.
+      </span>
+
+      <span lang-el="en">
+        You made it through.
+      </span>
+
+    </h2>
+
+
+    <p>
+
+      <span lang-el="vi">
+        Hãy dành một chút thời gian để nhận biết
+        cảm giác của bạn ngay lúc này.
+      </span>
+
+      <span lang-el="en">
+        Take a moment to notice how you feel right now.
+      </span>
+
+    </p>
+
+
+    <button
+      type="button"
+      class="grounding-restart"
+      id="groundingRestart"
+    >
+
+      <span lang-el="vi">
+        Thực hiện lại
+      </span>
+
+      <span lang-el="en">
+        Try again
+      </span>
+
+    </button>
+
+  </div>
+
+</section>
+
+
+</main>
   <main class="page hidden" id="pageAbout">
     <div class="about-wrap">
 
@@ -216,8 +885,8 @@
       </h1>
 
       <p class="about-intro">
-        <span lang-el="vi">MappingSiteVN là dự án phi lợi nhuận kết nối người cần hỗ trợ tâm lý với các cơ sở tham vấn, bác sĩ và chuyên gia phù hợp trên khắp Việt Nam. Chúng mình tin rằng ai cũng xứng đáng được tiếp cận dịch vụ chăm sóc sức khoẻ tinh thần một cách an toàn, dễ dàng và không bị phán xét — đặc biệt là những nhóm dễ tổn thương như LGBTQ+, người sống chung với HIV, trẻ em, và nạn nhân của bạo lực hay buôn bán người. Đây là đoạn giới thiệu mẫu, bạn thay bằng nội dung chính thức sau nhé.</span>
-        <span lang-el="en">MappingSiteVN is a non-profit project that connects people seeking mental health support with the right clinics, doctors, and specialists across Vietnam. We believe everyone deserves safe, easy, judgment-free access to mental healthcare — especially vulnerable groups such as the LGBTQ+ community, people living with HIV, children, and survivors of violence or trafficking. This is placeholder copy — swap in your final text later.</span>
+        <span lang-el="vi">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac lacus semper, rhoncus libero semper, pellentesque eros. Praesent mattis hendrerit odio ut auctor. Nam nec pretium risus, id aliquam diam. Etiam sit amet diam sit amet nunc auctor imperdiet. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam erat volutpat. In pretium lectus nec diam blandit fringilla. Donec ornare tincidunt neque sed laoreet.</span>
+        <span lang-el="en">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac lacus semper, rhoncus libero semper, pellentesque eros. Praesent mattis hendrerit odio ut auctor. Nam nec pretium risus, id aliquam diam. Etiam sit amet diam sit amet nunc auctor imperdiet. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam erat volutpat. In pretium lectus nec diam blandit fringilla. Donec ornare tincidunt neque sed laoreet.</span>
       </p>
 
       <h2 class="about-h2">
@@ -378,8 +1047,8 @@
         <span lang-el="en">About us</span>
       </a>
       <a href="#" id="footerHome">
-        <span lang-el="vi">Các bài tập thư giãn</span>
-        <span lang-el="en">Mental therapy practices</span>
+        <span lang-el="vi">Tìm cơ sở thăm khám ngay!</span>
+        <span lang-el="en">Find clinics!</span>
       </a>
       <a href="#" id="footerPractice">
         <span lang-el="vi">Các bài tập thư giãn</span>
@@ -406,29 +1075,27 @@
         <span lang-el="en">Frequently asked questions</span>
       </a>
 
-      <a href="#">
-        <span lang-el="vi">Lưu ý về thông tin</span>
-        <span lang-el="en">Information disclaimer</span>
+      <a href="#" id="footerFeedback">
+        <span lang-el="vi">Feedback nhận xét</span>
+        <span lang-el="en">Feedback form</span>
       </a>
     </div>
 
   <div class="footer-partners">
 
   <a
-    href="URL_LOGO_1"
     target="_blank"
     rel="noopener noreferrer"
     aria-label="Đơn vị 1"
   >
-    <img src="https://cdn.phototourl.com/member/2026-08-08-de7cbd2f-c5aa-45f2-b2b8-fb311c0b8a4a.png" alt="Đơn vị 1">
+    <img src="https://cdn.phototourl.com/member/2026-08-08-de7cbd2f-c5aa-45f2-b2b8-fb311c0b8a4a.png">
   </a>
   <a
-    href="URL_LOGO_2"
     target="_blank"
     rel="noopener noreferrer"
     aria-label="Đơn vị 2"
   >
-    <img src="https://cdn.phototourl.com/member/2026-08-08-62fe99d2-4708-45ce-a122-aa4e48b33222.png" alt="Đơn vị 2">
+    <img src="https://cdn.phototourl.com/member/2026-08-08-62fe99d2-4708-45ce-a122-aa4e48b33222.png">
   </a>
 </div>
   <!-- BOTTOM -->
@@ -482,5 +1149,6 @@
 
 <script src="questions.js"></script>
 <script src="script.js"></script>
+<script src="practice/grounding.js"></script>
 </body>
 </html>

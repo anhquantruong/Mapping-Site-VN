@@ -122,6 +122,30 @@
       e.preventDefault();
       showPage('home');
       });
+  const footerFeedback = document.getElementById('footerFeedback');
+  const feedbackF = document.getElementById('feedbackForm');
+
+if (footerFeedback && feedbackF) {
+  footerFeedback.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    // Mở Help Center
+    showPage('help');
+
+    // Đợi Help Center hiện ra
+    setTimeout(() => {
+      const y =
+        feedbackF.getBoundingClientRect().top +
+        window.scrollY -
+        100;
+
+      window.scrollTo({
+        top: y,
+        behavior: 'smooth'
+      });
+    }, 150);
+  });
+}
 
 function showPage(page) {
   pageHome.classList.toggle('hidden', page !== 'home');
@@ -453,9 +477,39 @@ if (footer && wordmark) {
       wordmark.classList.toggle('footer-visible', entry.isIntersecting);
     },
     {
-      threshold: 0.7
+      threshold: 0.8
     }
   );
 
   footerObserver.observe(footer);
+}
+
+/* FEEDBACK FORM SUBMISSION */
+const feedbackForm = document.getElementById('feedbackForm');
+const feedbackSuccess = document.getElementById('feedbackSuccess');
+const feedbackAgain = document.getElementById('feedbackAgain');
+
+if (feedbackForm && feedbackSuccess) {
+
+  feedbackForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    // Hide form
+    feedbackForm.classList.add('hidden');
+
+    // Show success message
+    feedbackSuccess.classList.remove('hidden');
+  });
+
+  // Send another response
+  if (feedbackAgain) {
+    feedbackAgain.addEventListener('click', () => {
+
+      feedbackForm.reset();
+
+      feedbackSuccess.classList.add('hidden');
+      feedbackForm.classList.remove('hidden');
+
+    });
+  }
 }
