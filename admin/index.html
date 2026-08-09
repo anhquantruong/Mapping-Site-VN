@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>MappingSiteVN — Admin</title>
+
+  <link rel="stylesheet" href="admin.css">
+</head>
+
+
+<body>
+
+  <aside class="admin-sidebar">
+
+    <div class="admin-brand">
+      <h1>MappingSiteVN</h1>
+      <span>ADMIN</span>
+    </div>
+
+
+    <nav>
+
+      <button
+        class="nav-item active"
+        data-page="dashboard"
+      >
+        Dashboard Quản Lý 
+      </button>
+
+      <button
+        class="nav-item"
+        data-page="clinics"
+      >
+        Clinics
+      </button>
+
+      <button
+        class="nav-item"
+        data-page="feedback"
+      >
+        Feedback
+      </button>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+      <a href="../app/index.html">
+        ← Back to website
+      </a>
+
+      <button id="logoutButton">
+        Log out
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <main class="admin-main">
+
+
+    <!-- =================================================
+         DASHBOARD
+         ================================================= -->
+
+    <section
+      class="admin-page active"
+      id="dashboard"
+    >
+
+      <header class="page-header">
+
+        <div>
+
+          <span class="eyebrow">
+            MAPPINGSITEVN
+          </span>
+
+          <h2>
+            Dashboard Quản Lý
+          </h2>
+
+          <p>
+            Manage mental health service providers.
+          </p>
+
+        </div>
+
+      </header>
+
+
+      <div class="stats">
+
+        <div class="stat-card">
+
+          <span>
+            Tổng số cơ sở phòng khám
+          </span>
+
+          <strong id="clinicCount">
+            —
+          </strong>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <span>
+            Chờ duyệt
+          </span>
+
+          <strong>
+            —
+          </strong>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <span>
+            Tổng số Feedback
+          </span>
+
+          <strong>
+            —
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <div class="welcome-card">
+
+        <span class="eyebrow">
+          TRANG CHỦ QUẢN LÝ ADMIN
+        </span>
+
+        <h3>
+          Quản lý danh sách phòng khám
+        </h3>
+
+        <p>
+          Thêm, cập nhật, và quản lý dữ liệu/thông tin các phòng khám
+        </p>
+
+        <button
+          class="primary-button"
+          data-page-link="clinics"
+        >
+          Manage clinics →
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- =================================================
+         CLINICS
+         ================================================= -->
+
+    <section
+      class="admin-page"
+      id="clinics"
+    >
+
+      <header class="page-header clinic-header">
+
+        <div>
+
+          <span class="eyebrow">
+            PROVIDER DIRECTORY
+          </span>
+
+          <h2>
+            Clinics
+          </h2>
+
+          <p>
+            Add and manage mental health service providers.
+          </p>
+
+        </div>
+
+
+        <button
+          class="primary-button"
+          id="openAddClinic"
+        >
+          + Add clinic
+        </button>
+
+      </header>
+
+
+      <!-- SEARCH -->
+
+      <div class="clinic-toolbar">
+
+  <input
+    id="clinicSearch"
+    type="search"
+    placeholder="Search clinics..."
+  >
+
+  <select id="clinicTypeFilter">
+    <option value="all">
+      All types
+    </option>
+  </select>
+
+  <select id="clinicProvinceFilter">
+    <option value="all">
+      All provinces / cities
+    </option>
+  </select>
+
+  <select id="clinicWardFilter">
+    <option value="all">
+      All wards
+    </option>
+  </select>
+
+</div>
+
+
+      <!-- TABLE -->
+
+      <div class="clinic-table-wrapper">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Clinic
+              </th>
+
+              <th>
+                Type
+              </th>
+
+              <th>
+                Location
+              </th>
+
+              <th>
+                Phone
+              </th>
+
+              <th>
+                Actions
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="clinicTable"></tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+    <!-- =================================================
+         FEEDBACK
+         ================================================= -->
+
+    <section
+      class="admin-page"
+      id="feedback"
+    >
+
+      <header class="page-header">
+
+        <span class="eyebrow">
+          USER FEEDBACK
+        </span>
+
+        <h2>
+          Feedback
+        </h2>
+
+        <p>
+          Review feedback submitted by users.
+        </p>
+
+      </header>
+
+
+      <div class="empty-state">
+
+        <h3>
+          No feedback loaded yet.
+        </h3>
+
+        <p>
+          This section will connect to your backend later.
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =====================================================
+       ADD CLINIC MODAL
+       ===================================================== -->
+
+  <div
+    class="modal hidden"
+    id="clinicModal"
+  >
+
+    <div class="modal-overlay"></div>
+
+
+    <div class="modal-card">
+
+      <div class="modal-header">
+
+        <div>
+
+          <span class="eyebrow">
+            PROVIDER DIRECTORY
+          </span>
+
+          <h2>
+            Add clinic
+          </h2>
+
+        </div>
+
+
+        <button
+          id="closeClinicModal"
+          class="close-button"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <form id="clinicForm">
+
+
+        <!-- BASIC -->
+
+        <div class="form-section">
+
+          <h3>
+            Basic information
+          </h3>
+
+
+          <label>
+
+            Clinic name *
+
+            <input
+              name="clinic_name"
+              required
+            >
+
+          </label>
+
+
+          <label>
+
+            Clinic type *
+
+            <select
+              name="clinic_type"
+              required
+            >
+
+              <option value="">
+                Select type
+              </option>
+
+              <option>
+                Clinic
+              </option>
+
+              <option>
+                Counseling Center
+              </option>
+
+              <option>
+                Hospital
+              </option>
+
+              <option>
+                Psychology Center
+              </option>
+
+              <option>
+                Other
+              </option>
+
+            </select>
+
+          </label>
+
+
+          <label>
+
+            Description
+
+            <textarea
+              name="description"
+              rows="4"
+            ></textarea>
+
+          </label>
+
+        </div>
+
+
+        <!-- LOCATION -->
+
+        <div class="form-section">
+
+          <h3>
+            Location
+          </h3>
+
+
+          <label>
+
+            Address *
+
+            <input
+              name="address"
+              required
+            >
+
+          </label>
+
+
+          <label>
+
+            Old address
+
+            <input
+              name="old_address"
+            >
+
+          </label>
+
+
+          <div class="form-grid">
+
+            <label>
+
+              Ward
+
+              <input name="ward">
+
+            </label>
+
+
+            <label>
+
+              Province
+
+              <input name="prov">
+
+            </label>
+
+          </div>
+
+
+          <div class="form-grid">
+
+            <label>
+
+              Latitude
+
+              <input
+                name="latitude"
+                type="number"
+                step="any"
+              >
+
+            </label>
+
+
+            <label>
+
+              Longitude
+
+              <input
+                name="longitude"
+                type="number"
+                step="any"
+              >
+
+            </label>
+
+          </div>
+
+        </div>
+
+
+        <!-- CONTACT -->
+
+        <div class="form-section">
+
+          <h3>
+            Contact
+          </h3>
+
+
+          <div class="form-grid">
+
+            <label>
+
+              Phone
+
+              <input
+                name="phone"
+                type="tel"
+              >
+
+            </label>
+
+
+            <label>
+
+              Website
+
+              <input
+                name="website"
+                type="url"
+              >
+
+            </label>
+
+          </div>
+
+        </div>
+
+
+        <!-- SERVICE -->
+
+        <div class="form-section">
+
+          <h3>
+            Service information
+          </h3>
+
+
+          <label>
+
+            Pricing
+
+            <input
+              name="pricing"
+            >
+
+          </label>
+
+
+          <label>
+
+            Operating hours
+
+            <textarea
+              name="operating_hours"
+              rows="3"
+            ></textarea>
+
+          </label>
+
+
+          <label>
+
+            Target groups
+
+            <textarea
+              name="target_groups"
+              rows="3"
+              placeholder="Children, adolescents, adults..."
+            ></textarea>
+
+          </label>
+
+        </div>
+
+
+        <!-- LICENSE -->
+
+        <div class="form-section">
+
+          <h3>
+            Licensing
+          </h3>
+
+
+          <div class="form-grid">
+
+            <label>
+
+              License number
+
+              <input
+                name="license_number"
+              >
+
+            </label>
+
+
+            <label>
+
+              License issue date
+
+              <input
+                name="license_issue_date"
+                type="date"
+              >
+
+            </label>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-actions">
+
+          <button
+            type="button"
+            class="secondary-button"
+            id="cancelClinic"
+          >
+            Cancel
+          </button>
+
+
+          <button
+            type="submit"
+            class="primary-button"
+          >
+            Add clinic
+          </button>
+
+        </div>
+
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+  <script src="admin.js"></script>
+
+</body>
+
+</html>

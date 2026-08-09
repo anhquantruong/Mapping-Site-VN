@@ -1,0 +1,151 @@
+clinic_name,clinic_type,address,old_address,ward,prov,latitude,longitude,pricing,phone,website,operating_hours,license_number,license_issue_date,description,target_groups
+Bệnh viện Đại học Y Dược TPHCM,Bệnh viện công lập,"215 Hồng Bàng, Phường Chợ Lớn, Thành phố Hồ Chí Minh","215 Hồng Bàng, Phường 11, Quận 5",Phường Chợ Lớn,Thành phố Hồ Chí Minh,,,,"1900 7178
+",https://bvdaihoc.com.vn,"Thứ 2 - Thứ 6: 4h30 - 16h30
+Thứ 7: 4h30 - 11h30",,,"Cung cấp dịch vụ đánh giá sức khoẻ tâm thần; Thăm khám, chữa bệnh về tâm lý/ tầm thần",Nhân viên Y tế; Người bệnh mạn tính; Người có H; Cộng đồng LGBTQ+; Nạn nhân buôn bán người
+Bệnh viện Chỉnh hình PHCN,Bệnh viện công lập,"1A Lý Thường Kiệt, Phường Tân Sơn Nhất, Thành phố Hồ Chí Minh","1A Lý Thường Kiệt, Phường 7, Quận Tân Bình",Phường Tân Sơn Nhất,Thành phố Hồ Chí Minh,,,,(028) 3971 2960,https://benhvien1a.com/dat-lich-kham/,"Thứ 2 - Thứ 6: 7h00 - 16h30
+Thứ 7: 7h00 - 11h30",,,,Nhân viên Y tế; Người bệnh mạn tính; Người có H; Cộng đồng LGBTQ+; Nạn nhân buôn bán người
+Bệnh viện Quân Y 175,Bệnh viện công lập,"786 Nguyễn Kiệm, Phường Hạnh Thông, Thành phố Hồ Chí Minh (Quận Gò Vấp cũ)","786 Nguyễn Kiệm, Phường 3, Quận Gò Vấp",Phường Hạnh Thông,Thành phố Hồ Chí Minh,,,,"1900 1175
+",,"Thứ 2 - Thứ 6: 
+  - Sáng: 7h00 - 11h30
+  - Chiều: 13h30 - 16h30
+
+Thứ 7: 7h00 - 11h30
+
+Cấp cứu 24/24",,,,Nhân viên Y tế; Người bệnh mạn tính; Người có H; Cộng đồng LGBTQ+; Nạn nhân buôn bán người
+Bệnh viện Thống Nhất,Bệnh viện công lập,"Số 1 Lý Thường Kiệt, Phường Tân Sơn Nhất, Thành phố Hồ Chí Minh","Số 1 Lý Thường Kiệt, Phường 7, Quận Tân Bình",Phường Tân Sơn Nhất,Thành phố Hồ Chí Minh,,,,"028 3869 0277
+CSKH 1: 1900 2345 47
+CSKH 2: 1900 6163 95
+",,Thứ 2 - Thứ 7: 6h00 - 16h30,,,,Nhân viên Y tế; Người bệnh mạn tính; Người có H; Cộng đồng LGBTQ+; Nạn nhân buôn bán người
+Bênh viện 7A,Bệnh viện công lập,"466 Nguyễn Trải, Phường An Đông, Thành phố Hồ Chí Minh",,Phường An Đông,Thành phố Hồ Chí Minh,,,,"028 3924 4879
+Hotline tư vấn: 028 38366789
+",,,,,,Nhân viên Y tế; Người bệnh mạn tính; Người có H; Cộng đồng LGBTQ+; Nạn nhân buôn bán người
+Bệnh viện Nhân Dân 115,Bệnh viện công lập,"527 Sư Vạn Hạnh, Phường Hoà Hưng, Thành phố Hồ Chí Minh",,Phường Hoà Hưng,Thành phố Hồ Chí Minh,,,,"1900 099983
+Số điện thoại để đăng ký khám bệnh: (028)38 683 496",,,,,,Nhân viên Y tế; Người bệnh mạn tính; Người có H; Cộng đồng LGBTQ+; Nạn nhân buôn bán người
+Bệnh viện Bưu Điện Thành Phố,Bệnh viện công lập,"Lô B9, Đường Thành Thái, Phường Hoà Hưng, Thành phố Hồ Chí Minh",,Phường Hoà Hưng,Thành phố Hồ Chí Minh,,,,"Số điện thoại 1: 028 3864 9834
+Số điện thoại 2: 028 3864 9836
+Số điện thoại 3: 028 3864 9837
+",www.bvdkbuudien.com.vn,,,,,Nhân viên Y tế; Người bệnh mạn tính; Người có H; Cộng đồng LGBTQ+; Nạn nhân buôn bán người
+Bệnh viện 30/4,Bệnh viện công lập,"9 Sư Vạn Hạnh, Phường An Đông, Thành phố Hồ Chí Minh",,Phường An Đông,Thành phố Hồ Chí Minh,,,,"Số điện thoại 1: 069 333 64 68
+Số điện thoại 2: 069 333 64 68",,,,,,Nhân viên Y tế; Người bệnh mạn tính; Người có H; Cộng đồng LGBTQ+; Nạn nhân buôn bán người
+Bệnh viện Nhân Dân Gia Định,Bệnh viện công lập,"Số 1 Nơ Trang Long, Phường Gia Định, Thành phố Hồ Chí Minh",,Phường Gia Định,Thành phố Hồ Chí Minh,,,,Số điện thoại: 02838412692 ,,,,,,Nhân viên Y tế; Người bệnh mạn tính; Người có H; Cộng đồng LGBTQ+; Nạn nhân buôn bán người
+Bệnh viện Nguyễn Tri Phương,Bệnh viện công lập,"468 Nguyễn Trãi, Phường An Đông, Thành phố Hồ Chí Minh",,Phường An Đông,Thành phố Hồ Chí Minh,,,,,,,,,,Nhân viên Y tế; Người bệnh mạn tính; Người có H; Cộng đồng LGBTQ+; Nạn nhân buôn bán người
+Bệnh viện Tâm thần TP. HCM,Bệnh viện công lập,,,,Thành phố Hồ Chí Minh,,,,,,,,,,Nhân viên Y tế; Người bệnh mạn tính; Người có H; Cộng đồng LGBTQ+; Nạn nhân buôn bán người
+Bệnh viện đa khoa khu vực Hóc Môn,Bệnh viện công lập,,,,Thành phố Hồ Chí Minh,,,,,,,,,"Cung cấp dịch vụ đánh giá sức khoẻ tâm thần; Thăm khám, chữa bệnh về tâm lý/ tầm thần",Nhân viên Y tế; Người bệnh mạn tính; Người có H; Cộng đồng LGBTQ+; Nạn nhân buôn bán người
+Bệnh viện Nguyễn Trãi,Bệnh viện công lập,,,,Thành phố Hồ Chí Minh,,,,,,,,,,Nhân viên Y tế; Người bệnh mạn tính; Người có H; Cộng đồng LGBTQ+; Nạn nhân buôn bán người
+Bệnh viện đa khoa khu vực Củ Chi,Bệnh viện công lập,,,,Thành phố Hồ Chí Minh,,,,,,,,,,Nhân viên Y tế; Người bệnh mạn tính; Người có H; Cộng đồng LGBTQ+; Nạn nhân buôn bán người
+Bệnh viện đa khoa khu vực Thủ Đức,Bệnh viện công lập,,,,Thành phố Hồ Chí Minh,,,,,,,,,,Nhân viên Y tế; Người bệnh mạn tính; Người có H; Cộng đồng LGBTQ+; Nạn nhân buôn bán người
+Bệnh viện đa khoa Hoàn Mỹ Sài Gòn,Bệnh viện tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,"Cung cấp dịch vụ đánh giá sức khoẻ tâm thần; Thăm khám, chữa bệnh về tâm lý/ tầm thần",Nhân viên Y tế; Người bệnh mạn tính; Người có H; Cộng đồng LGBTQ+; Nạn nhân buôn bán người
+Bệnh viện Nhân Ái,Bệnh viện tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,Nhân viên Y tế; Người bệnh mạn tính; Người có H; Cộng đồng LGBTQ+; Nạn nhân buôn bán người
+Bệnh viện Lê Văn Thịnh,Bệnh viện tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,Nhân viên Y tế; Người bệnh mạn tính; Người có H; Cộng đồng LGBTQ+; Nạn nhân buôn bán người
+Bệnh viện đa khoa Vạn Hạnh,Bệnh viện tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,Nhân viên Y tế; Người bệnh mạn tính; Người có H; Cộng đồng LGBTQ+; Nạn nhân buôn bán người
+Bệnh viện Đức Khang,Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Bệnh viện Lê Văn Việt,Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Bệnh viện đa khoa Thủ Đức,Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Bệnh viện đa khoa Khánh Hội (Bệnh viện Quận 4 cũ),Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Bệnh viện đa khoa Hồng Đức III,Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Bệnh viện đa khoa Lãnh Binh Thăng (Bệnh viện Quận 11 cũ),Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Bệnh viện Tâm Anh,Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Bệnh viện đa khoa quốc tế Hoàn Mỹ Thủ Đức,Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Bệnh viện Xuyên Á,Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Bệnh viện đa khoa quốc tế Vinmec Central Park,Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Bệnh viện Hồng Đức II,Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Bệnh viện FV,Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Bệnh viện Gia An 115,Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Bệnh viện đa khoa An Sinh,Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Bệnh viện Triều An,Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+"Khoa Tâm lý, Bệnh viện Nhi Đồng 1",Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Bệnh viện Phục hồi chức năng - Điều trị bệnh nghề nghiệp,Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Bệnh viện Y học cổ truyền,Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+"Khoa Tâm lý - Vật lý trị liệu, Bệnh viện Nhi Đồng 2",Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Bệnh viện Nhi Đồng Thành Phố,Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Bệnh viện Ngoại Thần kinh quốc tế,Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Bệnh viện Ngoại Sante,Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+"Phòng khám tâm lý thuộc Khoa Khám Bệnh, Bệnh viện quốc tế Vinmec, TP. HCM",Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám đa khoa thuộc Khoa Khám bệnh Trung tâm Y tế Phường Gò Vấp/ Phòng khám đa khoa Nguyễn Thái Sơn,Trung tâm Y tế,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Bệnh viện quốc tế City,Bệnh viện,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám đa khoa (thuộc Công ty TNHH Y tế Đại Phước),Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám đa khoa (thuộc Công ty TNHH PK đa khoa quốc tế Hàng Xanh),Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám đa khoa (thuộc Công ty TNHH PK đa khoa Nhơn Tâm),Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám đa khoa (thuộc Công ty TNHH PK đa khoa Hưng Dũng),Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám đa khoa (thuộc SIM Medical Center - Chi nhánh Công ty CP SIM MED),Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám đa khoa Victoria Healthcare (thuộc Công ty CP Phát triển Y tế Victoria Healthcare),Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám Jio Health,Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám chuyên khoa Tâm thần - BS CK1 Nhữ Văn Minh,Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng mạch Bác sĩ Chu Quang An - Chuyên khoa Tâm thần,Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám Tâm Thần kinh - Bác sĩ Vũ Kim Hoàn,Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám chuyên khoa Tâm thần - Bác sĩ Chu Thị Dung,Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám Tâm Thần kinh - Bác sĩ Đặng Thế Ân,Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám Prof. Thọ & Dr. Nguyên,Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám Chuyên khoa Tâm thần Bác sĩ Huỳnh Thanh Hiển,Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám Chuyên khoa Tâm thần Bác sĩ Nguyễn Trung Hoàng,Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám Tâm Thần Kinh Mất Ngủ Bác sĩ Lê Đỗ Hưng,Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám Tâm thần kinh Nguyễn Thế Hùng,Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng Khám Chuyên Khoa Tâm Thần - Trần Duy Trâm,Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám chuyên khoa Tâm thần Bác sĩ Giang Vân,Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám Tâm thần kinh - Bác sĩ Phan Văn Tiễn,Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám Thần kinh - BS. Nguyễn Văn Hường,Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám Chuyên khoa Tâm thần kinh - BS. Nguyễn Đức Tuệ,Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+Phòng khám Chuyên khoa Tâm thần kinh - BS. Nguyễn Đức Chinh,Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+"Phòng khám Tâm
+lý - Tâm thần
+BS.CKII. Đặng Thị
+Ngọc Hạnh",Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+"Phòng Khám
+Chuyên Khoa Tâm
+Thần - Trần Trung
+Nghĩa",Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+"Phòng Khám
+Chuyên Khoa Tâm
+Thần - Nguyễn Thị
+Nhỏ",Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+"Phòng khám Bác
+sĩ Phạm Văn Khởi",Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+"Phòng mạch
+chuyên Tâm thần
+kinh của BS
+Nguyễn Đăng Đức",Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+"Phòng Khám
+Chuyên Khoa Tâm
+Thần - Nguyễn
+Đức Khôi",Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+"Phòng khám Thần
+kinh – Bác sĩ Đào
+Trần Thái",Phòng khám tư nhân,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
+,,,,,Thành phố Hồ Chí Minh,,,,,,,,,,
