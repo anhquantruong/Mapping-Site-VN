@@ -1,4 +1,4 @@
-  :root{
+:root{
     --bg: #EFF3EE;
     --surface: #FFFFFF;
     --surface-2: #E4EAE2;
@@ -25,8 +25,31 @@
     --shadow: rgba(0,0,0,0.35);
   }
 
+  /* ============ GLOBAL RESET / RESPONSIVE SAFETY ============ */
+  /* box-sizing áp dụng luôn cho ::before/::after để tránh phần tử
+     bị tràn ra ngoài khi cộng thêm padding/border */
+  *,
+  *::before,
+  *::after{ box-sizing: border-box; }
+
+  html{
+    font-size: calc(16px * var(--font-scale));
+    /* Chặn iOS Safari tự phóng to chữ khi xoay ngang màn hình
+       — đây là nguyên nhân phổ biến khiến "font bị lỗi" trên iPhone */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html, body{
+    /* Không cho trang cuộn ngang — chặn mọi phần tử lỡ tràn
+       (vòng tròn trang trí, ảnh, chữ dài không ngắt dòng...) */
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
   *{ box-sizing: border-box; }
-  html{ font-size: calc(16px * var(--font-scale)); }
   body{
     margin:0;
     background: var(--bg);
@@ -34,8 +57,18 @@
     font-family: 'Be Vietnam Pro', sans-serif;
     transition: background .35s ease, color .35s ease;
     min-height: 100vh;
+    min-height: 100dvh;
+    /* Chữ dài / không có khoảng trắng (URL, mã...) sẽ tự ngắt dòng
+       thay vì đẩy layout tràn ngang */
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
   button{ font-family: inherit; }
+
+  img, svg, video{
+    max-width: 100%;
+    height: auto;
+  }
 
   /* ============ NAVBAR ============ */
   .navbar{
@@ -54,10 +87,11 @@
   }
 
 .wordmark img {
-  width: 150px;
+  width: clamp(110px, 22vw, 150px);
   height: auto;
   display: block;
   transform: translateY(50px);
+  transition: width .25s ease, transform .25s ease;
 }
 
 .wordmark {
@@ -74,6 +108,8 @@
     display:flex;
     align-items:center;
     gap: clamp(4px, 1.6vw, 10px);
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
   .nav-item{
     font-size: 0.93rem;
@@ -100,6 +136,7 @@
     font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 0.02em;
+    flex-shrink: 0;
   }
   .lang-toggle button{
     position: relative;
@@ -131,6 +168,7 @@
     top: calc(100% + 12px);
     right: 0;
     width: 268px;
+    max-width: calc(100vw - 32px);
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 16px;
@@ -191,7 +229,13 @@
 
   /* ============ HERO ============ */
   .hero{
+    position: relative;
+    /* Chặn vòng tròn trang trí (::before) tràn ra ngoài màn hình
+       và gây thanh cuộn ngang trên mobile */
+    overflow: hidden;
+
     min-height: 100vh;
+    min-height: 100dvh;
 
     display: flex;
     flex-direction: column;
@@ -201,7 +245,7 @@
 
     text-align: center;
 
-    padding-top: var(--nav-h);
+    padding: var(--nav-h) 20px 40px;
     box-sizing: border-box;
 }
 .hero::before {
@@ -242,9 +286,10 @@
   .hero h1{
     font-family:'Fraunces', serif;
     font-weight: 700;
-    font-size: clamp(2.0rem, 4.5vw, 3.0rem);
+    font-size: clamp(1.7rem, 4.5vw, 3.0rem);
     line-height: 1.25;
     max-width: 620px;
+    width: 100%;
     margin: 0 0 14px;
     color: var(--ink);
     min-height: 2.6em;
@@ -279,6 +324,7 @@
     font-size: 0.98rem;
     color: var(--ink-soft);
     max-width: 460px;
+    width: 100%;
     line-height: 1.6;
     margin: 0 0 32px;
   }
@@ -305,6 +351,7 @@
     border: 1px dashed var(--border);
     padding: 8px 16px;
     border-radius: 999px;
+    max-width: calc(100vw - 40px);
   }
 
   [lang-el]{ display:none; }
@@ -334,7 +381,7 @@
   .about-h1{
     font-family:'Fraunces', serif;
     font-weight: 540;
-    font-size: clamp(2rem, 4.6vw, 3.1rem);
+    font-size: clamp(1.8rem, 4.6vw, 3.1rem);
     line-height: 1.15;
     color: var(--ink);
     margin: 0 0 22px;
@@ -373,6 +420,7 @@
     display:flex;
     flex-direction:column;
     box-shadow: 0 14px 30px -20px var(--shadow);
+    min-width: 0; /* cho phép grid item co lại thay vì đẩy tràn */
   }
   .team-photo{
     width: 100%;
@@ -404,7 +452,12 @@
     color: var(--ink-soft);
   }
 
-  @media (max-width: 720px){
+  /* iPad / tablet: 2 cột thay vì nhồi 3 cột hoặc rớt về 1 cột luôn */
+  @media (min-width: 601px) and (max-width: 900px){
+    .team-grid{ grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 600px){
     .team-grid{ grid-template-columns: 1fr; }
   }
 
@@ -413,6 +466,7 @@
     position: fixed;
     inset: 0;
     z-index: 110;
+    background: rgba(0,0,0,0.35);
     background: color-mix(in srgb, var(--bg) 92%, transparent);
     backdrop-filter: blur(6px);
     display:flex;
@@ -430,7 +484,9 @@
     width: 100%;
     max-width: 460px;
     max-height: 80vh;
+    max-height: 80dvh;
     overflow-y:auto;
+    -webkit-overflow-scrolling: touch;
     background: var(--surface);
     border-radius: 20px;
     box-shadow: 0 30px 60px -20px var(--shadow);
@@ -485,6 +541,7 @@
     position: fixed;
     inset: 0;
     z-index: 100;
+    background: rgba(0,0,0,0.35);
     background: color-mix(in srgb, var(--bg) 92%, transparent);
     backdrop-filter: blur(6px);
     display:flex;
@@ -501,6 +558,7 @@
     width: 100%;
     max-width: 580px;
     max-height: 88vh;
+    max-height: 88dvh;
     background: var(--surface);
     border-radius: 22px;
     box-shadow: 0 30px 60px -20px var(--shadow);
@@ -551,6 +609,7 @@
   .wizard-body{
     padding: 26px 30px 10px;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .wizard-step-label{
     font-size: 0.76rem;
@@ -597,10 +656,12 @@
     color: var(--ink);
     cursor:pointer;
     transition: border-color .15s ease, background .15s ease;
+    min-width: 0;
   }
   .option-card:hover{ border-color: var(--teal); }
   .option-card.selected{
     border-color: var(--plum);
+    background: rgba(74,59,82,0.08);
     background: color-mix(in srgb, var(--plum) 8%, var(--surface));
   }
   .option-check{
@@ -625,7 +686,9 @@
 
   .text-input, .select-input{
     width:100%;
-    font-size: 0.95rem;
+    /* 16px tối thiểu để Safari trên iPhone không tự zoom vào khi
+       người dùng chạm vào ô nhập liệu */
+    font-size: max(16px, 0.95rem);
     padding: 12px 14px;
     border-radius: 12px;
     border: 1.5px solid var(--border);
@@ -690,6 +753,7 @@
   .done-icon{
     width: 56px; height:56px;
     border-radius:50%;
+    background: rgba(95,138,129,0.18);
     background: color-mix(in srgb, var(--teal) 18%, var(--surface));
     color: var(--teal);
     display:flex;
@@ -697,15 +761,6 @@
     justify-content:center;
     font-size: 1.6rem;
     margin: 4px 0 18px;
-  }
-
-  @media (max-width: 560px){
-    .nav-item{ padding: 8px 10px; font-size: 0.85rem; }
-    .settings-panel{ width: 240px; }
-    .option-list.grid{ grid-template-columns: 1fr; }
-    .wizard-body{ padding: 22px 20px 8px; }
-    .wizard-footer{ padding: 16px 20px 20px; }
-    .notice-card{ padding: 26px 20px 22px; }
   }
 
 .team-socials {
@@ -742,11 +797,12 @@
 .stats-heading {
   text-align: center;
   margin-bottom: 42px;
+  padding: 0 20px;
 }
 
 .stats-heading h2 {
   font-family: 'Fraunces', serif;
-  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-size: clamp(1.6rem, 3.5vw, 2.6rem);
   font-weight: 500;
   line-height: 1.2;
   color: var(--ink);
@@ -769,12 +825,13 @@
 
 .stat-item {
   flex: 1;
+  min-width: 0;
   text-align: center;
 }
 
 .stat-number {
   font-family: 'Fraunces', serif;
-  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-size: clamp(2rem, 5vw, 3.4rem);
   font-weight: 560;
   line-height: 1;
   color: var(--plum);
@@ -791,8 +848,17 @@
   width: 1px;
   height: 48px;
   background: var(--border);
+  flex-shrink: 0;
 }
 
+/* ============ RESPONSIVE BREAKPOINTS ============ */
+
+/* iPad / tablet chung */
+@media (max-width: 900px){
+  .about-wrap{ padding: 48px 20px 72px; }
+}
+
+/* Mobile / iPhone */
 @media (max-width: 600px) {
   .stats-wrap {
     flex-direction: column;
@@ -803,4 +869,38 @@
     width: 48px;
     height: 1px;
   }
+
+  .hero{ padding: calc(var(--nav-h) + 12px) 16px 32px; }
+
+  .hero::before{
+    width: 380px;
+    height: 380px;
+    top: 20px;
+  }
+
+  .hero-eyebrow{ transform: translateY(-10px); }
+
+  .wordmark img{
+    width: 118px;
+    transform: translateY(36px);
+  }
+
+  .about-h1{ margin-bottom: 16px; }
+}
+
+@media (max-width: 560px){
+  .nav-item{ padding: 8px 10px; font-size: 0.85rem; }
+  .settings-panel{ width: 240px; }
+  .option-list.grid{ grid-template-columns: 1fr; }
+  .wizard-body{ padding: 22px 20px 8px; }
+  .wizard-footer{ padding: 16px 20px 20px; flex-wrap: wrap; }
+  .notice-card{ padding: 26px 20px 22px; }
+  .wizard-card, .notice-card{ max-width: calc(100vw - 32px); }
+}
+
+/* Màn rất nhỏ (iPhone SE và tương đương) */
+@media (max-width: 380px){
+  .nav-links{ gap: 2px; }
+  .nav-item{ padding: 7px 8px; font-size: 0.8rem; }
+  .cta-btn{ padding: 13px 26px; font-size: 0.95rem; }
 }

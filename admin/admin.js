@@ -133,7 +133,7 @@ async function loadClinics() {
       await response.json();
 
 
-    // Build dropdown options
+    // Build type dropdown (still derived from clinic data)
     populateFilters();
 
 
@@ -176,7 +176,393 @@ async function loadClinics() {
 
 
 // =========================================================
-// BUILD FILTER OPTIONS
+// VIETNAM PROVINCE / WARD API (provinces.open-api.vn v2)
+// Cấu trúc hành chính mới sau sáp nhập 01/07/2025 (2 cấp:
+// Tỉnh/Thành → Phường/Xã, không còn quận/huyện)
+// =========================================================
+
+const VN_PROVINCE_API =
+  "https://provinces.open-api.vn/api/v2/?depth=2";
+
+let vnProvinces = [];
+
+
+async function loadVNProvinces() {
+
+  try {
+
+    const response =
+      await fetch(VN_PROVINCE_API);
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Failed to load provinces."
+      );
+
+    }
+
+
+    vnProvinces =
+      await response.json();
+
+
+    populateProvinceFilter();
+
+    updateWardFilter();
+
+
+    populateFormProvinceSelect();
+
+    updateFormWardSelect();
+
+
+  } catch (error) {
+
+    console.error(
+      "Could not load provinces/wards:",
+      error
+    );
+
+
+    if (clinicProvinceFilter) {
+
+      clinicProvinceFilter.innerHTML = `
+        <option value="all">
+          Không tải được danh sách tỉnh
+        </option>
+      `;
+
+    }
+
+  }
+
+}
+
+
+// =========================================================
+// BUILD PROVINCE OPTIONS (từ API)
+// =========================================================
+
+function populateProvinceFilter() {
+
+  if (!clinicProvinceFilter) {
+    return;
+  }
+
+
+  const currentProvince =
+    clinicProvinceFilter.value;
+
+
+  clinicProvinceFilter.innerHTML = `
+    <option value="all">
+      Tất cả Tỉnh / Thành
+    </option>
+  `;
+
+
+  vnProvinces
+
+    .slice()
+
+    .sort((a, b) =>
+      a.name.localeCompare(b.name)
+    )
+
+    .forEach(province => {
+
+      const option =
+        document.createElement("option");
+
+
+      option.value = province.name;
+
+      option.textContent = province.name;
+
+
+      clinicProvinceFilter.appendChild(
+        option
+      );
+
+    });
+
+
+  const stillExists =
+    [...clinicProvinceFilter.options].some(
+      opt => opt.value === currentProvince
+    );
+
+
+  if (stillExists) {
+
+    clinicProvinceFilter.value =
+      currentProvince;
+
+  }
+
+}
+
+
+// =========================================================
+// UPDATE WARD FILTER (từ API, theo tỉnh đang chọn)
+// =========================================================
+
+function updateWardFilter() {
+
+  if (!clinicWardFilter) {
+    return;
+  }
+
+
+  const selectedProvinceName =
+    clinicProvinceFilter?.value ||
+    "all";
+
+
+  const currentWard =
+    clinicWardFilter.value;
+
+
+  clinicWardFilter.innerHTML = `
+    <option value="all">
+      Tất cả Phường
+    </option>
+  `;
+
+
+  if (selectedProvinceName === "all") {
+
+    clinicWardFilter.disabled = true;
+
+    return;
+
+  }
+
+
+  clinicWardFilter.disabled = false;
+
+
+  const province =
+    vnProvinces.find(
+      item => item.name === selectedProvinceName
+    );
+
+
+  const wards =
+    (province?.wards || [])
+
+      .slice()
+
+      .sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+
+
+  wards.forEach(ward => {
+
+    const option =
+      document.createElement("option");
+
+
+    option.value = ward.name;
+
+    option.textContent = ward.name;
+
+
+    clinicWardFilter.appendChild(
+      option
+    );
+
+  });
+
+
+  const stillExists =
+    [...clinicWardFilter.options].some(
+      opt => opt.value === currentWard
+    );
+
+
+  if (stillExists) {
+
+    clinicWardFilter.value =
+      currentWard;
+
+  }
+
+}
+
+
+// =========================================================
+// ADD/EDIT CLINIC FORM — PROVINCE / WARD SELECTS
+// Cascading dropdowns fed by the same VN API cache
+// =========================================================
+
+const formProvinceSelect =
+  document.getElementById("formProvince");
+
+const formWardSelect =
+  document.getElementById("formWard");
+
+
+function populateFormProvinceSelect() {
+
+  if (!formProvinceSelect) {
+    return;
+  }
+
+
+  const currentProvince =
+    formProvinceSelect.value;
+
+
+  formProvinceSelect.innerHTML = `
+    <option value="">
+      Select province
+    </option>
+  `;
+
+
+  vnProvinces
+
+    .slice()
+
+    .sort((a, b) =>
+      a.name.localeCompare(b.name)
+    )
+
+    .forEach(province => {
+
+      const option =
+        document.createElement("option");
+
+
+      option.value = province.name;
+
+      option.textContent = province.name;
+
+
+      formProvinceSelect.appendChild(
+        option
+      );
+
+    });
+
+
+  const stillExists =
+    [...formProvinceSelect.options].some(
+      opt => opt.value === currentProvince
+    );
+
+
+  if (stillExists) {
+
+    formProvinceSelect.value =
+      currentProvince;
+
+  }
+
+}
+
+
+function updateFormWardSelect() {
+
+  if (!formWardSelect) {
+    return;
+  }
+
+
+  const selectedProvinceName =
+    formProvinceSelect?.value || "";
+
+
+  const currentWard =
+    formWardSelect.value;
+
+
+  formWardSelect.innerHTML = `
+    <option value="">
+      Select ward
+    </option>
+  `;
+
+
+  if (!selectedProvinceName) {
+
+    formWardSelect.disabled = true;
+
+    return;
+
+  }
+
+
+  formWardSelect.disabled = false;
+
+
+  const province =
+    vnProvinces.find(
+      item => item.name === selectedProvinceName
+    );
+
+
+  const wards =
+    (province?.wards || [])
+
+      .slice()
+
+      .sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+
+
+  wards.forEach(ward => {
+
+    const option =
+      document.createElement("option");
+
+
+    option.value = ward.name;
+
+    option.textContent = ward.name;
+
+
+    formWardSelect.appendChild(
+      option
+    );
+
+  });
+
+
+  const stillExists =
+    [...formWardSelect.options].some(
+      opt => opt.value === currentWard
+    );
+
+
+  if (stillExists) {
+
+    formWardSelect.value =
+      currentWard;
+
+  }
+
+}
+
+
+formProvinceSelect?.addEventListener(
+  "change",
+  () => {
+
+    updateFormWardSelect();
+
+  }
+);
+
+
+// =========================================================
+// BUILD FILTER OPTIONS (Type only — Province/Ward come
+// from the VN administrative API above)
 // =========================================================
 
 function populateFilters() {
@@ -244,175 +630,6 @@ function populateFilters() {
         currentType;
 
     }
-
-  }
-
-
-  // =======================================================
-  // PROVINCE / CITY
-  // =======================================================
-
-  const provinces = [
-    ...new Set(
-
-      clinics
-
-        .map(clinic =>
-          String(
-            clinic.prov || ""
-          ).trim()
-        )
-
-        .filter(Boolean)
-
-    )
-  ].sort((a, b) =>
-    a.localeCompare(b)
-  );
-
-
-  if (clinicProvinceFilter) {
-
-    const currentProvince =
-      clinicProvinceFilter.value;
-
-
-    clinicProvinceFilter.innerHTML = `
-      <option value="all">
-        All provinces / cities
-      </option>
-    `;
-
-
-    provinces.forEach(province => {
-
-      const option =
-        document.createElement("option");
-
-
-      option.value = province;
-
-      option.textContent = province;
-
-
-      clinicProvinceFilter.appendChild(
-        option
-      );
-
-    });
-
-
-    if (
-      provinces.includes(
-        currentProvince
-      )
-    ) {
-
-      clinicProvinceFilter.value =
-        currentProvince;
-
-    }
-
-  }
-
-
-  // Build ward list based on selected province
-  updateWardFilter();
-
-}
-
-
-// =========================================================
-// UPDATE WARD FILTER
-// =========================================================
-
-function updateWardFilter() {
-
-  if (!clinicWardFilter) {
-    return;
-  }
-
-
-  const selectedProvince =
-    clinicProvinceFilter?.value ||
-    "all";
-
-
-  const wards = [
-    ...new Set(
-
-      clinics
-
-        .filter(clinic => {
-
-          if (
-            selectedProvince === "all"
-          ) {
-
-            return true;
-
-          }
-
-
-          return (
-            String(
-              clinic.prov || ""
-            ).trim() ===
-            selectedProvince
-          );
-
-        })
-
-        .map(clinic =>
-          String(
-            clinic.ward || ""
-          ).trim()
-        )
-
-        .filter(Boolean)
-
-    )
-  ].sort((a, b) =>
-    a.localeCompare(b)
-  );
-
-
-  const currentWard =
-    clinicWardFilter.value;
-
-
-  clinicWardFilter.innerHTML = `
-    <option value="all">
-      All wards
-    </option>
-  `;
-
-
-  wards.forEach(ward => {
-
-    const option =
-      document.createElement("option");
-
-
-    option.value = ward;
-
-    option.textContent = ward;
-
-
-    clinicWardFilter.appendChild(
-      option
-    );
-
-  });
-
-
-  // Keep ward only if it still belongs to selected province
-  if (
-    wards.includes(currentWard)
-  ) {
-
-    clinicWardFilter.value =
-      currentWard;
 
   }
 
@@ -689,7 +906,7 @@ clinicProvinceFilter?.addEventListener(
   "change",
   () => {
 
-    // Rebuild ward options
+    // Rebuild ward options from the VN API cache
     updateWardFilter();
 
 
@@ -805,6 +1022,10 @@ function closeModal() {
   }
 
 
+  // Selects don't reset cleanly on their own — resync them
+  updateFormWardSelect();
+
+
   const title =
     clinicModal.querySelector(
       ".modal-header h2"
@@ -854,6 +1075,10 @@ openAddClinic?.addEventListener(
       clinicForm.reset();
 
     }
+
+
+    // Selects don't reset cleanly on their own — resync them
+    updateFormWardSelect();
 
 
     const title =
@@ -1158,6 +1383,20 @@ function editClinic(id) {
   });
 
 
+  // Province select is now set from the generic loop above —
+  // rebuild the ward options for that province, then re-apply
+  // the clinic's saved ward (the generic loop ran before the
+  // matching ward options existed, so it couldn't select it).
+  updateFormWardSelect();
+
+  if (formWardSelect) {
+
+    formWardSelect.value =
+      clinic.ward || "";
+
+  }
+
+
   const title =
     clinicModal?.querySelector(
       ".modal-header h2"
@@ -1366,3 +1605,4 @@ document
 // =========================================================
 
 loadClinics();
+loadVNProvinces();

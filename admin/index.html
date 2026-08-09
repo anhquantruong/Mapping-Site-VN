@@ -91,7 +91,7 @@
           </h2>
 
           <p>
-            Manage mental health service providers.
+            Quản lý các cơ sở phòng khám tham vấn tâm lý.
           </p>
 
         </div>
@@ -160,7 +160,7 @@
           class="primary-button"
           data-page-link="clinics"
         >
-          Manage clinics →
+          Quản lý dữ liệu ->
         </button>
 
       </div>
@@ -213,12 +213,12 @@
   <input
     id="clinicSearch"
     type="search"
-    placeholder="Search clinics..."
+    placeholder="Tìm kiếm cơ sở phòng khám...."
   >
 
   <select id="clinicTypeFilter">
     <option value="all">
-      All types
+      Loại hình phong khám
     </option>
   </select>
 
@@ -401,23 +401,23 @@
               </option>
 
               <option>
-                Clinic
+                Bệnh viện công lập
               </option>
 
               <option>
-                Counseling Center
+                Bệnh viện tư nhân
               </option>
 
               <option>
-                Hospital
+                Phòng khám tư nhân
               </option>
 
               <option>
-                Psychology Center
+                Tổ chức cộng đồng
               </option>
 
               <option>
-                Other
+                Dịch vụ trực tuyến
               </option>
 
             </select>
@@ -475,18 +475,33 @@
 
             <label>
 
-              Ward
+              Province
 
-              <input name="ward">
+              <select
+                id="formProvince"
+                name="prov"
+              >
+                <option value="">
+                  Chọn địa phương
+                </option>
+              </select>
 
             </label>
 
 
             <label>
 
-              Province
+              Ward
 
-              <input name="prov">
+              <select
+                id="formWard"
+                name="ward"
+                disabled
+              >
+                <option value="">
+                  Chọn phường
+                </option>
+              </select>
 
             </label>
 
