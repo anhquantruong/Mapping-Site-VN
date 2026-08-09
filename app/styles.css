@@ -191,6 +191,8 @@
 
   /* ============ HERO ============ */
   .hero{
+    min-height: 100vh;
+
     display: flex;
     flex-direction: column;
 
@@ -201,7 +203,6 @@
 
     padding-top: var(--nav-h);
     box-sizing: border-box;
-      margin-bottom: 30px;
 }
 .hero::before {
   content: "";
@@ -242,19 +243,10 @@
     font-family:'Fraunces', serif;
     font-weight: 700;
     font-size: clamp(2.0rem, 4.5vw, 3.0rem);
-    line-height: 1.15;
-    min-height: auto;
-    margin: 0 0 12px;
-    max-width: 650px;
-    color: var(--ink);
-  }
-  .hero h2{
-    font-family:'Fraunces', serif;
-    font-weight: 200;
-    font-size: clamp(1.0rem, 3.0vw, 1.5rem);
+    line-height: 1.25;
     max-width: 620px;
     margin: 0 0 14px;
-    color: var(--teal);
+    color: var(--ink);
     min-height: 2.6em;
   }
   .hero-title .typing-line {

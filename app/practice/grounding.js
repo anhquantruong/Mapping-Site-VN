@@ -177,7 +177,7 @@ let groundingReturnTimeout = null;
 // ĐANG TEST
 // 1 giây mỗi bước
 
-const GROUNDING_STEP_DURATION = 20 * 1000;
+const GROUNDING_STEP_DURATION = 25 * 1000;
 
 
 // Khi hoàn thành test xong,
@@ -610,13 +610,13 @@ function launchConfetti() {
 
     '#7B4B7A',
 
-    '#3F8F8C',
+    '#00ff84ff',
 
     '#D8A84E',
 
-    '#E58B8B',
+    '#ff0000ff',
 
-    '#6B7280'
+    '#0055ffff'
 
   ];
 
