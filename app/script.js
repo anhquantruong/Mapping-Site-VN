@@ -1,4 +1,57 @@
-  const body = document.body;
+const body = document.body;
+
+  /* ---------- Mobile hamburger nav ---------- */
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  const NAV_COLLAPSE_QUERY = '(max-width: 1024px)';
+
+  function closeNavMenu(){
+    if(!navLinks || !navToggle) return;
+    navLinks.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  }
+  function openNavMenu(){
+    if(!navLinks || !navToggle) return;
+    navLinks.classList.add('open');
+    navToggle.setAttribute('aria-expanded', 'true');
+  }
+  function toggleNavMenu(){
+    if(!navLinks) return;
+    if(navLinks.classList.contains('open')) closeNavMenu();
+    else openNavMenu();
+  }
+
+  if(navToggle && navLinks){
+
+    navToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleNavMenu();
+    });
+
+    // Đóng menu khi bấm ra ngoài (chỉ áp dụng khi menu đang ở dạng mobile)
+    document.addEventListener('click', (e) => {
+      if(!window.matchMedia(NAV_COLLAPSE_QUERY).matches) return;
+      if(navLinks.contains(e.target) || navToggle.contains(e.target)) return;
+      closeNavMenu();
+    });
+
+    // Đóng menu khi bấm 1 trong 4 mục điều hướng chính (không đụng
+    // tới nút Cài đặt / đổi ngôn ngữ, vì chúng có popover riêng)
+    ['navHome', 'navAbout', 'navPractice', 'navHelp'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el){
+        el.addEventListener('click', () => {
+          if(window.matchMedia(NAV_COLLAPSE_QUERY).matches) closeNavMenu();
+        });
+      }
+    });
+
+    // Nếu người dùng xoay ngang / đổi kích thước cửa sổ vượt qua
+    // breakpoint desktop, tự đóng menu mobile để tránh kẹt trạng thái mở
+    window.addEventListener('resize', () => {
+      if(!window.matchMedia(NAV_COLLAPSE_QUERY).matches) closeNavMenu();
+    });
+  }
 
   /* ---------- Nav settings ---------- */
   const settingsBtn = document.getElementById('settingsBtn');
@@ -513,4 +566,3 @@ if (feedbackForm && feedbackSuccess) {
     });
   }
 }
-

@@ -111,6 +111,35 @@
     flex-wrap: wrap;
     justify-content: flex-end;
   }
+
+  /* ============ HAMBURGER MENU (ẩn mặc định trên desktop) ============ */
+  .nav-toggle{
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+  .nav-toggle:hover{ background: var(--surface-2); }
+  .nav-toggle span{
+    display:block;
+    width: 22px;
+    height: 2px;
+    background: var(--ink);
+    border-radius: 2px;
+    transition: transform .25s ease, opacity .25s ease;
+  }
+  /* Đổi 3 gạch thành dấu X khi menu đang mở */
+  .nav-toggle[aria-expanded="true"] span:nth-child(1){ transform: translateY(7px) rotate(45deg); }
+  .nav-toggle[aria-expanded="true"] span:nth-child(2){ opacity: 0; }
+  .nav-toggle[aria-expanded="true"] span:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
   .nav-item{
     font-size: 0.93rem;
     font-weight: 500;
@@ -858,6 +887,63 @@
   .about-wrap{ padding: 48px 20px 72px; }
 }
 
+/* Điện thoại + iPad (portrait & landscape): navbar thu gọn thành
+   nút 3 gạch, bấm vào mới xổ danh sách menu xuống */
+@media (max-width: 1024px){
+
+  .nav-toggle{ display: flex; }
+
+  .nav-links{
+    position: fixed;
+    top: var(--nav-h);
+    left: 0;
+    right: 0;
+    z-index: 45;
+
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 4px;
+
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 16px 30px -20px var(--shadow);
+    padding: 10px 16px 18px;
+
+    max-height: calc(100dvh - var(--nav-h));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+
+    /* Ẩn menu mặc định, chỉ hiện khi có class .open */
+    transform: translateY(-8px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease, visibility .2s step-end;
+  }
+
+  .nav-links.open{
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity .2s ease, transform .2s ease, visibility .2s step-start;
+  }
+
+  .nav-item{
+    width: 100%;
+    text-align: left;
+  }
+
+  .settings-wrap{ width: 100%; }
+
+  .lang-toggle{
+    align-self: flex-start;
+    margin-top: 4px;
+  }
+}
+
 /* Mobile / iPhone */
 @media (max-width: 600px) {
   .stats-wrap {
@@ -900,7 +986,6 @@
 
 /* Màn rất nhỏ (iPhone SE và tương đương) */
 @media (max-width: 380px){
-  .nav-links{ gap: 2px; }
-  .nav-item{ padding: 7px 8px; font-size: 0.8rem; }
+  .nav-item{ padding: 12px 10px; font-size: 0.85rem; }
   .cta-btn{ padding: 13px 26px; font-size: 0.95rem; }
 }
