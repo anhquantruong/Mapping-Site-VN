@@ -60,7 +60,7 @@ const groundingExit =
 // COMPLETION SOUND
 // =========================================================
 
-// MP3 nằm trong folder practice
+// MP3 nằm trong folder assets
 const groundingCompleteSound =
   new Audio('practice/duolingo-completed-lesson.mp3');
 
@@ -177,7 +177,7 @@ let groundingReturnTimeout = null;
 // ĐANG TEST
 // 1 giây mỗi bước
 
-const GROUNDING_STEP_DURATION = 25 * 1000;
+const GROUNDING_STEP_DURATION = 1 * 1000;
 
 
 // Khi hoàn thành test xong,
