@@ -133,7 +133,7 @@
             Tổng số Feedback
           </span>
 
-          <strong>
+          <strong id="feedbackCount">
             —
           </strong>
 
@@ -301,21 +301,83 @@
         </h2>
 
         <p>
-          Review các feedbacks từ người dùng.
+          Review các feedbacks từ người dùng. Dòng đậm là feedback
+          chưa được mở xem.
         </p>
 
       </header>
 
 
-      <div class="empty-state">
+      <!-- SEARCH / FILTER -->
 
-        <h3>
-          No feedback loaded yet.
-        </h3>
+      <div class="clinic-toolbar feedback-toolbar">
 
-        <p>
-          This section will connect to your backend later.
-        </p>
+        <input
+          id="feedbackSearch"
+          type="search"
+          placeholder="Tìm kiếm feedback...."
+        >
+
+        <select id="feedbackStatusFilter">
+          <option value="all">
+            Tất cả trạng thái
+          </option>
+
+          <option value="new">
+            Mới
+          </option>
+
+          <option value="reviewed">
+            Đã xem
+          </option>
+
+          <option value="resolved">
+            Đã xử lý
+          </option>
+        </select>
+
+      </div>
+
+
+      <!-- TABLE (KHÔNG hiện nội dung feedback ở đây —
+           phải bấm "Xem" mới thấy nội dung) -->
+
+      <div class="clinic-table-wrapper">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Người gửi
+              </th>
+
+              <th>
+                Chủ đề
+              </th>
+
+              <th>
+                Ngày gửi
+              </th>
+
+              <th>
+                Trạng thái
+              </th>
+
+              <th>
+                Actions
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="feedbackTable"></tbody>
+
+        </table>
 
       </div>
 
@@ -686,6 +748,141 @@
 
 
       </form>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       FEEDBACK DETAIL MODAL
+       Box trái: nội dung người dùng gửi (tên, email, chủ đề,
+       nội dung). Box phải: nơi admin soạn trả lời — bấm Gửi
+       sẽ lưu vào DB + tự chuyển status sang "Đã xử lý".
+       (Gửi mail thật sẽ được kết nối sau, hiện tại chỉ lưu
+       nội bộ.)
+       ===================================================== -->
+
+  <div
+    class="modal hidden"
+    id="feedbackDetailModal"
+  >
+
+    <div class="modal-overlay" id="feedbackDetailOverlay"></div>
+
+
+    <div class="modal-card feedback-detail-card">
+
+      <div class="modal-header">
+
+        <div>
+
+          <span class="eyebrow">
+            FEEDBACK
+          </span>
+
+          <h2>
+            Chi tiết feedback
+          </h2>
+
+        </div>
+
+
+        <button
+          id="closeFeedbackDetail"
+          class="close-button"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <div class="feedback-detail-grid">
+
+
+        <!-- BOX TRÁI: NỘI DUNG NGƯỜI GỬI -->
+
+        <div class="feedback-detail-box">
+
+          <h3>
+            Người dùng đã gửi
+          </h3>
+
+
+          <dl class="feedback-meta">
+
+            <div>
+              <dt>Tên</dt>
+              <dd id="fbDetailName">—</dd>
+            </div>
+
+            <div>
+              <dt>Email</dt>
+              <dd id="fbDetailEmail">—</dd>
+            </div>
+
+            <div>
+              <dt>Chủ đề</dt>
+              <dd id="fbDetailType">—</dd>
+            </div>
+
+            <div>
+              <dt>Ngày gửi</dt>
+              <dd id="fbDetailDate">—</dd>
+            </div>
+
+          </dl>
+
+
+          <div class="feedback-message-box" id="fbDetailMessage"></div>
+
+        </div>
+
+
+        <!-- BOX PHẢI: TRẢ LỜI -->
+
+        <div class="feedback-detail-box">
+
+          <h3>
+            Trả lời
+          </h3>
+
+          <p class="feedback-hint" id="fbReplyHint">
+            Nội dung này sẽ được lưu lại nội bộ và feedback sẽ
+            tự động chuyển sang "Đã xử lý". Gửi email thật sẽ
+            được kết nối ở bản sau.
+          </p>
+
+          <textarea
+            id="fbReplyText"
+            rows="10"
+            placeholder="Nhập nội dung trả lời cho người dùng..."
+          ></textarea>
+
+          <div class="feedback-detail-actions">
+
+            <button
+              type="button"
+              class="secondary-button"
+              id="fbCancelReply"
+            >
+              Đóng
+            </button>
+
+            <button
+              type="button"
+              class="primary-button"
+              id="fbSendReply"
+            >
+              Gửi & Đánh dấu hoàn thành
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
 
     </div>
 

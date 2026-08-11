@@ -92,8 +92,8 @@ const body = document.body;
 
   /* ---------- Hero typing animation ---------- */
   const HERO_TYPING_TEXT = {
-    vi: 'Không gian tìm kiếm sự hỗ trợ tâm lý an toàn bằng AI.',
-    en: 'A safe, respectful space to find mental health support through AI.',
+    vi: 'Không gian tìm kiếm sự hỗ trợ tâm lý an toàn',
+    en: 'A safe, respectful space to find mental health support.',
   };
   const heroTypingVi = document.getElementById('heroTypingVi');
   const heroTypingEn = document.getElementById('heroTypingEn');
@@ -457,12 +457,60 @@ function showPage(page) {
     }
   }
   wfNext.addEventListener('click', () => {
-    const list = activeSteps();
-    const step = list[cursor];
-    if(step.type === 'done'){ closeWizard(); return; }
-    if(cursor === list.length - 1){ closeWizard(); return; }
-    goNext();
-  });
+
+  const list = activeSteps();
+  const step = list[cursor];
+
+
+  // Khi hoàn thành screening
+  if (step.type === 'done') {
+
+    closeWizard();
+
+    // Lấy location từ q4
+    const locationAnswer = answers.q4 || {};
+
+    const location = {
+      province: locationAnswer.province,
+      ward: locationAnswer.ward
+    };
+
+
+    // Gọi recommendation engine
+    if (
+      window.MappingResults &&
+      typeof window.MappingResults.showResults === 'function'
+    ) {
+
+      window.MappingResults.showResults(
+        answers,
+        location
+      );
+
+    } else {
+
+      console.error(
+        'MappingResults.showResults is not available.'
+      );
+
+    }
+
+    return;
+  }
+
+
+  if(cursor === list.length - 1){
+
+    closeWizard();
+
+    return;
+
+  }
+
+
+  goNext();
+
+});
   wfBack.addEventListener('click', goBack);
 
 /* ANIMATION COUNTUP CHO THÔNG TIN NHỮNG CON SỐ */
@@ -537,21 +585,81 @@ if (footer && wordmark) {
   footerObserver.observe(footer);
 }
 
-/* FEEDBACK FORM SUBMISSION */
+/* =========================================================
+   FEEDBACK FORM SUBMISSION
+   Gửi feedback lên server (POST /api/feedback), lưu vào
+   bảng "feedback" trong mappingsite.db, để hiện ra bên Admin.
+   ========================================================= */
+
 const feedbackForm = document.getElementById('feedbackForm');
 const feedbackSuccess = document.getElementById('feedbackSuccess');
 const feedbackAgain = document.getElementById('feedbackAgain');
 
 if (feedbackForm && feedbackSuccess) {
 
-  feedbackForm.addEventListener('submit', (e) => {
+  feedbackForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // Hide form
-    feedbackForm.classList.add('hidden');
+    const submitBtn = feedbackForm.querySelector('.feedback-submit');
+    const originalHTML = submitBtn ? submitBtn.innerHTML : '';
 
-    // Show success message
-    feedbackSuccess.classList.remove('hidden');
+    const payload = {
+      name: feedbackForm.name.value.trim(),
+      email: feedbackForm.email.value.trim(),
+      type: feedbackForm.type.value,
+      message: feedbackForm.message.value.trim()
+    };
+
+    try {
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = (lang() === 'vi') ? 'Đang gửi...' : 'Sending...';
+      }
+
+      const response = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      let result = {};
+      try {
+        result = await response.json();
+      } catch {
+        result = {};
+      }
+
+      if (!response.ok) {
+        throw new Error(
+          result.error ||
+          (lang() === 'vi' ? 'Gửi feedback thất bại.' : 'Failed to send feedback.')
+        );
+      }
+
+      // Thành công: ẩn form, hiện thông báo cảm ơn
+      feedbackForm.classList.add('hidden');
+      feedbackSuccess.classList.remove('hidden');
+
+    } catch (error) {
+
+      console.error('Feedback submit error:', error);
+
+      alert(
+        error.message ||
+        (lang() === 'vi'
+          ? 'Gửi feedback thất bại. Vui lòng thử lại.'
+          : 'Failed to send feedback. Please try again.')
+      );
+
+    } finally {
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalHTML;
+      }
+
+    }
   });
 
   // Send another response

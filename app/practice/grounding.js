@@ -910,7 +910,7 @@ function finishGrounding() {
       });
 
 
-    }, 5000);
+    }, 10000);
 
 }
 

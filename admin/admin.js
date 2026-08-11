@@ -5,6 +5,70 @@
 
 
 // =========================================================
+// AUTH GUARD
+// Kiểm tra session ngay khi trang tải — nếu hết hạn (ví dụ
+// tab để mở quá 8 tiếng) thì đá về trang đăng nhập. Đây là
+// lớp bảo vệ phụ; lớp chính đã chặn ở server (server.js sẽ
+// redirect trước khi index.html được trả về nếu chưa đăng
+// nhập, nên đoạn này chủ yếu xử lý trường hợp phiên hết hạn
+// giữa chừng trong lúc trang vẫn đang mở).
+// =========================================================
+
+async function guardAdminSession() {
+
+  try {
+
+    const response =
+      await fetch("/api/admin/session", {
+        credentials: "same-origin"
+      });
+
+
+    const data =
+      await response.json();
+
+
+    if (!data.authenticated) {
+
+      window.location.href = "login.html";
+
+    }
+
+
+  } catch (error) {
+
+    console.error(
+      "Session check failed:",
+      error
+    );
+
+    window.location.href = "login.html";
+
+  }
+
+}
+
+guardAdminSession();
+
+
+// Nếu 1 request tới /api/admin/* trả về 401 (phiên đã hết
+// hạn), gọi hàm này để đá về trang đăng nhập ngay lập tức
+function redirectIfUnauthorized(response) {
+
+  if (response.status === 401) {
+
+    window.location.href = "login.html";
+
+    return true;
+
+  }
+
+  return false;
+
+}
+
+
+// =========================================================
 // PAGE NAVIGATION
 // =========================================================
 
@@ -117,7 +181,16 @@ async function loadClinics() {
   try {
 
     const response =
-      await fetch("/api/admin/clinics");
+      await fetch("/api/admin/clinics", {
+        credentials: "same-origin"
+      });
+
+
+    if (redirectIfUnauthorized(response)) {
+
+      return;
+
+    }
 
 
     if (!response.ok) {
@@ -1227,6 +1300,8 @@ clinicForm?.addEventListener(
           {
             method,
 
+            credentials: "same-origin",
+
             headers: {
               "Content-Type":
                 "application/json"
@@ -1236,6 +1311,13 @@ clinicForm?.addEventListener(
               JSON.stringify(data)
           }
         );
+
+
+      if (redirectIfUnauthorized(response)) {
+
+        return;
+
+      }
 
 
       let result = {};
@@ -1474,9 +1556,19 @@ async function deleteClinic(id) {
       await fetch(
         `/api/admin/clinics/${id}`,
         {
-          method: "DELETE"
+          method: "DELETE",
+
+          credentials: "same-origin"
+
         }
       );
+
+
+    if (redirectIfUnauthorized(response)) {
+
+      return;
+
+    }
 
 
     let result = {};
@@ -1581,6 +1673,976 @@ function attachClinicActions() {
 
 
 // =========================================================
+// FEEDBACK ELEMENTS
+// =========================================================
+
+const feedbackTable =
+  document.getElementById("feedbackTable");
+
+const feedbackSearch =
+  document.getElementById("feedbackSearch");
+
+const feedbackStatusFilter =
+  document.getElementById("feedbackStatusFilter");
+
+const feedbackCount =
+  document.getElementById("feedbackCount");
+
+
+let feedbackList = [];
+
+
+// =========================================================
+// LOAD FEEDBACK
+// =========================================================
+
+async function loadFeedback() {
+
+  try {
+
+    const response =
+      await fetch("/api/admin/feedback", {
+        credentials: "same-origin"
+      });
+
+
+    if (redirectIfUnauthorized(response)) {
+
+      return;
+
+    }
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Failed to load feedback."
+      );
+
+    }
+
+
+    feedbackList =
+      await response.json();
+
+
+    renderFeedback();
+
+
+    if (feedbackCount) {
+
+      feedbackCount.textContent =
+        feedbackList.length;
+
+    }
+
+
+  } catch (error) {
+
+    console.error(
+      "Could not load feedback:",
+      error
+    );
+
+
+    if (feedbackTable) {
+
+      feedbackTable.innerHTML = `
+        <tr>
+          <td colspan="5">
+            Failed to load feedback.
+          </td>
+        </tr>
+      `;
+
+    }
+
+  }
+
+}
+
+
+// =========================================================
+// FORMAT DATE (SQLite CURRENT_TIMESTAMP is UTC, "YYYY-MM-DD HH:MM:SS")
+// =========================================================
+
+function formatFeedbackDate(value) {
+
+  if (!value) {
+    return "—";
+  }
+
+
+  const isoLike =
+    value.includes("T")
+      ? value
+      : value.replace(" ", "T") + "Z";
+
+
+  const date =
+    new Date(isoLike);
+
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return value;
+
+  }
+
+
+  return date.toLocaleString(
+    "vi-VN",
+    {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    }
+  );
+
+}
+
+
+// =========================================================
+// IS READ HELPER
+// (better-sqlite3 trả về 0/1 dạng số)
+// =========================================================
+
+function isFeedbackRead(item) {
+
+  return Number(item.is_read) === 1;
+
+}
+
+
+// =========================================================
+// RENDER FEEDBACK
+// KHÔNG hiện cột nội dung — nội dung chỉ hiện khi bấm "Xem".
+// Dòng chưa đọc có nền đậm hơn dòng đã đọc.
+// =========================================================
+
+function renderFeedback() {
+
+  if (!feedbackTable) {
+    return;
+  }
+
+
+  const query =
+    feedbackSearch?.value
+      ?.trim()
+      .toLowerCase() || "";
+
+
+  const selectedStatus =
+    feedbackStatusFilter?.value ||
+    "all";
+
+
+  const filteredFeedback =
+    feedbackList.filter(item => {
+
+      const searchableText = [
+
+        item.name,
+
+        item.email,
+
+        item.category,
+
+        item.message,
+
+        item.page
+
+      ]
+
+        .filter(Boolean)
+
+        .join(" ")
+
+        .toLowerCase();
+
+
+      const matchesSearch =
+        !query ||
+        searchableText.includes(query);
+
+
+      const matchesStatus =
+        selectedStatus === "all" ||
+        String(
+          item.status || ""
+        ).trim() === selectedStatus;
+
+
+      return (
+        matchesSearch &&
+        matchesStatus
+      );
+
+    });
+
+
+  if (
+    filteredFeedback.length === 0
+  ) {
+
+    feedbackTable.innerHTML = `
+      <tr>
+        <td colspan="5">
+          No feedback found.
+        </td>
+      </tr>
+    `;
+
+    return;
+
+  }
+
+
+  feedbackTable.innerHTML =
+    filteredFeedback
+
+      .map(item => {
+
+        const read =
+          isFeedbackRead(item);
+
+
+        const rowClass =
+          read
+            ? "feedback-row-read"
+            : "feedback-row-unread";
+
+
+        return `
+
+          <tr class="${rowClass}">
+
+            <td>
+
+              <strong>
+                ${!read ? '<span class="unread-dot" title="Chưa đọc"></span>' : ''}${escapeHTML(
+                  item.name ||
+                  "Ẩn danh"
+                )}
+              </strong>
+
+              <span class="table-subtext">
+                ${escapeHTML(
+                  item.email ||
+                  ""
+                )}
+              </span>
+
+            </td>
+
+
+            <td>
+              ${escapeHTML(
+                item.category ||
+                "—"
+              )}
+            </td>
+
+
+            <td>
+              ${escapeHTML(
+                formatFeedbackDate(
+                  item.created_at
+                )
+              )}
+            </td>
+
+
+            <td>
+
+              <select
+                class="status-select"
+                data-id="${item.id}"
+              >
+
+                <option
+                  value="new"
+                  ${item.status === "new" ? "selected" : ""}
+                >
+                  Mới
+                </option>
+
+                <option
+                  value="reviewed"
+                  ${item.status === "reviewed" ? "selected" : ""}
+                >
+                  Đã xem
+                </option>
+
+                <option
+                  value="resolved"
+                  ${item.status === "resolved" ? "selected" : ""}
+                >
+                  Đã xử lý
+                </option>
+
+              </select>
+
+            </td>
+
+
+            <td>
+
+              <button
+                class="table-action view-feedback"
+                data-id="${item.id}"
+                type="button"
+              >
+                Xem
+              </button>
+
+
+              <button
+                class="table-action danger delete-feedback"
+                data-id="${item.id}"
+                type="button"
+              >
+                Delete
+              </button>
+
+            </td>
+
+          </tr>
+
+        `;
+
+      })
+
+      .join("");
+
+
+  attachFeedbackActions();
+
+}
+
+
+// =========================================================
+// SEARCH / STATUS FILTER
+// =========================================================
+
+feedbackSearch?.addEventListener(
+  "input",
+  renderFeedback
+);
+
+
+feedbackStatusFilter?.addEventListener(
+  "change",
+  renderFeedback
+);
+
+
+// =========================================================
+// UPDATE FEEDBACK STATUS (chỉnh tay từ dropdown trong bảng)
+// =========================================================
+
+async function updateFeedbackStatus(id, status) {
+
+  try {
+
+    const response =
+      await fetch(
+        `/api/admin/feedback/${id}`,
+        {
+          method: "PATCH",
+
+          credentials: "same-origin",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({ status })
+        }
+      );
+
+
+    if (redirectIfUnauthorized(response)) {
+
+      return;
+
+    }
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Failed to update feedback status."
+      );
+
+    }
+
+
+    await loadFeedback();
+
+
+  } catch (error) {
+
+    console.error(
+      "Update feedback status error:",
+      error
+    );
+
+
+    alert(
+      error.message ||
+      "Failed to update feedback status."
+    );
+
+
+    // Nếu lỗi, load lại để đồng bộ dropdown về trạng thái đúng
+    await loadFeedback();
+
+  }
+
+}
+
+
+// =========================================================
+// DELETE FEEDBACK
+// =========================================================
+
+async function deleteFeedback(id) {
+
+  const confirmed =
+    confirm(
+      "Delete this feedback?\n\nThis action cannot be undone."
+    );
+
+
+  if (!confirmed) {
+
+    return;
+
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+        `/api/admin/feedback/${id}`,
+        {
+          method: "DELETE",
+
+          credentials: "same-origin"
+
+        }
+      );
+
+
+    if (redirectIfUnauthorized(response)) {
+
+      return;
+
+    }
+
+
+    let result = {};
+
+
+    try {
+
+      result =
+        await response.json();
+
+    } catch {
+
+      result = {};
+
+    }
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        result.error ||
+        "Failed to delete feedback."
+      );
+
+    }
+
+
+    await loadFeedback();
+
+
+  } catch (error) {
+
+    console.error(
+      "Delete feedback error:",
+      error
+    );
+
+
+    alert(
+      error.message ||
+      "Failed to delete feedback."
+    );
+
+  }
+
+}
+
+
+// =========================================================
+// FEEDBACK DETAIL MODAL
+// Box trái: nội dung người dùng gửi. Box phải: soạn trả lời.
+// Mở modal => tự động đánh dấu is_read = 1 (đổi màu dòng).
+// Gửi trả lời => lưu reply_message + status = "resolved".
+// =========================================================
+
+const feedbackDetailModal =
+  document.getElementById("feedbackDetailModal");
+
+const closeFeedbackDetailBtn =
+  document.getElementById("closeFeedbackDetail");
+
+const feedbackDetailOverlay =
+  document.getElementById("feedbackDetailOverlay");
+
+const fbCancelReply =
+  document.getElementById("fbCancelReply");
+
+const fbSendReply =
+  document.getElementById("fbSendReply");
+
+const fbReplyText =
+  document.getElementById("fbReplyText");
+
+const fbDetailName =
+  document.getElementById("fbDetailName");
+
+const fbDetailEmail =
+  document.getElementById("fbDetailEmail");
+
+const fbDetailType =
+  document.getElementById("fbDetailType");
+
+const fbDetailDate =
+  document.getElementById("fbDetailDate");
+
+const fbDetailMessage =
+  document.getElementById("fbDetailMessage");
+
+const fbReplyHint =
+  document.getElementById("fbReplyHint");
+
+
+let currentFeedbackId = null;
+
+
+function openFeedbackDetailModal() {
+
+  if (!feedbackDetailModal) {
+    return;
+  }
+
+
+  feedbackDetailModal.classList.remove(
+    "hidden"
+  );
+
+
+  document.body.classList.add(
+    "modal-open"
+  );
+
+}
+
+
+function closeFeedbackDetailModal() {
+
+  if (!feedbackDetailModal) {
+    return;
+  }
+
+
+  feedbackDetailModal.classList.add(
+    "hidden"
+  );
+
+
+  document.body.classList.remove(
+    "modal-open"
+  );
+
+
+  currentFeedbackId = null;
+
+
+  if (fbReplyText) {
+
+    fbReplyText.value = "";
+
+  }
+
+}
+
+
+async function openFeedbackDetail(id) {
+
+  const item =
+    feedbackList.find(
+      f =>
+        Number(f.id) ===
+        Number(id)
+    );
+
+
+  if (!item) {
+
+    alert(
+      "Feedback could not be found."
+    );
+
+    return;
+
+  }
+
+
+  currentFeedbackId =
+    Number(id);
+
+
+  // Điền box trái
+  if (fbDetailName) {
+
+    fbDetailName.textContent =
+      item.name || "Ẩn danh";
+
+  }
+
+  if (fbDetailEmail) {
+
+    fbDetailEmail.textContent =
+      item.email || "—";
+
+  }
+
+  if (fbDetailType) {
+
+    fbDetailType.textContent =
+      item.category || "—";
+
+  }
+
+  if (fbDetailDate) {
+
+    fbDetailDate.textContent =
+      formatFeedbackDate(
+        item.created_at
+      );
+
+  }
+
+  if (fbDetailMessage) {
+
+    fbDetailMessage.textContent =
+      item.message || "";
+
+  }
+
+
+  // Điền box phải — nếu đã trả lời trước đó, hiện lại nội
+  // dung đã trả lời để admin có thể xem / sửa tiếp
+  if (fbReplyText) {
+
+    fbReplyText.value =
+      item.reply_message || "";
+
+  }
+
+  if (fbReplyHint) {
+
+    fbReplyHint.textContent =
+      item.replied_at
+        ? `Đã trả lời lúc ${formatFeedbackDate(item.replied_at)}. Nội dung này sẽ được lưu lại nội bộ — gửi email thật sẽ được kết nối ở bản sau.`
+        : `Nội dung này sẽ được lưu lại nội bộ và feedback sẽ tự động chuyển sang "Đã xử lý". Gửi email thật sẽ được kết nối ở bản sau.`;
+
+  }
+
+
+  openFeedbackDetailModal();
+
+
+  // Đánh dấu đã đọc (chỉ gọi API nếu đang chưa đọc, tránh
+  // request thừa mỗi lần mở lại 1 feedback đã đọc rồi)
+  if (!isFeedbackRead(item)) {
+
+    try {
+
+      const response =
+        await fetch(
+          `/api/admin/feedback/${id}/read`,
+          {
+            method: "POST",
+
+            credentials: "same-origin"
+
+          }
+        );
+
+
+      if (redirectIfUnauthorized(response)) {
+
+        return;
+
+      }
+
+
+      if (response.ok) {
+
+        await loadFeedback();
+
+      }
+
+
+    } catch (error) {
+
+      console.error(
+        "Mark feedback read error:",
+        error
+      );
+
+    }
+
+  }
+
+}
+
+
+closeFeedbackDetailBtn?.addEventListener(
+  "click",
+  closeFeedbackDetailModal
+);
+
+
+fbCancelReply?.addEventListener(
+  "click",
+  closeFeedbackDetailModal
+);
+
+
+feedbackDetailOverlay?.addEventListener(
+  "click",
+  closeFeedbackDetailModal
+);
+
+
+fbSendReply?.addEventListener(
+  "click",
+  async () => {
+
+    if (!currentFeedbackId) {
+      return;
+    }
+
+
+    const replyMessage =
+      fbReplyText?.value
+        ?.trim() || "";
+
+
+    if (!replyMessage) {
+
+      alert(
+        "Vui lòng nhập nội dung trả lời."
+      );
+
+      return;
+
+    }
+
+
+    const originalText =
+      fbSendReply.textContent;
+
+
+    try {
+
+      fbSendReply.disabled = true;
+
+      fbSendReply.textContent =
+        "Đang lưu...";
+
+
+      const response =
+        await fetch(
+          `/api/admin/feedback/${currentFeedbackId}/reply`,
+          {
+            method: "POST",
+
+            credentials: "same-origin",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify({
+                reply_message:
+                  replyMessage
+              })
+          }
+        );
+
+
+      if (redirectIfUnauthorized(response)) {
+
+        return;
+
+      }
+
+
+      let result = {};
+
+
+      try {
+
+        result =
+          await response.json();
+
+      } catch {
+
+        result = {};
+
+      }
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          result.error ||
+          "Failed to save reply."
+        );
+
+      }
+
+
+      alert(
+        "Đã lưu trả lời. Feedback đã được đánh dấu Đã xử lý."
+      );
+
+
+      closeFeedbackDetailModal();
+
+
+      await loadFeedback();
+
+
+    } catch (error) {
+
+      console.error(
+        "Send reply error:",
+        error
+      );
+
+
+      alert(
+        error.message ||
+        "Failed to save reply."
+      );
+
+
+    } finally {
+
+      fbSendReply.disabled = false;
+
+      fbSendReply.textContent =
+        originalText;
+
+    }
+
+  }
+);
+
+
+// =========================================================
+// FEEDBACK ROW ACTIONS
+// =========================================================
+
+function attachFeedbackActions() {
+
+
+  document
+    .querySelectorAll(
+      ".status-select"
+    )
+    .forEach(select => {
+
+      select.addEventListener(
+        "change",
+        () => {
+
+          updateFeedbackStatus(
+            select.dataset.id,
+            select.value
+          );
+
+        }
+      );
+
+    });
+
+
+  document
+    .querySelectorAll(
+      ".view-feedback"
+    )
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          openFeedbackDetail(
+            button.dataset.id
+          );
+
+        }
+      );
+
+    });
+
+
+  document
+    .querySelectorAll(
+      ".delete-feedback"
+    )
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          deleteFeedback(
+            button.dataset.id
+          );
+
+        }
+      );
+
+    });
+
+}
+
+
+// =========================================================
 // LOGOUT
 // =========================================================
 
@@ -1590,11 +2652,29 @@ document
   )
   ?.addEventListener(
     "click",
-    () => {
+    async () => {
 
-      alert(
-        "Authentication will be connected next."
-      );
+      try {
+
+        await fetch("/api/admin/logout", {
+          method: "POST",
+          credentials: "same-origin"
+        });
+
+
+      } catch (error) {
+
+        console.error(
+          "Logout request failed:",
+          error
+        );
+
+      }
+
+
+      // Dù request lỗi hay không cũng đưa về trang đăng nhập —
+      // cookie hết hạn tự nhiên sau 8 tiếng nếu chẳng may lỗi mạng
+      window.location.href = "login.html";
 
     }
   );
@@ -1606,3 +2686,4 @@ document
 
 loadClinics();
 loadVNProvinces();
+loadFeedback();
