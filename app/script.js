@@ -578,7 +578,12 @@ if (footer && wordmark) {
       wordmark.classList.toggle('footer-visible', entry.isIntersecting);
     },
     {
-      threshold: 0.8
+      /* threshold: 0 => trigger ngay khi PIXEL ĐẦU TIÊN của footer
+         chạm vào viewport (đúng nghĩa "đụng trúng footer"), thay vì
+         chờ tới khi 80% footer hiện ra như trước — đó là lý do trước
+         đây cảm giác logo "không biến mất" (phải cuộn gần hết trang
+         mới thấy hiệu ứng). */
+      threshold: 0
     }
   );
 

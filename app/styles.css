@@ -44,9 +44,18 @@
 
   html, body{
     /* Không cho trang cuộn ngang — chặn mọi phần tử lỡ tràn
-       (vòng tròn trang trí, ảnh, chữ dài không ngắt dòng...) */
+       (vòng tròn trang trí, ảnh, chữ dài không ngắt dòng...)
+
+       QUAN TRỌNG: chỉ khai báo overflow-x mà KHÔNG khai báo
+       overflow-y sẽ khiến trình duyệt tự đổi overflow-y thành
+       "auto" (theo spec CSS) — biến body thành 1 vùng cuộn
+       riêng, và đó chính là lý do position: sticky của navbar
+       (con của body) bị "hỏng", không dính khi cuộn nữa.
+       Khai báo rõ overflow-y: visible để giữ đúng ý định ban
+       đầu (chỉ chặn cuộn ngang) mà không phá sticky. */
     max-width: 100%;
     overflow-x: hidden;
+    overflow-y: visible;
   }
 
   *{ box-sizing: border-box; }
@@ -62,6 +71,11 @@
        thay vì đẩy layout tràn ngang */
     overflow-wrap: break-word;
     word-break: break-word;
+    /* Navbar dùng position: fixed (xem bên dưới), không còn nằm
+       trong flow nữa — nên toàn bộ trang cần chừa 1 khoảng đúng
+       bằng chiều cao navbar ở trên cùng để nội dung không bị
+       navbar đè lên. Đặt DUY NHẤT ở đây, áp dụng cho mọi trang. */
+    padding-top: var(--nav-h);
   }
   button{ font-family: inherit; }
 
@@ -72,8 +86,11 @@
 
   /* ============ NAVBAR ============ */
   .navbar{
-    position: sticky;
-    top:0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
     z-index: 50;
     height: var(--nav-h);
     background: var(--surface);
@@ -81,21 +98,25 @@
     box-shadow: 0 1px 0 var(--border), 0 8px 24px -18px var(--shadow);
     display:flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     padding: 0 clamp(16px, 4vw, 40px);
-    overflow: visible; /* allows wordmark to spill below */
   }
+
+/* Wordmark (logo)*/
+.wordmark {
+  position: fixed;
+  top: 0;
+  left: clamp(16px, 4vw, 40px);
+  z-index: 51;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
 
 .wordmark img {
   width: clamp(110px, 22vw, 150px);
   height: auto;
   display: block;
-  transform: translateY(50px);
+  transform: translateY(20px);
   transition: width .25s ease, transform .25s ease;
-}
-
-.wordmark {
-  transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
 .wordmark.footer-visible {
@@ -263,8 +284,11 @@
        và gây thanh cuộn ngang trên mobile */
     overflow: hidden;
 
-    min-height: 100vh;
-    min-height: 100dvh;
+    /* body đã chừa sẵn --nav-h ở trên cùng (padding-top), nên hero
+       KHÔNG cộng thêm --nav-h vào đây nữa — tránh bị lố 2 lần
+       khoảng cách so với navbar. */
+    min-height: calc(100vh - var(--nav-h));
+    min-height: calc(100dvh - var(--nav-h));
 
     display: flex;
     flex-direction: column;
@@ -274,7 +298,7 @@
 
     text-align: center;
 
-    padding: var(--nav-h) 20px 40px;
+    padding: 24px 20px 40px;
     box-sizing: border-box;
 }
 .hero::before {
@@ -956,7 +980,9 @@
     height: 1px;
   }
 
-  .hero{ padding: calc(var(--nav-h) + 12px) 16px 32px; }
+  /* body đã chừa --nav-h ở trên cùng rồi, hero mobile chỉ cần
+     thêm chút khoảng thở, không cộng thêm --nav-h lần nữa */
+  .hero{ padding: 12px 16px 32px; }
 
   .hero::before{
     width: 380px;
