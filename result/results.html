@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MappingSiteVN · Kết quả gợi ý</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- Dùng lại toàn bộ biến màu / font / reset đã có trong styles.css -->
+  <link rel="stylesheet" href="../app/styles.css">
+  <link rel="stylesheet" href="results.css">
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+  >
+
+  <!-- Leaflet + OpenStreetMap: thư viện bản đồ mã nguồn mở, MIỄN PHÍ,
+       KHÔNG cần API key — dùng tạm thay Google Maps SDK trong lúc
+       chưa có gói Google Maps Pro. Khi có API key, chỉ cần thay khối
+       khởi tạo bản đồ trong results.js bằng Google Maps JS API,
+       phần logic lọc/điểm số/pipeline bên dưới giữ nguyên. -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+</head>
+<body data-theme="light" data-lang="vi">
+
+  <nav class="navbar">
+    <a class="wordmark" href="../app/index.html" aria-label="MappingSiteVN">
+      <img src="" alt="MappingSiteVN">
+    </a>
+
+    <div class="nav-links">
+      <button class="nav-item" id="backHomeBtn" type="button">
+        <span lang-el="vi">← Trang chủ</span>
+        <span lang-el="en">← Home</span>
+      </button>
+
+      <div class="lang-toggle" id="langToggle">
+        <div class="lang-pill"></div>
+        <button id="viBtn" class="active" type="button">🇻🇳</button>
+        <button id="enBtn" type="button">🇬🇧</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="results-page" id="resultsPage">
+
+    <div class="results-intro">
+      <span class="results-eyebrow">
+        <span lang-el="vi">KẾT QUẢ GỢI Ý · MÂY</span>
+        <span lang-el="en">RECOMMENDED RESULTS · MÂY</span>
+      </span>
+
+      <h1 id="resultsHeadline">
+        <span lang-el="vi">Đang tìm cơ sở phù hợp với bạn…</span>
+        <span lang-el="en">Finding facilities that fit you…</span>
+      </h1>
+
+      <p id="resultsSub" class="results-sub"></p>
+    </div>
+
+    <div class="mock-banner hidden" id="mockBanner">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span lang-el="vi">
+        Không kết nối được <code>/api/clinics</code> — đang hiển thị <b>DỮ LIỆU MẪU</b> để test giao diện, không phải phòng khám thật trong database.
+      </span>
+      <span lang-el="en">
+        Could not reach <code>/api/clinics</code> — showing <b>SAMPLE DATA</b> for UI testing, not real clinics from the database.
+      </span>
+    </div>
+
+    <div class="results-toolbar">
+      <div class="results-radius">
+        <label for="radiusSelect">
+          <span lang-el="vi">Bán kính tìm kiếm</span>
+          <span lang-el="en">Search radius</span>
+        </label>
+        <select id="radiusSelect">
+          <option value="2">2 km</option>
+          <option value="5" selected>5 km</option>
+          <option value="8">8 km</option>
+          <option value="0">—</option>
+        </select>
+      </div>
+
+      <div class="results-count" id="resultsCount"></div>
+    </div>
+
+    <div class="results-body">
+
+      <section class="results-stack">
+
+        <div class="results-card-shell" id="resultsCardShell">
+
+          <div class="results-loading" id="resultsLoading">
+            <div class="results-spinner"></div>
+            <p>
+              <span lang-el="vi">Đang phân tích nhu cầu và đối chiếu với cơ sở dữ liệu…</span>
+              <span lang-el="en">Analyzing your needs and matching against our database…</span>
+            </p>
+          </div>
+
+          <div class="results-empty hidden" id="resultsEmpty">
+            <i class="fa-solid fa-map-location-dot"></i>
+            <h3>
+              <span lang-el="vi">Chưa tìm thấy cơ sở phù hợp trong bán kính này</span>
+              <span lang-el="en">No matching facility found within this radius</span>
+            </h3>
+            <p>
+              <span lang-el="vi">Hãy thử mở rộng bán kính tìm kiếm ở phía trên.</span>
+              <span lang-el="en">Try expanding the search radius above.</span>
+            </p>
+          </div>
+
+          <article class="results-card hidden" id="resultsCard">
+
+            <div class="rc-top">
+              <span class="rc-type-tag" id="rcTypeTag"></span>
+              <div class="rc-score" id="rcScore">
+                <svg viewBox="0 0 42 42" class="rc-score-ring">
+                  <circle class="rc-score-track" cx="21" cy="21" r="18"></circle>
+                  <circle class="rc-score-bar" id="rcScoreBar" cx="21" cy="21" r="18"></circle>
+                </svg>
+                <span class="rc-score-num" id="rcScoreNum">0%</span>
+              </div>
+            </div>
+
+            <h2 class="rc-name">
+              <span id="rcName"></span>
+              <span id="rcVerifiedBadge" class="rc-verified hidden">
+                <i class="fa-solid fa-circle-check"></i>
+              </span>
+            </h2>
+
+            <p class="rc-address" id="rcAddress"></p>
+            <p class="rc-distance" id="rcDistance"></p>
+
+            <a class="rc-directions-btn" id="rcDirections" href="#" target="_blank" rel="noopener noreferrer">
+              <i class="fa-solid fa-diamond-turn-right"></i>
+              <span lang-el="vi">Chỉ đường trên Google Maps</span>
+              <span lang-el="en">Get directions on Google Maps</span>
+            </a>
+
+            <div class="rc-info-grid">
+              <div class="rc-info-item">
+                <i class="fa-solid fa-phone"></i>
+                <span id="rcPhone">—</span>
+              </div>
+              <div class="rc-info-item">
+                <i class="fa-solid fa-clock"></i>
+                <span id="rcHours">—</span>
+              </div>
+              <div class="rc-info-item">
+                <i class="fa-solid fa-sack-dollar"></i>
+                <span id="rcPricing">—</span>
+              </div>
+              <div class="rc-info-item">
+                <i class="fa-solid fa-globe"></i>
+                <a id="rcWebsite" href="#" target="_blank" rel="noopener noreferrer">—</a>
+              </div>
+            </div>
+
+            <p class="rc-desc" id="rcDesc"></p>
+
+            <div class="rc-chips" id="rcTargetGroups"></div>
+
+            <div class="rc-license" id="rcLicense"></div>
+
+            <div class="rc-ai-box">
+              <div class="rc-ai-label">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span lang-el="vi">Vì sao Mây gợi ý cơ sở này</span>
+                <span lang-el="en">Why Mây recommends this facility</span>
+              </div>
+              <p id="rcAiExplain"></p>
+            </div>
+
+          </article>
+
+        </div>
+
+        <div class="results-nav">
+          <button class="wf-btn wf-back" id="prevClinic" type="button">
+            <span lang-el="vi">Quay lại</span>
+            <span lang-el="en">Back</span>
+          </button>
+
+          <div class="results-progress" id="resultsProgress">– / –</div>
+
+          <button class="wf-btn wf-next" id="nextClinic" type="button">
+            <span lang-el="vi">Đề xuất tiếp theo</span>
+            <span lang-el="en">Next suggestion</span>
+          </button>
+        </div>
+
+      </section>
+
+      <section class="results-map-wrap">
+        <div id="resultsMap"></div>
+        <div class="map-legend">
+          <span><i class="map-dot dot-public"></i><span lang-el="vi">Công lập</span><span lang-el="en">Public</span></span>
+          <span><i class="map-dot dot-private"></i><span lang-el="vi">Tư nhân</span><span lang-el="en">Private</span></span>
+          <span><i class="map-dot dot-community"></i><span lang-el="vi">Tổ chức cộng đồng</span><span lang-el="en">Community org.</span></span>
+          <span><i class="fa-solid fa-circle-check map-verified-ic"></i><span lang-el="vi">Đã xác nhận GPHĐ</span><span lang-el="en">Verified license</span></span>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="results.js"></script>
+</body>
+</html>

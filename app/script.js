@@ -229,10 +229,7 @@ function showPage(page) {
   navHelp.addEventListener('click', () => showPage('help'));
   navPractice.addEventListener('click', () => showPage('practice'));
 
-  /* ---------- Notification popup ----------
-     Nội dung để trống, chỉnh trực tiếp trong khối
-     <div class="notice-overlay" id="noticeOverlay"> ở phần HTML phía trên.
-     Popup tự mở khi tải trang, đóng khi bấm nút "X". */
+/* notification */
   const noticeOverlay = document.getElementById('noticeOverlay');
   const noticeClose = document.getElementById('noticeClose');
 
@@ -268,6 +265,25 @@ function showPage(page) {
     render();
   }
   function closeWizard(){ overlay.classList.remove('open'); }
+
+  // Lưu answers + location vào sessionStorage rồi chuyển sang trang
+  // kết quả (results.html, nằm ở folder /result, ngang hàng với /app).
+  function goToResults(){
+    const locationAnswer = answers.q4 || {};
+    const provInfo = locationsState.provinces?.[locationAnswer.province];
+    const wardInfo = provInfo?.wards?.[locationAnswer.ward];
+
+    sessionStorage.setItem('mappingWizardResult', JSON.stringify({
+      answers,
+      location: {
+        provinceVi: provInfo?.vi, provinceEn: provInfo?.en,
+        wardVi: wardInfo?.vi, wardEn: wardInfo?.en,
+      },
+    }));
+
+    window.location.href = '../result/results.html';
+  }
+
   document.getElementById('startBtn').addEventListener('click', openWizard);
   document.getElementById('wizardClose').addEventListener('click', closeWizard);
 
@@ -309,8 +325,12 @@ function showPage(page) {
         <div style="text-align:center; padding: 10px 0 18px;">
           <div class="done-icon">✓</div>
           <div class="wizard-question">${t({vi:'Cảm ơn bạn đã chia sẻ',en:'Thank you for sharing'})}</div>
-          <p class="wizard-hint">${t({vi:'Hệ thống sẽ dùng thông tin này để gợi ý cơ sở tham vấn phù hợp nhất. Bước kết quả sẽ được kết nối riêng.',en:'This information will be used to recommend the best-fitting facility. The results step will be connected separately.'})}</p>
+          <p class="wizard-hint">${t({vi:'Đang chuyển bạn đến trang kết quả gợi ý…',en:'Taking you to your results…'})}</p>
         </div>`;
+      // Màn "done" không có nút bấm (wizardFooter bị ẩn ở dòng trên),
+      // nên tự động chuyển sang results.html sau một nhịp ngắn để
+      // người dùng kịp đọc lời cảm ơn.
+      setTimeout(goToResults, 1200);
     } else {
       const stepNumLabel = t({vi:`Câu ${posInQuestions + 1} / ${total}`, en:`Question ${posInQuestions + 1} of ${total}`});
       html += `<div class="wizard-step-label">${stepNumLabel}</div>`;
@@ -456,61 +476,29 @@ function showPage(page) {
       render();
     }
   }
+
   wfNext.addEventListener('click', () => {
 
-  const list = activeSteps();
-  const step = list[cursor];
+    const list = activeSteps();
+    const step = list[cursor];
 
-
-  // Khi hoàn thành screening
-  if (step.type === 'done') {
-
-    closeWizard();
-
-    // Lấy location từ q4
-    const locationAnswer = answers.q4 || {};
-
-    const location = {
-      province: locationAnswer.province,
-      ward: locationAnswer.ward
-    };
-
-
-    // Gọi recommendation engine
-    if (
-      window.MappingResults &&
-      typeof window.MappingResults.showResults === 'function'
-    ) {
-
-      window.MappingResults.showResults(
-        answers,
-        location
-      );
-
-    } else {
-
-      console.error(
-        'MappingResults.showResults is not available.'
-      );
-
+    // An toàn hai lớp: nếu vì lý do gì đó cursor đã đang đứng ở bước
+    // 'done' (ví dụ bấm lại rất nhanh), chuyển trang ngay thay vì
+    // chờ setTimeout trong render().
+    if (step.type === 'done') {
+      closeWizard();
+      goToResults();
+      return;
     }
 
-    return;
-  }
+    if (cursor === list.length - 1){
+      closeWizard();
+      return;
+    }
 
+    goNext();
+  });
 
-  if(cursor === list.length - 1){
-
-    closeWizard();
-
-    return;
-
-  }
-
-
-  goNext();
-
-});
   wfBack.addEventListener('click', goBack);
 
 /* ANIMATION COUNTUP CHO THÔNG TIN NHỮNG CON SỐ */

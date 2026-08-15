@@ -1,22 +1,16 @@
   const LOCATIONS_API = 'https://provinces.open-api.vn/api/v2/?depth=2';
-  const SCOPE_PROVINCE_MATCH = ['Hồ Chí Minh', 'Đồng Nai', 'Hà Nội', 'Đã Nẵng', 'Hải Phòng', 'Huế']; 
+  const SCOPE_PROVINCE_MATCH = ['Hồ Chí Minh']; 
   const PROVINCE_EN_NAMES = {
     'Hồ Chí Minh': 'Ho Chi Minh City',
-    'Đồng Nai': 'Dong Nai City',
-    'Hà Nội': 'Hanoi Capital City',
-    'Đà Nẵng': 'Da Nang City',
-    'Hải Phòng': 'Hai Phong City',
-    'Huế': 'Hue City',
   };
   function wardEnGuess(viName){
-    // API không có tên tiếng Anh cho phường/xã -> quy đổi nhẹ để hiển thị bản EN
     if(viName.startsWith('Phường ')) return viName.replace('Phường ', '') + ' Ward';
     if(viName.startsWith('Xã ')) return viName.replace('Xã ', '') + ' Commune';
     if(viName.startsWith('Đặc khu ')) return viName.replace('Đặc khu ', '') + ' Special Zone';
     return viName;
   }
 
-  const locationsState = { status:'idle', provinces:[] }; // status: idle | loading | ready | error
+  const locationsState = { status:'idle', provinces:[] }; 
 
   async function ensureLocationsLoaded(onChange){
     if(locationsState.status === 'loading' || locationsState.status === 'ready') return;
@@ -51,13 +45,21 @@
         {vi:'Bản thân', en:'Myself'},
         {vi:'Cho người thân', en:'For a loved one'},
       ]},
+
     { key:'q1b', type:'text', required:true,
       showIf:a => a.q1 === 1,
-      q:{vi:'Mối quan hệ giữa bạn và người cần tham vấn là gì?', en:"What is your relationship with the person who needs counseling?"},
-      placeholder:{vi:'Ví dụ: con, vợ/chồng, bạn bè...', en:'e.g. child, spouse, friend...'}},
+      q:{vi:'Mối quan hệ của bạn và người cần tham vấn là gì?', en:"What is your relationship to the person who needs counseling?"},
+      options:[
+        {vi:'Cha mẹ', en:'Parents'},
+        {vi:'Vợ/Chồng', en:'Spouses'},
+        {vi:'Cặp đôi', en:'Couple'},
+        {vi:'Con cái', en:'Children'},
+        {vi:'Người thân', en:'Relatives'},
+        {vi:'Others', en:'Others'},
+      ]},
+
     { key:'q2', type:'single', required:true,
       q:{vi:'Người cần tham vấn đang ở độ tuổi nào?', en:'What age group is the person who needs counseling in?'},
-      grid:true,
       options:[
         {vi:'Dưới 12 tuổi', en:'Under 12'},
         {vi:'12–17 tuổi', en:'12–17'},
@@ -66,7 +68,7 @@
         {vi:'41–60 tuổi', en:'41–60'},
         {vi:'Trên 60 tuổi', en:'Over 60'},
       ]},
-    { key:'q3', type:'single', required:true,
+    { key:'q3', type:'single', required: false,
       q:{vi:'Giới tính của người cần tham vấn là gì?', en:'What is the gender of the person who needs counseling?'},
       options:[
         {vi:'Nam', en:'Male'},
@@ -76,16 +78,44 @@
         {vi:'Không muốn tiết lộ', en:'Prefer not to say'},
       ]},
     { key:'q4', type:'cascade', required:true,
-      q:{vi:'Bạn muốn tìm cơ sở tham vấn tâm lý trên địa bàn nào?', en:'Where would you like to find a counseling facility?'},
+      q:{vi:'Bạn đang sinh sống tại địa phương nào?', en:'Where would you like to find a counseling facility?'},
       hint:{vi:'Chọn Tỉnh/Thành trước, sau đó chọn Phường.', en:'Select a Province/City first, then a Ward.'}},
+    
     { key:'q5', type:'single', required:true,
+      q:{vi:'Bạn muốn tìm cơ sở tham vấn như thế nào', en:'How do you search for mental health counseling facilities?'},
+      options:[
+        {vi:'Gần tôi nhất.', en:'Nearest to me.'},
+        {vi:'Trong địa phương tôi đang sinh sống.', en:'Within the province/city I am living.'},
+        {vi:'Tôi sẵn sàng đi xa để tìm cơ sở phù hợp', en:'I’m willing to travel farther to find a suitable facility.'},
+      ]},
+
+    { key:'q5b', type:'single', required:true,
+      showIf:a => a.q5 === 0,
+      q:{vi:'Bạn sẵn sàng đi trong tối đa bao nhiêu lâu?', en:"How long are you willing to travel?"},
+      options:[
+        {vi:'15 phút', en:'15 minutes'},
+        {vi:'30 phút', en:'30 minutes'},
+        {vi:'45 phút', en:'45 minutes'},
+        {vi:'Không giới hạn', en:'No limit'},
+      ]},
+
+    { key:'q6', type:'single', required:true,
       q:{vi:'Bạn muốn tìm cơ sở tham vấn nào?', en:'What type of facility are you looking for?'},
       options:[
         {vi:'Công lập', en:'Public'},
         {vi:'Tư nhân', en:'Private'},
         {vi:'Không quan trọng', en:'No preference'},
       ]},
-    { key:'q6', type:'multi', required:true,
+
+    { key:'q7', type:'single', required:true,
+      q:{vi:'Bạn muốn tìm cơ sở chi phí khám như nào?', en:'Pricing?'},
+      options:[
+        {vi:'100K-500K', en:'100K-500K'},
+        {vi:'500K-1000K', en:'500K-1000K'},
+        {vi:'Trên 1000K', en:'Over 1000K'},
+        {vi:'Không quan trọng', en:'No preference'},
+      ]},
+    { key:'q8', type:'multi', required:true,
       q:{vi:'Chủ đề bạn đang quan tâm', en:'Which topics are you concerned about?'},
       hint:{vi:'Có thể chọn nhiều đáp án.', en:'You may select more than one.'},
       grid:true,
@@ -109,7 +139,7 @@
         {vi:'Khó khăn trong công việc', en:'Work difficulties'},
         {vi:'Khác', en:'Other'},
       ]},
-    { key:'q7', type:'multi', required:false,
+    { key:'q9', type:'multi', required: false,
       q:{vi:'Bạn có thuộc nhóm đối tượng cần được hỗ trợ chuyên biệt không?', en:'Do you belong to a group that needs specialized support?'},
       hint:{vi:'Không bắt buộc trả lời.', en:'Optional.'},
       options:[

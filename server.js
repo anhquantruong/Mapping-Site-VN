@@ -1851,6 +1851,48 @@ app.delete(
   }
 );
 
+// =========================================================
+// PUBLIC — GET ALL CLINICS (dùng cho trang kết quả results.html,
+// KHÔNG yêu cầu đăng nhập admin, vì đây là trang người dùng xem)
+// =========================================================
+
+app.get(
+  "/api/clinics",
+  (req, res) => {
+
+    try {
+
+      const clinics =
+        db
+          .prepare(`
+            SELECT *
+            FROM clinics
+            ORDER BY id ASC
+          `)
+          .all();
+
+
+      res.json(clinics);
+
+
+    } catch (error) {
+
+      console.error(
+        "GET /api/clinics error:",
+        error
+      );
+
+
+      res.status(500).json({
+        error:
+          "Failed to load clinics."
+      });
+
+    }
+
+  }
+);
+
 
 // =========================================================
 // START SERVER

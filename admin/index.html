@@ -478,10 +478,6 @@
                 Tổ chức cộng đồng
               </option>
 
-              <option>
-                Dịch vụ trực tuyến
-              </option>
-
             </select>
 
           </label>
@@ -597,6 +593,21 @@
 
             </label>
 
+            <!-- SỬA: name trước đây là "google maps location" (có
+                 khoảng trắng, không khớp cột DB nào) — đổi thành
+                 "ggmaps_link" để khớp đúng cột ggmaps_link vừa thêm
+                 trong bảng clinics của mappingsite.db. -->
+            <label>
+
+              Google Maps link
+
+              <input
+                name="ggmaps_link"
+                type="url"
+                placeholder="https://maps.google.com/?q=..."
+              >
+
+            </label>
           </div>
 
         </div>

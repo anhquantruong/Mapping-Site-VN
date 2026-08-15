@@ -775,6 +775,8 @@ function renderClinics() {
 
         clinic.website,
 
+        clinic.ggmaps_link,
+
         clinic.pricing,
 
         clinic.description,
