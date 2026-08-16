@@ -3,14 +3,12 @@
    ========================================================= */
 
 .feedback-section {
-  max-width: 1120px;
+  max-width: 880px;
   margin: 0 auto;
-  padding: 90px 48px 110px;
-
+  padding: 56px 24px 88px;
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
   gap: 100px;
-
   align-items: start;
 }
 

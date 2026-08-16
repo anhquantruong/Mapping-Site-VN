@@ -9,19 +9,18 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>MappingSiteVN</title>
+  <title>PsychMapVN</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap"
-    rel="stylesheet"
-  >
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="footer.css">
   <link rel="stylesheet" href="feedback.css">
   <link rel="stylesheet" href="practice/grounding.css">
+  <link rel="stylesheet" href="practice/practice.css">
 
   <link
     rel="stylesheet"
@@ -29,165 +28,398 @@
   >
 
 </head>
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-/>
 <body data-theme="light" data-lang="vi">
-  <nav class="navbar">
-    <a class="wordmark" href="#" aria-label="MappingSiteVN">
-      <img src="" alt="MappingSiteVN">
-    </a>
 
-    <button
-      class="nav-toggle"
-      id="navToggle"
-      type="button"
-      aria-label="Mở menu"
-      aria-controls="navLinks"
-      aria-expanded="false"
-    >
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
+  <header class="site-header">
+    <div class="header-top">
 
-    <div class="nav-links" id="navLinks">
-      <button class="nav-item active" id="navHome" type="button">
-        <span lang-el="vi">Trang chủ</span><span lang-el="en">Home</span>
-      </button>
-      <button class="nav-item" id="navAbout" type="button">
-        <span lang-el="vi">Giới thiệu</span><span lang-el="en">About</span>
-      </button>
-      <button class="nav-item" id="navPractice" type="button">
-        <span lang-el="vi">Bài tập sức khoẻ tinh thần</span><span lang-el="en">Mental wellness exercise</span>
-      </button>
-      <button class="nav-item" id="navHelp" type="button">
-        <span lang-el="vi">Trợ giúp</span><span lang-el="en">Help center</span>
+      <a class="wordmark" href="#" aria-label="PsychMapVN">
+        <img src="assets/m-logo.png" alt="Logo of PsychMapVN">
+      </a>
+
+      <button
+        class="nav-toggle"
+        id="navToggle"
+        type="button"
+        aria-label="Mở menu"
+        aria-controls="navLinks"
+        aria-expanded="false"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
 
-      <div class="settings-wrap">
-        <button class="nav-item" id="settingsBtn" type="button" aria-expanded="false">
-          <span lang-el="vi">Cài đặt</span><span lang-el="en">Settings</span>
-        </button>
-        <div class="settings-panel" id="settingsPanel">
-          <div class="settings-row">
-            <span class="settings-label"><span lang-el="vi">Giao diện</span><span lang-el="en">Appearance</span></span>
-            <div class="theme-switch">
-              <button id="lightBtn" class="active" type="button">
-                <span lang-el="vi">Sáng</span><span lang-el="en">Light</span>
-              </button>
-              <button id="darkBtn" type="button">
-                <span lang-el="vi">Tối</span><span lang-el="en">Dark</span>
-              </button>
+      <div class="nav-links" id="navLinks">
+
+        <div class="nav-item-wrap" data-menu="home">
+          <button class="nav-item active" id="navHome" type="button">
+            <span lang-el="vi">Trang chủ</span><span lang-el="en">Home</span>
+            <i class="fa-solid fa-chevron-down nav-caret" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <div class="nav-item-wrap" data-menu="about">
+          <button class="nav-item" id="navAbout" type="button">
+            <span lang-el="vi">Giới thiệu</span><span lang-el="en">About</span>
+            <i class="fa-solid fa-chevron-down nav-caret" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <div class="nav-item-wrap" data-menu="practice">
+          <button class="nav-item" id="navPractice" type="button">
+            <span lang-el="vi">Bài tập sức khoẻ tinh thần</span><span lang-el="en">Mental wellness exercise</span>
+            <i class="fa-solid fa-chevron-down nav-caret" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <div class="nav-item-wrap" data-menu="help">
+          <button class="nav-item" id="navHelp" type="button">
+            <span lang-el="vi">Trợ giúp</span><span lang-el="en">Help center</span>
+            <i class="fa-solid fa-chevron-down nav-caret" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <div class="settings-wrap">
+          <button class="nav-item" id="settingsBtn" type="button" aria-expanded="false">
+            <span lang-el="vi">Cài đặt</span><span lang-el="en">Settings</span>
+          </button>
+          <div class="settings-panel" id="settingsPanel">
+            <div class="settings-row">
+              <span class="settings-label"><span lang-el="vi">Giao diện</span><span lang-el="en">Appearance</span></span>
+              <div class="theme-switch">
+                <button id="lightBtn" class="active" type="button">
+                  <span lang-el="vi">Sáng</span><span lang-el="en">Light</span>
+                </button>
+                <button id="darkBtn" type="button">
+                  <span lang-el="vi">Tối</span><span lang-el="en">Dark</span>
+                </button>
+              </div>
             </div>
-          </div>
-          <div class="settings-row">
-            <span class="settings-label"><span lang-el="vi">Cỡ chữ</span><span lang-el="en">Text size</span></span>
-            <div class="size-switch">
-              <button class="size-btn" data-scale="0.925" type="button">
-                <span lang-el="vi">Nhỏ</span><span lang-el="en">Small</span>
-              </button>
-              <button class="size-btn active" data-scale="1" type="button">
-                <span lang-el="vi">Vừa</span><span lang-el="en">Medium</span>
-              </button>
-              <button class="size-btn" data-scale="1.125" type="button">
-                <span lang-el="vi">To</span><span lang-el="en">Large</span>
-              </button>
+            <div class="settings-row">
+              <span class="settings-label"><span lang-el="vi">Cỡ chữ</span><span lang-el="en">Text size</span></span>
+              <div class="size-switch">
+                <button class="size-btn" data-scale="0.925" type="button">
+                  <span lang-el="vi">Nhỏ</span><span lang-el="en">Small</span>
+                </button>
+                <button class="size-btn active" data-scale="1" type="button">
+                  <span lang-el="vi">Vừa</span><span lang-el="en">Medium</span>
+                </button>
+                <button class="size-btn" data-scale="1.125" type="button">
+                  <span lang-el="vi">To</span><span lang-el="en">Large</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="lang-toggle" id="langToggle">
-        <div class="lang-pill"></div>
-        <button id="viBtn" class="active" type="button">🇻🇳</button>
-        <button id="enBtn" type="button">🇬🇧</button>
+        <div class="lang-toggle" id="langToggle">
+          <div class="lang-pill"></div>
+          <button id="viBtn" class="active" type="button">🇻🇳</button>
+          <button id="enBtn" type="button">🇬🇧</button>
+        </div>
+
+        <button class="header-cta" type="button" onclick="openWizard()">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <span lang-el="vi">Tìm cơ sở</span><span lang-el="en">Find a clinic</span>
+        </button>
+
       </div>
     </div>
-  </nav>
+
+    <!-- ===== MEGA MENU PANELS (Mayo-Clinic style, second tier) ===== -->
+
+    <div class="mega-panel" data-panel="home">
+      <div class="mega-inner">
+        <div class="mega-lead">
+          <span class="mega-lead-label"><span lang-el="vi">Trang chủ</span><span lang-el="en">Home</span></span>
+          <p><span lang-el="vi">Nơi bắt đầu hành trình tìm kiếm sự hỗ trợ tâm lý phù hợp với bạn.</span><span lang-el="en">Where your search for the right mental health support begins.</span></p>
+          <a class="mega-lead-link" href="#" onclick="event.preventDefault(); showPage('home');">
+            <span lang-el="vi">Về trang chủ</span><span lang-el="en">Go home</span> <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+        <div class="mega-links">
+          <div class="mega-col">
+            <h4><span lang-el="vi">Bắt đầu</span><span lang-el="en">Get started</span></h4>
+            <a href="#" onclick="event.preventDefault(); openWizard();"><span lang-el="vi">Trò chuyện cùng Mây</span><span lang-el="en">Talk to Mây</span></a>
+            <a href="#" onclick="event.preventDefault(); document.querySelector('.problem-section')?.scrollIntoView({behavior:'smooth'});"><span lang-el="vi">Vì sao điều này quan trọng</span><span lang-el="en">Why this matters</span></a>
+            <a href="#" onclick="event.preventDefault(); document.querySelector('.journey-section')?.scrollIntoView({behavior:'smooth'});"><span lang-el="vi">Quy trình 3 bước</span><span lang-el="en">The 3-step process</span></a>
+          </div>
+          <div class="mega-col">
+            <h4><span lang-el="vi">Khám phá thêm</span><span lang-el="en">Explore</span></h4>
+            <a href="#" onclick="event.preventDefault(); showPage('about');"><span lang-el="vi">Về PsychMapVN</span><span lang-el="en">About PsychMapVN</span></a>
+            <a href="#" onclick="event.preventDefault(); showPage('practice');"><span lang-el="vi">Bài tập thư giãn</span><span lang-el="en">Wellness exercises</span></a>
+          </div>
+        </div>
+        <div class="mega-feature">
+          <span class="mega-feature-eyebrow"><span lang-el="vi">Nổi bật</span><span lang-el="en">Featured</span></span>
+          <h4><span lang-el="vi">Sàng lọc cùng Mây</span><span lang-el="en">Screen with Mây</span></h4>
+          <p><span lang-el="vi">5 phút để tìm cơ sở tham vấn phù hợp nhất với bạn.</span><span lang-el="en">5 minutes to find the facility that fits you best.</span></p>
+          <a href="#" onclick="event.preventDefault(); openWizard();"><span lang-el="vi">Bắt đầu ngay</span><span lang-el="en">Start now</span> <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mega-panel" data-panel="about">
+      <div class="mega-inner">
+        <div class="mega-lead">
+          <span class="mega-lead-label"><span lang-el="vi">Giới thiệu</span><span lang-el="en">About</span></span>
+          <p><span lang-el="vi">Tìm hiểu sứ mệnh và đội ngũ đứng sau PsychMapVN.</span><span lang-el="en">Learn about the mission and team behind PsychMapVN.</span></p>
+          <a class="mega-lead-link" href="#" onclick="event.preventDefault(); showPage('about');">
+            <span lang-el="vi">Xem đầy đủ</span><span lang-el="en">See full page</span> <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+        <div class="mega-links">
+          <div class="mega-col">
+            <h4><span lang-el="vi">Nội dung</span><span lang-el="en">Contents</span></h4>
+            <a href="#" onclick="event.preventDefault(); showPage('about');"><span lang-el="vi">Về PsychMapVN</span><span lang-el="en">About PsychMapVN</span></a>
+            <a href="#" onclick="event.preventDefault(); showPage('about'); setTimeout(()=>document.querySelector('.team-grid')?.scrollIntoView({behavior:'smooth'}),150);"><span lang-el="vi">Đội ngũ đồng hành</span><span lang-el="en">Our team</span></a>
+          </div>
+          <div class="mega-col">
+            <h4><span lang-el="vi">Khác</span><span lang-el="en">Other</span></h4>
+            <a href="#" onclick="event.preventDefault(); showPage('help');"><span lang-el="vi">Trợ giúp</span><span lang-el="en">Help center</span></a>
+          </div>
+        </div>
+        <div class="mega-feature">
+          <span class="mega-feature-eyebrow"><span lang-el="vi">Cam kết</span><span lang-el="en">Our commitment</span></span>
+          <h4><span lang-el="vi">Phi lợi nhuận & bảo mật</span><span lang-el="en">Non-profit &amp; confidential</span></h4>
+          <p><span lang-el="vi">Thông tin bạn chia sẻ không được lưu trữ hay bán cho bên thứ ba.</span><span lang-el="en">What you share is never stored or sold to third parties.</span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mega-panel" data-panel="practice">
+      <div class="mega-inner">
+        <div class="mega-lead">
+          <span class="mega-lead-label"><span lang-el="vi">Bài tập</span><span lang-el="en">Practice</span></span>
+          <p><span lang-el="vi">Những bài thực hành ngắn giúp bạn chậm lại và kết nối với chính mình.</span><span lang-el="en">Short exercises to help you slow down and reconnect with yourself.</span></p>
+          <a class="mega-lead-link" href="#" onclick="event.preventDefault(); showPage('practice');">
+            <span lang-el="vi">Xem tất cả</span><span lang-el="en">See all</span> <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+        <div class="mega-links">
+          <div class="mega-col">
+            <h4><span lang-el="vi">3 phút</span><span lang-el="en">3 minutes</span></h4>
+            <a href="#" onclick="event.preventDefault(); showPage('practice'); setTimeout(()=>document.getElementById('openGrounding')?.click(),150);"><span lang-el="vi">Grounding 5–4–3–2–1</span><span lang-el="en">5–4–3–2–1 Grounding</span></a>
+          </div>
+          <div class="mega-col">
+            <h4><span lang-el="vi">Sắp có</span><span lang-el="en">Coming soon</span></h4>
+            <a href="#" onclick="event.preventDefault(); showPage('practice');"><span lang-el="vi">Thở chậm</span><span lang-el="en">Slow breathing</span></a>
+            <a href="#" onclick="event.preventDefault(); showPage('practice');"><span lang-el="vi">Body Scan</span><span lang-el="en">Body scan</span></a>
+          </div>
+        </div>
+        <div class="mega-feature">
+          <span class="mega-feature-eyebrow"><span lang-el="vi">Gợi ý</span><span lang-el="en">Tip</span></span>
+          <h4><span lang-el="vi">Chỉ mất vài phút</span><span lang-el="en">Just a few minutes</span></h4>
+          <p><span lang-el="vi">Không cần chuẩn bị gì, bạn có thể dừng bất cứ lúc nào.</span><span lang-el="en">No preparation needed — stop whenever you like.</span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mega-panel" data-panel="help">
+      <div class="mega-inner">
+        <div class="mega-lead">
+          <span class="mega-lead-label"><span lang-el="vi">Trợ giúp</span><span lang-el="en">Help</span></span>
+          <p><span lang-el="vi">Hướng dẫn sử dụng và kênh gửi góp ý cho đội ngũ PsychMapVN.</span><span lang-el="en">How-to guides and feedback channels for the PsychMapVN team.</span></p>
+          <a class="mega-lead-link" href="#" onclick="event.preventDefault(); showPage('help');">
+            <span lang-el="vi">Đến trang trợ giúp</span><span lang-el="en">Go to help center</span> <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+        <div class="mega-links">
+          <div class="mega-col">
+            <h4><span lang-el="vi">Hướng dẫn</span><span lang-el="en">Guidance</span></h4>
+            <a href="#" onclick="event.preventDefault(); showPage('help');"><span lang-el="vi">Cách sử dụng PsychMapVN</span><span lang-el="en">How PsychMapVN works</span></a>
+          </div>
+          <div class="mega-col">
+            <h4><span lang-el="vi">Kết nối</span><span lang-el="en">Connect</span></h4>
+            <a href="#" onclick="event.preventDefault(); showPage('help'); setTimeout(()=>document.getElementById('feedbackForm')?.scrollIntoView({behavior:'smooth'}),150);"><span lang-el="vi">Gửi góp ý</span><span lang-el="en">Send feedback</span></a>
+          </div>
+        </div>
+        <div class="mega-feature">
+          <span class="mega-feature-eyebrow"><span lang-el="vi">Liên hệ</span><span lang-el="en">Contact</span></span>
+          <h4>hello@mappingsitevn.com</h4>
+          <p><span lang-el="vi">Chúng mình phản hồi trong vòng 2–3 ngày làm việc.</span><span lang-el="en">We reply within 2–3 business days.</span></p>
+        </div>
+      </div>
+    </div>
+
+  </header>
 
   <main class="page" id="pageHome">
-    <div class="hero">
-      <div class="hero-eyebrow">
-        <span lang-el="vi">Mapping Site · Các cơ sở cung cấp dịch vụ về sức khoẻ tâm thần</span>
-        <span lang-el="en">Mapping Site · Mental Health Service Providers</span>
-      </div>
-      <h1 class="hero-title" id="heroTitle">
-        <span class="typing-line" lang-el="vi">
-          <span class="typing-text" id="heroTypingVi"></span><span class="typing-cursor" aria-hidden="true"></span>
-        <span class="typing-line" lang-el="en">
-          <span class="typing-text" id="heroTypingEn"></span><span class="typing-cursor" aria-hidden="true"></span>
-        </span>
-      </h1>
-      <p>
-        <span lang-el="vi">Trả lời các câu hỏi sàng lọc sau để tìm các cơ sở <br> thăm khám đúng nhu cầu!</span>
-        <span lang-el="en">Answer the questions to find your most suitable clinics!</span>
-      </p>
-      <button class="cta-btn" id="startBtn" type="button">
-        <span lang-el="vi">Trò chuyện cùng <b>Mây</b> nhé!</span>
-        <span lang-el="en">Start searching now with <b>Mây</b>!</span>
-      </button>
-      <div class="hero-note">
-        <span lang-el="vi">Kết quả gợi ý từ AI sẽ được kết nối riêng sau bước sàng lọc này</span>
-        <span lang-el="en">AI-matched results will be connected separately after this screening</span>
-      </div>
-    </div>
-    <section class="stats-section">
 
-  <section class="stats-section">
-
-  <div class="stats-heading">
-    <h2>
-      <span lang-el="vi">Những Con Số Đáng Để Biết</span>
-      <span lang-el="en">Numbers Worth Knowing</span>
-    </h2>
-  </div>
-
-  <div class="stats-wrap">
-
-    <div class="stat-item">
-      <div class="stat-number">
-        <span class="counter" data-target="300">0</span><span>+</span>
+    <!-- ============ HERO — STORY OPENING ============ -->
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="hero-eyebrow">
+          <span lang-el="vi">PsychMapVN · Bản đồ dịch vụ sức khoẻ tâm thần</span>
+          <span lang-el="en">PsychMapVN · Mental Health Service Directory</span>
+        </div>
+        <h1 class="hero-title" id="heroTitle">
+          <span class="typing-line" lang-el="vi">
+            <span class="typing-text" id="heroTypingVi"></span><span class="typing-cursor" aria-hidden="true"></span>
+          </span>
+          <span class="typing-line" lang-el="en">
+            <span class="typing-text" id="heroTypingEn"></span><span class="typing-cursor" aria-hidden="true"></span>
+          </span>
+        </h1>
+        <p class="hero-sub">
+          <span lang-el="vi">Rất nhiều người Việt đang âm thầm chịu đựng một mình — không phải vì không có nơi để đến, mà vì không biết nơi nào phù hợp. PsychMapVN giúp bạn trả lời điều đó trong vài phút.</span>
+          <span lang-el="en">Many people quietly struggle alone — not because help doesn't exist, but because the right place is hard to find. PsychMapVN answers that in a few minutes.</span>
+        </p>
+        <div class="hero-actions">
+          <button class="cta-btn" id="startBtn" type="button">
+            <span lang-el="vi">Bắt đọc sàng lọc ngay!</span>
+            <span lang-el="en">Start screening now!</span>
+          </button>
+          <span class="hero-note">
+            <span lang-el="vi">Kết quả gợi ý từ AI sẽ được kết nối riêng sau bước sàng lọc này</span>
+            <span lang-el="en">AI-matched results will be connected separately after this screening</span>
+          </span>
+        </div>
       </div>
 
-      <div class="stat-label">
-        <span lang-el="vi">Cơ sở chăm sóc sức khỏe tinh thần.</span>
-        <span lang-el="en">Supported mental health facilities.</span>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hero-visual-panel">
+          <div class="hero-ring"></div>
+          <div class="hero-card hero-card-1">
+            <span class="hero-card-eyebrow"><span lang-el="vi">Tỷ lệ mắc rối loạn tâm thần</span><span lang-el="en">Mental disorder prevalence</span></span>
+            <span class="hero-card-value">~15%</span>
+          </div>
+          <div class="hero-card hero-card-2">
+            <span class="hero-card-eyebrow"><span lang-el="vi">Phạm vi thử nghiệm</span><span lang-el="en">Pilot coverage</span></span>
+            <span class="hero-card-value">11 / 34 <small><span lang-el="vi">tỉnh/thành</span><span lang-el="en">provinces</span></small></span>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <div class="stat-divider"></div>
+    <!-- ============ THE PROBLEM — NARRATIVE + STATS ============ -->
+    <section class="problem-section">
+      <div class="problem-inner">
+        <div class="section-eyebrow">
+          <span lang-el="vi">THỰC TRẠNG</span>
+          <span lang-el="en">THE PROBLEM</span>
+        </div>
+        <h2 class="problem-heading">
+          <span lang-el="vi">Khoảng cách giữa nhu cầu và sự hỗ trợ đang rất lớn.</span>
+          <span lang-el="en">The gap between need and support is wide.</span>
+        </h2>
+        <p class="problem-lead">
+          <span lang-el="vi">Theo Bộ Y tế, gần 15% dân số Việt Nam đang phải vật lộn với các rối loạn tâm thần — nhưng số lượng bác sĩ chuyên khoa lại quá thưa thớt so với nhu cầu thực tế. Với nhiều người, bước khó nhất không phải là quyết định tìm giúp đỡ, mà là biết bắt đầu từ đâu.</span>
+          <span lang-el="en">According to the Ministry of Health, nearly 15% of Vietnam's population struggles with a mental disorder — yet specialists remain scarce relative to real demand. For many, the hardest step isn't deciding to seek help; it's knowing where to start.</span>
+        </p>
 
-    <div class="stat-item">
-      <div class="stat-number">
-        <span class="counter" data-target="100">0</span><span>+</span>
+        <div class="stats-section">
+          <div class="stats-wrap">
+
+            <div class="stat-item">
+              <div class="stat-number">
+                <span>~</span><span class="counter" data-target="15">0</span><span>%</span>
+              </div>
+              <div class="stat-label">
+                <span lang-el="vi">dân số Việt Nam mắc rối loạn tâm thần <a href="https://vov.vn/suc-khoe/gan-15-trieu-nguoi-viet-nam-dang-phai-vat-lon-voi-roi-loan-tam-than-post1156917.vov">(theo Bộ Y tế)</a></span>
+                <span lang-el="en">of the Vietnamese population lives with a mental disorder <a href="https://vov.vn/suc-khoe/gan-15-trieu-nguoi-viet-nam-dang-phai-vat-lon-voi-roi-loan-tam-than-post1156917.vov">(Ministry of Health)</a></span>
+              </div>
+            </div>
+
+            <div class="stat-divider"></div>
+
+            <div class="stat-item">
+              <div class="stat-number">
+                <span>1:</span><span class="counter" data-target="100000">0</span>
+              </div>
+              <div class="stat-label">
+                <span lang-el="vi">tỷ lệ bác sĩ tâm thần trên dân số <a href="https://nhandan.vn/con-nhieu-khoang-trong-trong-cham-soc-suc-khoe-tam-than-post956100.html">(Báo Nhân dân)</a></span>
+                <span lang-el="en">psychiatrist-to-population ratio in Vietnam <a href="https://nhandan.vn/con-nhieu-khoang-trong-trong-cham-soc-suc-khoe-tam-than-post956100.html">(Nhan Dan Newspaper)</a></span>
+              </div>
+            </div>
+
+            <div class="stat-divider"></div>
+
+            <div class="stat-item">
+              <div class="stat-number">
+                <span class="counter" data-target="11">0</span><span>/34</span>
+              </div>
+              <div class="stat-label">
+                <span lang-el="vi">tỉnh/thành hiện được PsychMapVN phủ rộng</span>
+                <span lang-el="en">provinces &amp; cities currently covered by PsychMapVN</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
       </div>
+    </section>
 
-      <div class="stat-label">
-        <span lang-el="vi">Người dùng được hỗ trợ.</span>
-        <span lang-el="en">Users get supports.</span>
+    <!-- ============ THE JOURNEY — 3-STEP PROCESS ============ -->
+    <section class="journey-section">
+      <div class="journey-inner">
+        <div class="section-eyebrow">
+          <span lang-el="vi">CÁCH HOẠT ĐỘNG</span>
+          <span lang-el="en">HOW IT WORKS</span>
+        </div>
+        <h2 class="journey-heading">
+          <span lang-el="vi">Ba bước, để bạn không phải tự tìm hiểu một mình.</span>
+          <span lang-el="en">Three steps, so you don't have to figure it out alone.</span>
+        </h2>
+
+        <div class="journey-grid">
+          <div class="journey-step">
+            <span class="journey-num">01</span>
+            <h3><span lang-el="vi">Trả lời vài câu hỏi</span><span lang-el="en">Answer a few questions</span></h3>
+            <p><span lang-el="vi">Về độ tuổi, khu vực sinh sống, mối bận tâm và mong muốn của bạn — không cần tài khoản, không lưu trữ danh tính.</span><span lang-el="en">About age, location, concerns, and preferences — no account, no identity stored.</span></p>
+          </div>
+          <div class="journey-step">
+            <span class="journey-num">02</span>
+            <h3><span lang-el="vi">Nhận gợi ý phù hợp</span><span lang-el="en">Get matched suggestions</span></h3>
+            <p><span lang-el="vi">Hệ thống AI đối chiếu câu trả lời với cơ sở dữ liệu các cơ sở tham vấn đã được kiểm chứng.</span><span lang-el="en">Our AI cross-checks your answers against a directory of verified counseling facilities.</span></p>
+          </div>
+          <div class="journey-step">
+            <span class="journey-num">03</span>
+            <h3><span lang-el="vi">Kết nối khi bạn sẵn sàng</span><span lang-el="en">Connect when you're ready</span></h3>
+            <p><span lang-el="vi">Bạn chủ động liên hệ cơ sở phù hợp — theo tốc độ và sự thoải mái của riêng mình.</span><span lang-el="en">You reach out on your own terms — at your own pace and comfort.</span></p>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <div class="stat-divider"></div>
-
-    <div class="stat-item">
-      <div class="stat-number">
-        <span class="counter" data-target="11">0</span><span>/34</span>
+    <!-- ============ TRUST SIGNALS ============ -->
+    <section class="trust-section">
+      <div class="trust-inner">
+        <div class="trust-item">
+          <i class="fa-solid fa-lock"></i>
+          <h4><span lang-el="vi">Bảo mật</span><span lang-el="en">Confidential</span></h4>
+          <p><span lang-el="vi">Không yêu cầu danh tính, không lưu trữ câu trả lời sau phiên sàng lọc.</span><span lang-el="en">No identity required, answers aren't stored after your session.</span></p>
+        </div>
+        <div class="trust-item">
+          <i class="fa-solid fa-hand-holding-heart"></i>
+          <h4><span lang-el="vi">Phi lợi nhuận</span><span lang-el="en">Non-profit</span></h4>
+          <p><span lang-el="vi">Dự án được phát triển và duy trì miễn phí cho cộng đồng.</span><span lang-el="en">Built and maintained free for the community.</span></p>
+        </div>
+        <div class="trust-item">
+          <i class="fa-solid fa-list-check"></i>
+          <h4><span lang-el="vi">Đa dạng chủ đề</span><span lang-el="en">Wide range of topics</span></h4>
+          <p><span lang-el="vi">Từ lo âu, trầm cảm đến hôn nhân, nuôi dạy con và hơn thế nữa.</span><span lang-el="en">From anxiety and depression to marriage, parenting, and more.</span></p>
+        </div>
+        <div class="trust-item">
+          <i class="fa-solid fa-user-doctor"></i>
+          <h4><span lang-el="vi">Được kiểm chứng</span><span lang-el="en">Verified listings</span></h4>
+          <p><span lang-el="vi">Cơ sở dữ liệu được xây dựng cùng chuyên gia trong ngành.</span><span lang-el="en">Directory built together with practicing professionals.</span></p>
+        </div>
       </div>
+    </section>
 
-      <div class="stat-label">
-        <span lang-el="vi">Tỉnh/Thành được phủ rộng.</span>
-        <span lang-el="en">Provinces & cities covered.</span>
+    <!-- ============ CLOSING CTA BANNER ============ -->
+    <section class="cta-banner">
+      <div class="cta-banner-inner">
+        <h2><span lang-el="vi">Bạn xứng đáng được lắng nghe.</span><span lang-el="en">You deserve to be heard.</span></h2>
+        <p><span lang-el="vi">Chỉ mất vài phút để tìm cơ sở tham vấn phù hợp với bạn.</span><span lang-el="en">It only takes a few minutes to find the right facility for you.</span></p>
+        <button class="cta-btn cta-btn-invert" type="button" onclick="openWizard()">
+          <span lang-el="vi">Bắt đầu sàng lọc</span><span lang-el="en">Start the screening</span>
+        </button>
       </div>
-    </div>
+    </section>
 
-  </div>
-
-</section>
-
-</section>
   </main>
 
   <main class="page hidden" id="pageHelp">
@@ -865,8 +1097,8 @@
       </div>
 
       <h1 class="about-h1">
-        <span lang-el="vi">Về MappingSiteVN</span>
-        <span lang-el="en">About MappingSiteVN</span>
+        <span lang-el="vi">Về PsychMapVN</span>
+        <span lang-el="en">About PsychMapVN</span>
       </h1>
 
       <p class="about-intro">
@@ -952,7 +1184,7 @@
   <div class="footer-main">
 
     <div class="footer-brand">
-      <div class="footer-wordmark">MappingSiteVN</div>
+      <div class="footer-wordmark">PsychMapVN</div>
 
       <p class="footer-description">
         <span lang-el="vi">
@@ -965,11 +1197,11 @@
         </span>
         <br><br>
         <span lang-el="vi">
-          ❗️Khuyến cáo: Thông tin trên MappingSiteVN chỉ nhằm mục đích tham khảo và
+          ❗️Khuyến cáo: Thông tin trên PsychMapVN chỉ nhằm mục đích tham khảo và
         không thay thế tư vấn trực tiếp từ chuyên gia.
         </span>
         <span lang-el="en">
-          ❗️Caution: Information on MappingSiteVN is for reference only and does not
+          ❗️Caution: Information on PsychMapVN is for reference only and does not
         replace direct consultation with a qualified professional.
         </span>
       </p>
@@ -1020,8 +1252,8 @@
     <div class="footer-column">
 
       <h3>
-        <span lang-el="vi">Về MappingSiteVN</span>
-        <span lang-el="en">About MappingSiteVN</span>
+        <span lang-el="vi">Về PsychMapVN</span>
+        <span lang-el="en">About PsychMapVN</span>
       </h3>
       <a href="#" id="footerAbout">
         <span lang-el="vi">Giới thiệu</span>
@@ -1050,8 +1282,8 @@
       </h3>
 
       <a href="#" id="footerHelp">
-        <span lang-el="vi">Cách sử dụng MappingSiteVN</span>
-        <span lang-el="en">How MappingSiteVN works</span>
+        <span lang-el="vi">Cách sử dụng PsychMapVN</span>
+        <span lang-el="en">How PsychMapVN works</span>
       </a>
 
       <a href="#">
@@ -1085,9 +1317,9 @@
   <div class="footer-bottom">
 
     <p>
-      © 2026 MappingSiteVN.
-      <span lang-el="vi">Bảo quyền thuộc MappingSiteVN</span>
-      <span lang-el="en">Copyrights owned by MappingSiteVN</span>
+      © 2026 PsychMapVN.
+      <span lang-el="vi">Bảo quyền thuộc PsychMapVN. </span>
+      <span lang-el="en">Copyrights owned by PsychMapVN. </span>
       <span lang-el="vi">Bảo lưu mọi quyền.</span>
       <span lang-el="en">All rights reserved.</span>
     </p>
@@ -1127,7 +1359,6 @@
       </div>
     </div>
   </div>
-
 <script src="questions.js"></script>
 <script src="script.js"></script>
 <script src="practice/grounding.js"></script>

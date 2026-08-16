@@ -779,6 +779,10 @@ function renderClinics() {
 
         clinic.pricing,
 
+        clinic.price,
+
+        clinic.service,
+
         clinic.description,
 
         clinic.target_groups
@@ -1217,6 +1221,17 @@ document
 // =========================================================
 // GET FORM DATA
 // =========================================================
+//
+// "service" là nhóm checkbox nhiều lựa chọn — nếu gom bằng
+// Object.fromEntries(formData.entries()) như bình thường thì
+// CHỈ giữ lại giá trị checkbox CUỐI CÙNG (bug), nên phải tự
+// lấy toàn bộ checkbox đã tick rồi nối lại thành 1 chuỗi để
+// khớp với cột "service" (TEXT) trong bảng clinics.
+//
+// "price_from" / "price_to" không phải cột thật trong DB —
+// đây chỉ là 2 ô nhập liệu tạm trên form, cần gộp lại thành
+// 1 chuỗi "A-B" để khớp với cột "price" (TEXT) trong DB.
+// =========================================================
 
 function getClinicFormData() {
 
@@ -1231,9 +1246,59 @@ function getClinicFormData() {
     );
 
 
-  return Object.fromEntries(
-    formData.entries()
-  );
+  const data =
+    Object.fromEntries(
+      formData.entries()
+    );
+
+
+  // ---- SERVICE (multi-select checkbox) ----
+
+  const checkedServices =
+    Array.from(
+      clinicForm.querySelectorAll(
+        'input[name="service"]:checked'
+      )
+    ).map(el => el.value);
+
+  data.service =
+    checkedServices.join(", ");
+
+
+  // ---- PRICE RANGE (price_from + price_to -> "price") ----
+
+  const priceFrom =
+    (data.price_from || "").trim();
+
+  const priceTo =
+    (data.price_to || "").trim();
+
+  delete data.price_from;
+  delete data.price_to;
+
+  if (priceFrom && priceTo) {
+
+    data.price =
+      `${priceFrom}-${priceTo}`;
+
+  } else if (priceFrom) {
+
+    data.price =
+      `${priceFrom}-`;
+
+  } else if (priceTo) {
+
+    data.price =
+      `-${priceTo}`;
+
+  } else {
+
+    data.price = "";
+
+  }
+
+
+  return data;
 
 }
 
@@ -1437,7 +1502,11 @@ function editClinic(id) {
     Number(id);
 
 
-  // Fill every form field
+  // Fill every simple text/select/textarea field. Checkbox
+  // ("service") và các ô riêng ("price_from"/"price_to") KHÔNG
+  // được set theo cách này — set .value trên 1 checkbox sẽ ghi
+  // đè "value" attribute của chính nó (là nhãn dịch vụ, vd "Lo
+  // âu") thay vì cột "service" gộp, phá luôn checkbox đó.
   const fields =
     clinicForm.querySelectorAll(
       "[name]"
@@ -1445,6 +1514,16 @@ function editClinic(id) {
 
 
   fields.forEach(field => {
+
+    if (
+      field.type === "checkbox" ||
+      field.type === "radio"
+    ) {
+
+      return;
+
+    }
+
 
     const value =
       clinic[field.name];
@@ -1465,6 +1544,59 @@ function editClinic(id) {
     }
 
   });
+
+
+  // ---- SERVICE checkboxes: tick đúng theo cột "service" ----
+
+  const clinicServices =
+    String(clinic.service || "")
+      .split(/[,;]/)
+      .map(s => s.trim())
+      .filter(Boolean);
+
+  clinicForm
+    .querySelectorAll(
+      'input[name="service"]'
+    )
+    .forEach(checkbox => {
+
+      checkbox.checked =
+        clinicServices.includes(
+          checkbox.value
+        );
+
+    });
+
+
+  // ---- PRICE RANGE: tách cột "price" ("A-B") thành 2 ô ----
+
+  const priceParts =
+    String(clinic.price || "")
+      .split("-");
+
+  const priceFromInput =
+    clinicForm.querySelector(
+      'input[name="price_from"]'
+    );
+
+  const priceToInput =
+    clinicForm.querySelector(
+      'input[name="price_to"]'
+    );
+
+  if (priceFromInput) {
+
+    priceFromInput.value =
+      (priceParts[0] || "").trim();
+
+  }
+
+  if (priceToInput) {
+
+    priceToInput.value =
+      (priceParts[1] || "").trim();
+
+  }
 
 
   // Province select is now set from the generic loop above —

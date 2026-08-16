@@ -711,11 +711,14 @@ app.post(
               pricing,
               phone,
               website,
+              ggmaps_link,
               operating_hours,
               license_number,
               license_issue_date,
               description,
-              target_groups
+              target_groups,
+              price,
+              service
 
             )
 
@@ -732,11 +735,14 @@ app.post(
               @pricing,
               @phone,
               @website,
+              @ggmaps_link,
               @operating_hours,
               @license_number,
               @license_issue_date,
               @description,
-              @target_groups
+              @target_groups,
+              @price,
+              @service
 
             )
           `)
@@ -773,6 +779,9 @@ app.post(
             website:
               data.website?.trim() || "",
 
+            ggmaps_link:
+              data.ggmaps_link?.trim() || "",
+
             operating_hours:
               data.operating_hours?.trim() || "",
 
@@ -786,7 +795,13 @@ app.post(
               data.description?.trim() || "",
 
             target_groups:
-              data.target_groups?.trim() || ""
+              data.target_groups?.trim() || "",
+
+            price:
+              data.price?.trim() || "",
+
+            service:
+              data.service?.trim() || ""
 
           });
 
@@ -954,6 +969,9 @@ app.put(
             website =
               @website,
 
+            ggmaps_link =
+              @ggmaps_link,
+
             operating_hours =
               @operating_hours,
 
@@ -967,7 +985,13 @@ app.put(
               @description,
 
             target_groups =
-              @target_groups
+              @target_groups,
+
+            price =
+              @price,
+
+            service =
+              @service
 
           WHERE id = @id
         `)
@@ -1006,6 +1030,9 @@ app.put(
           website:
             data.website?.trim() || "",
 
+          ggmaps_link:
+            data.ggmaps_link?.trim() || "",
+
           operating_hours:
             data.operating_hours?.trim() || "",
 
@@ -1019,7 +1046,13 @@ app.put(
             data.description?.trim() || "",
 
           target_groups:
-            data.target_groups?.trim() || ""
+            data.target_groups?.trim() || "",
+
+          price:
+            data.price?.trim() || "",
+
+          service:
+            data.service?.trim() || ""
 
         });
 

@@ -46,7 +46,7 @@
         {vi:'Cho người thân', en:'For a loved one'},
       ]},
 
-    { key:'q1b', type:'text', required:true,
+    { key:'q1a', type:'text', required:true,
       showIf:a => a.q1 === 1,
       q:{vi:'Mối quan hệ của bạn và người cần tham vấn là gì?', en:"What is your relationship to the person who needs counseling?"},
       options:[

@@ -93,7 +93,7 @@ const body = document.body;
   /* ---------- Hero typing animation ---------- */
   const HERO_TYPING_TEXT = {
     vi: 'Không gian tìm kiếm sự hỗ trợ tâm lý an toàn',
-    en: 'A safe, respectful space to find mental health support.',
+    en: 'A safe, respectful space to find mental health support',
   };
   const heroTypingVi = document.getElementById('heroTypingVi');
   const heroTypingEn = document.getElementById('heroTypingEn');

@@ -593,10 +593,6 @@
 
             </label>
 
-            <!-- SỬA: name trước đây là "google maps location" (có
-                 khoảng trắng, không khớp cột DB nào) — đổi thành
-                 "ggmaps_link" để khớp đúng cột ggmaps_link vừa thêm
-                 trong bảng clinics của mappingsite.db. -->
             <label>
 
               Google Maps link
@@ -652,7 +648,7 @@
         </div>
 
 
-        <!-- SERVICE -->
+        <!-- SERVICE INFO (freeform, cột cũ) -->
 
         <div class="form-section">
 
@@ -663,10 +659,11 @@
 
           <label>
 
-            Pricing
+            Pricing (mô tả tự do)
 
             <input
               name="pricing"
+              placeholder="VD: Theo bảo hiểm y tế, hoặc mô tả khác ngoài khoảng giá bên dưới"
             >
 
           </label>
@@ -695,6 +692,172 @@
             ></textarea>
 
           </label>
+
+        </div>
+
+
+        <!-- =====================================================
+             PRICE RANGE (cột "price" — dạng A-B VNĐ)
+             ===================================================== -->
+
+        <div class="form-section">
+
+          <h3>
+            Khoảng giá tham vấn
+          </h3>
+
+          <p class="field-hint">
+            Nhập khoảng giá dạng Từ — Đến (VNĐ). Bỏ trống nếu miễn phí /
+            theo bảo hiểm y tế. Đây là cột riêng (<code>price</code>) dùng
+            để hiển thị khoảng giá có cấu trúc trên trang kết quả, khác
+            với ô "Pricing" mô tả tự do ở trên.
+          </p>
+
+          <div class="form-grid">
+
+            <label>
+
+              Từ (VNĐ)
+
+              <input
+                name="price_from"
+                type="number"
+                min="0"
+                step="1000"
+                placeholder="300000"
+              >
+
+            </label>
+
+
+            <label>
+
+              Đến (VNĐ)
+
+              <input
+                name="price_to"
+                type="number"
+                min="0"
+                step="1000"
+                placeholder="600000"
+              >
+
+            </label>
+
+          </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             SERVICES OFFERED (cột "service" — multi-select)
+             ===================================================== -->
+
+        <div class="form-section">
+
+          <h3>
+            Dịch vụ thăm khám
+          </h3>
+
+          <p class="field-hint">
+            Chọn các chủ đề / dịch vụ thăm khám mà cơ sở này hỗ trợ.
+            Danh sách này khớp với các chủ đề trong bảng câu hỏi sàng
+            lọc, dùng để gợi ý chính xác hơn cho người dùng.
+          </p>
+
+          <div class="checkbox-grid">
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="service" value="Lo âu">
+              Lo âu <span class="checkbox-en">(Anxiety)</span>
+            </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="service" value="Trầm cảm">
+              Trầm cảm <span class="checkbox-en">(Depression)</span>
+            </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="service" value="Stress">
+              Stress <span class="checkbox-en">(Stress)</span>
+            </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="service" value="Kiệt sức">
+              Kiệt sức <span class="checkbox-en">(Burnout)</span>
+            </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="service" value="Khủng hoảng cảm xúc">
+              Khủng hoảng cảm xúc <span class="checkbox-en">(Emotional crisis)</span>
+            </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="service" value="Mất ngủ">
+              Mất ngủ <span class="checkbox-en">(Insomnia)</span>
+            </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="service" value="Quan hệ gia đình">
+              Quan hệ gia đình <span class="checkbox-en">(Family relationships)</span>
+            </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="service" value="Quan hệ tình cảm">
+              Quan hệ tình cảm <span class="checkbox-en">(Romantic relationships)</span>
+            </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="service" value="Hôn nhân">
+              Hôn nhân <span class="checkbox-en">(Marriage)</span>
+            </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="service" value="Nuôi dạy con">
+              Nuôi dạy con <span class="checkbox-en">(Parenting)</span>
+            </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="service" value="Sang chấn">
+              Sang chấn <span class="checkbox-en">(Trauma)</span>
+            </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="service" value="ADHD">
+              ADHD <span class="checkbox-en">(ADHD)</span>
+            </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="service" value="Phổ Tự kỷ">
+              Phổ Tự kỷ <span class="checkbox-en">(Autism Spectrum Disorder)</span>
+            </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="service" value="Rối loạn ăn uống">
+              Rối loạn ăn uống <span class="checkbox-en">(Eating disorders)</span>
+            </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="service" value="Nghiện">
+              Nghiện <span class="checkbox-en">(Addiction)</span>
+            </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="service" value="Khó khăn trong học tập">
+              Khó khăn trong học tập <span class="checkbox-en">(Academic difficulties)</span>
+            </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="service" value="Khó khăn trong công việc">
+              Khó khăn trong công việc <span class="checkbox-en">(Work difficulties)</span>
+            </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="service" value="Khác">
+              Khác <span class="checkbox-en">(Other)</span>
+            </label>
+
+          </div>
 
         </div>
 

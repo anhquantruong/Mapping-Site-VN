@@ -98,6 +98,10 @@
   color: var(--ink);
   cursor: pointer;
 }
+.results-radius select:disabled{
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 .results-count{
   font-size: 0.85rem;
   font-weight: 600;
@@ -171,24 +175,6 @@
 .rc-type-tag[data-type="public"]{ color: var(--teal); background: color-mix(in srgb, var(--teal) 16%, var(--surface)); }
 .rc-type-tag[data-type="private"]{ color: var(--coral); background: color-mix(in srgb, var(--coral) 16%, var(--surface)); }
 .rc-type-tag[data-type="community"]{ color: var(--plum); background: color-mix(in srgb, var(--plum) 16%, var(--surface)); }
-
-.rc-score{ position: relative; width: 46px; height: 46px; }
-.rc-score-ring{ width: 46px; height: 46px; transform: rotate(-90deg); }
-.rc-score-track{ fill:none; stroke: var(--border); stroke-width: 4; }
-.rc-score-bar{
-  fill:none;
-  stroke: var(--plum);
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-dasharray: 113;
-  stroke-dashoffset: 113;
-  transition: stroke-dashoffset .5s ease;
-}
-.rc-score-num{
-  position:absolute; inset:0;
-  display:flex; align-items:center; justify-content:center;
-  font-size: 0.68rem; font-weight: 700; color: var(--ink);
-}
 
 .rc-name{
   font-family:'Fraunces', serif;

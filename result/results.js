@@ -1,14 +1,22 @@
 /* ============================================================
    results.js
-   Pipeline: Form (sessionStorage từ script.js) -> Thuật toán chấm điểm
-   -> Danh sách cơ sở tối ưu kèm điểm phù hợp -> Hiển thị Card + Map
+   Pipeline: Form (sessionStorage từ script.js) -> Lọc theo bán kính +
+   loại hình -> Xếp hạng theo 3 tầng ưu tiên (Target groups hỗ trợ >
+   Loại hình phòng khám > Dịch vụ thăm khám / chủ đề) -> Hiển thị
+   Card + Map. KHÔNG dùng điểm số phù hợp (%) — chỉ xếp hạng theo
+   thứ tự ưu tiên nói trên, khoảng cách chỉ là tiêu chí phân định
+   cuối cùng khi mọi thứ khác bằng nhau.
+
+   Nếu người dùng chọn "Tôi sẵn sàng đi xa để tìm cơ sở phù hợp"
+   (q5 === 2), bán kính TỰ ĐỘNG chuyển về không giới hạn.
 
    YÊU CẦU BACKEND (bạn cần có sẵn, giống /api/feedback đã có):
    GET /api/clinics
    -> trả JSON: [{
         id, clinic_name, clinic_type, address, old_address, ward, prov,
-        latitude, longitude, pricing, phone, website, operating_hours,
-        license_number, license_issue_date, description, target_groups
+        latitude, longitude, pricing, price, phone, website, ggmaps_link,
+        operating_hours, license_number, license_issue_date,
+        description, target_groups, service
       }, ...]
    (SELECT * FROM clinics trong mappingsite.db)
 
@@ -68,6 +76,17 @@
     { vi: 'Công lập', en: 'Public' },
     { vi: 'Tư nhân', en: 'Private' },
     { vi: 'Không quan trọng', en: 'No preference' },
+  ];
+
+  // Từ khoá độ tuổi (q2) — dùng để đối chiếu với target_groups/description,
+  // cùng nhóm chỉ số với 6 lựa chọn q2 trong questions.js.
+  const AGE_GROUP_KEYWORDS = [
+    { vi: 'Dưới 12 tuổi', en: 'Under 12', kw: ['trẻ em', 'nhi', 'children', 'child'] },
+    { vi: '12–17 tuổi', en: '12–17', kw: ['vị thành niên', 'thanh thiếu niên', 'teen', 'adolescen'] },
+    { vi: '18–25 tuổi', en: '18–25', kw: ['thanh niên', 'người trẻ', 'sinh viên', 'young adult'] },
+    { vi: '26–40 tuổi', en: '26–40', kw: ['người lớn', 'adult'] },
+    { vi: '41–60 tuổi', en: '41–60', kw: ['người lớn', 'trung niên', 'adult'] },
+    { vi: 'Trên 60 tuổi', en: 'Over 60', kw: ['người cao tuổi', 'elderly', 'senior'] },
   ];
 
   /* ============================================================
@@ -317,85 +336,78 @@
   }
 
   /* ============================================================
-     7) THUẬT TOÁN CHẤM ĐIỂM (ma trận thuộc tính x nhu cầu)
-        Trọng số: khoảng cách 35% · loại hình 15% ·
-                  chủ đề quan tâm 30% · nhóm đặc biệt 10% · GPHĐ 10%
+     7) ĐÁNH GIÁ MỖI CƠ SỞ — KHÔNG còn điểm số phù hợp (%).
+        Trả về danh sách các mục khớp theo 3 tầng ưu tiên, dùng để
+        SẮP XẾP (xem computeMatches) và để sinh văn bản giải thích.
+        Tầng 1: Target groups hỗ trợ (nhóm đặc biệt q9 + độ tuổi q2)
+        Tầng 2: Loại hình phòng khám (q6/q7)
+        Tầng 3: Dịch vụ thăm khám / chủ đề quan tâm (q8)
      ============================================================ */
-  function scoreClinic(clinic, distanceKm) {
+  function evaluateClinic(clinic) {
     const a = state.answers;
-    let score = 0;
-    const matchedTopics = [];
-    const matchedGroups = [];
 
-    // 1) Khoảng cách (càng gần điểm càng cao, chuẩn hoá theo 15km)
-    let distScore = 0;
-    if (distanceKm != null) {
-      distScore = Math.max(0, 1 - distanceKm / 15);
-    } else {
-      distScore = 0.5; // không xác định được thì trung tính
-    }
-    score += distScore * 35;
-
-    // 2) Loại hình cơ sở (q6/q7 — hai câu trùng nhau trong questions.js)
-    const typePref = a.q6 !== undefined ? a.q6 : a.q7;
-    const wantedType = typePref !== undefined ? FACILITY_TYPE_OPTS[typePref] : null;
-    let typeScore = 0.5;
-    if (wantedType) {
-      if (wantedType.vi === 'Không quan trọng') typeScore = 1;
-      else {
-        const type = normType(clinic.clinic_type);
-        if (type === 'community') {
-          // Tổ chức cộng đồng luôn phù hợp về loại hình — chỉ so
-          // sánh qua giá cả & nhóm đối tượng (mục 3 và 4 bên dưới).
-          typeScore = 1;
-        } else {
-          const isPublic = type === 'public';
-          const wantsPublic = wantedType.vi === 'Công lập';
-          typeScore = isPublic === wantsPublic ? 1 : 0.15;
-        }
+    // ----- Tầng 1: Target groups hỗ trợ -----
+    // allSpecialTags: TẤT CẢ nhóm đặc biệt mà cơ sở này có gắn tag
+    // (dùng để lọc cứng bên dưới trong computeMatches — nếu cơ sở
+    // CHỈ chuyên biệt cho 1 nhóm khác với lựa chọn của người dùng,
+    // sẽ bị loại thay vì chỉ xếp hạng thấp).
+    const allSpecialTags = TOPICS_Q9.filter(
+      (g) => textIncludesAny(clinic.target_groups, g.kw) || textIncludesAny(clinic.description, g.kw)
+    );
+    const userGroupIdx = Array.isArray(a.q9) ? a.q9 : [];
+    const matchedGroups = allSpecialTags.filter((g) => userGroupIdx.some((i) => TOPICS_Q9[i] === g));
+    let ageMatch = null;
+    if (a.q2 !== undefined && AGE_GROUP_KEYWORDS[a.q2]) {
+      const ageInfo = AGE_GROUP_KEYWORDS[a.q2];
+      if (textIncludesAny(clinic.target_groups, ageInfo.kw) || textIncludesAny(clinic.description, ageInfo.kw)) {
+        ageMatch = ageInfo;
       }
     }
-    score += typeScore * 15;
+    const targetGroupScore = matchedGroups.length + (ageMatch ? 1 : 0);
 
-    // 3) Chủ đề quan tâm (q8, multi-select)
-    const topicIdx = Array.isArray(a.q8) ? a.q8 : [];
-    let topicHits = 0;
-    topicIdx.forEach((i) => {
+    // ----- Tầng 2: Loại hình phòng khám (q6/q7) -----
+    const typePref = a.q6 !== undefined ? a.q6 : a.q7;
+    const wantedType = typePref !== undefined ? FACILITY_TYPE_OPTS[typePref] : null;
+    const type = normType(clinic.clinic_type);
+    let typeExactMatch = false;
+    if (wantedType && wantedType.vi !== 'Không quan trọng') {
+      const wantsPublic = wantedType.vi === 'Công lập';
+      typeExactMatch = type === (wantsPublic ? 'public' : 'private');
+    }
+
+    // ----- Tầng 3: Dịch vụ thăm khám / chủ đề quan tâm (q8) -----
+    // Ưu tiên so khớp CHÍNH XÁC với cột "service" (admin chọn trực
+    // tiếp từ multi-select cùng danh sách TOPICS_Q8 trong trang quản
+    // trị) — chính xác hơn nhiều so với suy đoán qua từ khoá. Chỉ
+    // dùng description/target_groups làm fallback dò từ khoá cho các
+    // cơ sở cũ chưa được gắn tag "service".
+    const serviceTags = (clinic.service || '')
+      .split(/[,;]/)
+      .map((s) => s.trim().toLowerCase())
+      .filter(Boolean);
+    const matchedTopics = [];
+    (Array.isArray(a.q8) ? a.q8 : []).forEach((i) => {
       const topic = TOPICS_Q8[i];
       if (!topic) return;
-      if (textIncludesAny(clinic.description, topic.kw) || textIncludesAny(clinic.target_groups, topic.kw)) {
-        topicHits++;
+      const exactTagMatch = serviceTags.includes(topic.vi.toLowerCase());
+      const fuzzyMatch =
+        !serviceTags.length &&
+        (textIncludesAny(clinic.description, topic.kw) || textIncludesAny(clinic.target_groups, topic.kw));
+      if (exactTagMatch || fuzzyMatch) {
         matchedTopics.push(topic);
       }
     });
-    const topicScore = topicIdx.length ? topicHits / topicIdx.length : 0.4;
-    score += topicScore * 30;
 
-    // 4) Nhóm cần hỗ trợ chuyên biệt (q9, optional multi-select)
-    const groupIdx = Array.isArray(a.q9) ? a.q9 : [];
-    let groupScore = groupIdx.length ? 0 : 0.6;
-    if (groupIdx.length) {
-      let hits = 0;
-      groupIdx.forEach((i) => {
-        const g = TOPICS_Q9[i];
-        if (!g) return;
-        if (textIncludesAny(clinic.description, g.kw) || textIncludesAny(clinic.target_groups, g.kw)) {
-          hits++;
-          matchedGroups.push(g);
-        }
-      });
-      groupScore = hits / groupIdx.length;
-    }
-    score += groupScore * 10;
-
-    // 5) Đã xác nhận GPHĐ (uy tín / pháp lý)
     const verified = !!(clinic.license_number && clinic.license_number.trim());
-    score += (verified ? 1 : 0.3) * 10;
 
     return {
-      total: Math.round(Math.max(0, Math.min(100, score))),
-      matchedTopics,
+      targetGroupScore,
       matchedGroups,
+      allSpecialTags,
+      ageMatch,
+      typeExactMatch,
+      topicScore: matchedTopics.length,
+      matchedTopics,
       verified,
     };
   }
@@ -404,12 +416,12 @@
      8) SINH VĂN BẢN GIẢI THÍCH (rule-based — có thể thay bằng
         gọi LLM thật ở backend sau này, giữ nguyên input/output)
      ============================================================ */
-  function buildExplanation(clinic, scoreInfo, distanceKm) {
+  function buildExplanation(clinic, evalInfo, distanceKm) {
     const vi = state.lang === 'vi';
     const parts = [];
     const name = clinic.clinic_name;
 
-    if (scoreInfo.verified) {
+    if (evalInfo.verified) {
       parts.push(
         vi
           ? `${name} đã được cấp Giấy phép hoạt động chính thức (${clinic.license_number})`
@@ -417,6 +429,34 @@
       );
     } else {
       parts.push(vi ? `${name}` : `${name}`);
+    }
+
+    const groupNames = [
+      ...evalInfo.matchedGroups,
+      ...(evalInfo.ageMatch ? [evalInfo.ageMatch] : []),
+    ];
+    if (groupNames.length) {
+      const names = groupNames.map((g) => (vi ? g.vi : g.en).toLowerCase()).join(', ');
+      parts.push(
+        vi
+          ? `phù hợp với nhóm đối tượng bạn cần: ${names}`
+          : `is suited to the group you need support for: ${names}`
+      );
+    }
+
+    if (evalInfo.typeExactMatch) {
+      parts.push(
+        vi ? `đúng loại hình cơ sở bạn ưu tiên` : `matches the facility type you preferred`
+      );
+    }
+
+    if (evalInfo.matchedTopics.length) {
+      const names = evalInfo.matchedTopics.map((t) => (vi ? t.vi : t.en).toLowerCase()).join(', ');
+      parts.push(
+        vi
+          ? `có kinh nghiệm với các vấn đề bạn đang quan tâm: ${names}`
+          : `has experience with the topics you're concerned about: ${names}`
+      );
     }
 
     if (distanceKm != null) {
@@ -427,34 +467,32 @@
       );
     }
 
-    if (scoreInfo.matchedTopics.length) {
-      const names = scoreInfo.matchedTopics.map((t) => (vi ? t.vi : t.en).toLowerCase()).join(', ');
-      parts.push(
-        vi
-          ? `có kinh nghiệm với các vấn đề bạn đang quan tâm: ${names}`
-          : `has experience with the topics you're concerned about: ${names}`
-      );
-    }
-
-    if (scoreInfo.matchedGroups.length) {
-      const names = scoreInfo.matchedGroups.map((g) => (vi ? g.vi : g.en).toLowerCase()).join(', ');
-      parts.push(
-        vi
-          ? `phù hợp với nhóm đối tượng cần hỗ trợ chuyên biệt: ${names}`
-          : `is suited to the specialized-support group you selected: ${names}`
-      );
-    }
-
     const sentence = parts.join(vi ? ', ' : ', ') + '.';
     return sentence.charAt(0).toUpperCase() + sentence.slice(1);
   }
 
   /* ============================================================
-     9) PIPELINE: lọc theo bán kính + chấm điểm + sắp xếp
+     9) PIPELINE: lọc theo bán kính + loại hình, rồi SẮP XẾP theo
+        3 tầng ưu tiên — KHÔNG dùng điểm số phù hợp (%) nữa.
+
+        Nếu người dùng chọn "Tôi sẵn sàng đi xa để tìm cơ sở phù hợp"
+        (q5 === 2): tự động chuyển bán kính về KHÔNG GIỚI HẠN, và
+        việc xếp hạng dựa hoàn toàn vào:
+          Tầng 1 — Target groups hỗ trợ (nhiều mục khớp hơn xếp trước)
+          Tầng 2 — Loại hình phòng khám đúng ý (Công lập/Tư nhân)
+          Tầng 3 — Dịch vụ thăm khám / chủ đề quan tâm (q8)
+        Khoảng cách chỉ dùng để phân định khi 3 tầng trên bằng nhau.
      ============================================================ */
   function computeMatches() {
+    const willingToTravelFar = state.answers.q5 === 2;
+    if (willingToTravelFar) {
+      // Tự động chuyển bán kính về "Không giới hạn" và đồng bộ lại
+      // dropdown để người dùng thấy đúng trạng thái đang áp dụng.
+      state.radiusKm = 0;
+      const radiusSelect = $('radiusSelect');
+      if (radiusSelect) radiusSelect.value = '0';
+    }
     const radius = state.radiusKm;
-    const ref = state.refPoint;
 
     // Lọc cứng theo loại hình cơ sở nếu người dùng CÓ chọn cụ thể
     // (bỏ qua nếu họ chọn "Không quan trọng")
@@ -462,18 +500,17 @@
     const wantedType = typePref !== undefined ? FACILITY_TYPE_OPTS[typePref] : null;
     const strictType = wantedType && wantedType.vi !== 'Không quan trọng' ? wantedType.vi : null;
 
-    const scored = state.clinics
+    const evaluated = state.clinics
       .map((c) => {
-        const d = ref ? haversineKm(ref, c) : null;
-        const s = scoreClinic(c, d);
-        return { clinic: c, distanceKm: d, ...s };
+        const d = state.refPoint ? haversineKm(state.refPoint, c) : null;
+        const e = evaluateClinic(c);
+        return { clinic: c, distanceKm: d, ...e };
       })
       .filter((m) => {
-        // Lọc bán kính
+        // Lọc bán kính (bỏ qua nếu không giới hạn)
         if (radius && radius !== 0 && m.distanceKm != null && m.distanceKm > radius) return false;
         // Lọc loại hình cơ sở — "Tổ chức cộng đồng" luôn được giữ lại
-        // bất kể người dùng chọn Công lập/Tư nhân, vì nhóm này không
-        // phân biệt theo loại hình mà theo giá & nhóm đối tượng.
+        // bất kể người dùng chọn Công lập/Tư nhân
         if (strictType) {
           const type = normType(m.clinic.clinic_type);
           if (type !== 'community') {
@@ -482,11 +519,32 @@
             if (isPublic !== wantsPublic) return false;
           }
         }
+        // Lọc target group: nếu cơ sở CÓ gắn tag nhóm đặc biệt (vd
+        // "Hỗ trợ Nhân viên Y Tế") và người dùng CÓ chọn nhóm đặc
+        // biệt cần hỗ trợ (q9), nhưng không trùng với bất kỳ tag nào
+        // của cơ sở đó — loại khỏi danh sách, vì cơ sở này chỉ
+        // chuyên biệt cho (những) nhóm khác, không phải nhóm bạn cần.
+        // Nếu người dùng KHÔNG chọn nhóm đặc biệt nào, không loại —
+        // chỉ đơn giản là cơ sở đó không được ưu tiên ở Tầng 1.
+        if (m.allSpecialTags.length > 0 && Array.isArray(state.answers.q9) && state.answers.q9.length > 0) {
+          if (m.matchedGroups.length === 0) return false;
+        }
         return true;
       })
-      .sort((a, b) => b.total - a.total);
+      .sort((a, b) => {
+        // Tầng 1 — Target groups hỗ trợ
+        if (b.targetGroupScore !== a.targetGroupScore) return b.targetGroupScore - a.targetGroupScore;
+        // Tầng 2 — Loại hình phòng khám đúng ý
+        if (b.typeExactMatch !== a.typeExactMatch) return (b.typeExactMatch ? 1 : 0) - (a.typeExactMatch ? 1 : 0);
+        // Tầng 3 — Dịch vụ thăm khám / chủ đề quan tâm
+        if (b.topicScore !== a.topicScore) return b.topicScore - a.topicScore;
+        // Cuối cùng — khoảng cách gần hơn xếp trước (nếu xác định được)
+        const da = a.distanceKm == null ? Infinity : a.distanceKm;
+        const db = b.distanceKm == null ? Infinity : b.distanceKm;
+        return da - db;
+      });
 
-    state.matches = scored;
+    state.matches = evaluated;
     state.currentIndex = 0;
   }
 
@@ -544,11 +602,6 @@
     tag.dataset.type = type;
     tag.textContent = c.clinic_type || (vi ? 'Không rõ' : 'Unknown');
 
-    $('rcScoreNum').textContent = m.total + '%';
-    const bar = $('rcScoreBar');
-    const circumference = 113; // 2 * PI * r(18) ≈ 113.1
-    bar.style.strokeDashoffset = String(circumference - (circumference * m.total) / 100);
-
     $('rcName').textContent = c.clinic_name || '—';
     $('rcVerifiedBadge').classList.toggle('hidden', !m.verified);
 
@@ -558,18 +611,18 @@
         ? (vi ? `Cách bạn ~ ${m.distanceKm.toFixed(1)} km` : `~ ${m.distanceKm.toFixed(1)} km away`)
         : (vi ? 'Không xác định được khoảng cách' : 'Distance unavailable');
 
-    // Ưu tiên link Google Maps thật (cột ggmaps_link) nếu admin đã
-    // nhập; nếu chưa có, tự tạo link tìm kiếm theo địa chỉ để nút
-    // vẫn hoạt động được ngay.
-    const directionsUrl =
-      (c.ggmaps_link && c.ggmaps_link.trim())
-        ? c.ggmaps_link.trim()
-        : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.address || c.clinic_name || '')}`;
-    $('rcDirections').href = directionsUrl;
+    // Chỉ dùng link Google Maps THẬT do admin nhập (cột ggmaps_link) —
+    // không tự tạo link. Nếu cơ sở chưa có link, ẩn nút đi.
+    const directionsBtn = $('rcDirections');
+    const hasDirectionsLink = !!(c.ggmaps_link && c.ggmaps_link.trim());
+    directionsBtn.classList.toggle('hidden', !hasDirectionsLink);
+    if (hasDirectionsLink) {
+      directionsBtn.href = c.ggmaps_link.trim();
+    }
 
     $('rcPhone').textContent = c.phone || '—';
     $('rcHours').textContent = c.operating_hours || '—';
-    $('rcPricing').textContent = c.pricing || '—';
+    $('rcPricing').textContent = (c.price && c.price.trim()) || c.pricing || '—';
     const webEl = $('rcWebsite');
     if (c.website) {
       webEl.href = c.website;
@@ -660,14 +713,14 @@
     state.matches.forEach((m, idx) => {
       const c = m.clinic;
       if (c.latitude == null || c.longitude == null) return;
-      const directionsUrl =
-        (c.ggmaps_link && c.ggmaps_link.trim())
-          ? c.ggmaps_link.trim()
-          : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.address || c.clinic_name || '')}`;
+      const hasDirectionsLink = !!(c.ggmaps_link && c.ggmaps_link.trim());
+      const directionsLine = hasDirectionsLink
+        ? `<br><a href="${c.ggmaps_link.trim()}" target="_blank" rel="noopener noreferrer">${state.lang === 'vi' ? 'Chỉ đường →' : 'Directions →'}</a>`
+        : '';
       const marker = L.marker([c.latitude, c.longitude], { icon: buildMarkerIcon(c, idx === state.currentIndex) })
         .addTo(state.map)
         .bindPopup(
-          `<div class="rm-popup"><b>${c.clinic_name}</b><br>${c.address || ''}<br><a href="${directionsUrl}" target="_blank" rel="noopener noreferrer">${state.lang === 'vi' ? 'Chỉ đường →' : 'Directions →'}</a></div>`
+          `<div class="rm-popup"><b>${c.clinic_name}</b><br>${c.address || ''}${directionsLine}</div>`
         );
       marker.on('click', () => {
         state.currentIndex = idx;
@@ -731,9 +784,19 @@
     $('nextClinic').addEventListener('click', goNext);
 
     const radiusSelect = $('radiusSelect');
-    const q5b = state.answers.q5b;
-    const suggested = q5b !== undefined ? MINUTES_TO_KM[q5b] : DEFAULT_RADIUS_KM;
-    radiusSelect.value = String(suggested ?? DEFAULT_RADIUS_KM);
+    const willingToTravelFar = state.answers.q5 === 2;
+    if (willingToTravelFar) {
+      // Người dùng đã chọn "sẵn sàng đi xa" — bán kính luôn là
+      // không giới hạn, khoá dropdown lại để tránh nhầm lẫn.
+      radiusSelect.value = '0';
+      radiusSelect.disabled = true;
+      state.radiusKm = 0;
+    } else {
+      const q5b = state.answers.q5b;
+      const suggested = q5b !== undefined ? MINUTES_TO_KM[q5b] : DEFAULT_RADIUS_KM;
+      radiusSelect.value = String(suggested ?? DEFAULT_RADIUS_KM);
+      state.radiusKm = Number(radiusSelect.value);
+    }
     radiusSelect.addEventListener('change', () => {
       state.radiusKm = Number(radiusSelect.value);
       computeMatches();
@@ -741,7 +804,6 @@
       renderCard();
       renderMarkers();
     });
-    state.radiusKm = Number(radiusSelect.value);
 
     const [refPoint, clinics] = await Promise.all([getReferencePoint(), loadClinics()]);
     state.refPoint = refPoint;
