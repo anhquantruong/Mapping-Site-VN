@@ -354,6 +354,10 @@ function showPage(page) {
         html += `<input class="text-input" id="textField" type="text" value="${val.replace(/"/g,'&quot;')}" placeholder="${t(step.placeholder)}">`;
       }
 
+      if(step.type === 'hihi'){
+        html += `<div class="sample-note">${t({vi:'Bạn có thể bỏ qua câu này!'})}</div>`;
+      }
+
       if(step.type === 'cascade'){
         html += `<div class="sample-note">${t({vi:'(Phạm vi hiện tại: TP. Hồ Chí Minh, sau sáp nhập 01/07/2025)'})}</div>`;
 
@@ -364,7 +368,7 @@ function showPage(page) {
               <button type="button" class="wf-btn wf-back" id="retryLocations">${t({vi:'Thử lại', en:'Retry'})}</button>`;
           } else {
             html += `<div class="wizard-hint">${t({vi:'Đang tải danh sách Phường…', en:'Loading the Ward list…'})}</div>`;
-          }
+        }
         } else {
           const cur = answers[step.key] || {};
           const provinces = locationsState.provinces;

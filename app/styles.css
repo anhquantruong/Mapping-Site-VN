@@ -150,6 +150,7 @@
     text-decoration: none;
     display:flex;
     align-items:center;
+    transform: translateY(40px);
   }
   .wordmark img{
     width: clamp(118px, 15vw, 148px);
@@ -270,7 +271,7 @@
     transition: background .18s ease, border-color .18s ease, color .18s ease;
   }
   .header-cta i{ font-size: 0.78rem; }
-  .header-cta:hover{ background: var(--plum); color: var(--surface); border-color: var(--plum); }
+  .header-cta:hover{ background: var(--plum); color: rgb(201, 201, 201); border-color: var(--plum); }
 
   .lang-toggle{
     display:flex;
@@ -562,7 +563,7 @@
     flex-shrink: 0;
   }
   .hero h1{
-    font-family: var(--font-display);
+    font-family: 'Fraunces', serif;
     font-weight: 550;
     letter-spacing: -0.015em;
     font-size: clamp(2rem, 4.4vw, 3.4rem);
@@ -621,7 +622,7 @@
   .cta-btn-invert:hover{ background: var(--bg-alt); color: var(--plum-deep); }
 
   .hero-note{
-    font-family: var(--font-data);
+    font-family: 'Fraunces', serif;
     font-size: 0.74rem;
     color: var(--ink-soft);
     opacity: 0.85;
@@ -671,7 +672,7 @@
     gap: 4px;
   }
   .hero-card-eyebrow{
-    font-family: var(--font-data);
+    font-family: 'Fraunces', serif;
     font-size: 0.62rem;
     font-weight: 600;
     letter-spacing: 0.06em;
@@ -679,14 +680,25 @@
     color: var(--ink-soft);
   }
   .hero-card-value{
-    font-family: var(--font-data);
+    font-family: 'Fraunces', serif;
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--plum);
   }
-  .hero-card-value small{ font-size: 0.6rem; font-weight: 500; color: var(--ink-soft); margin-left: 4px; }
-  .hero-card-1{ top: 12%; left: 8%; }
-  .hero-card-2{ bottom: 12%; right: 8%; }
+  .hero-card-value small{ 
+    font-size: 0.6rem; 
+    font-weight: 500; 
+    color: var(--ink-soft); 
+    margin-left: 4px; 
+  }
+  .hero-card-1{ 
+    top: 12%; 
+    left: 8%; 
+  }
+  .hero-card-2{ 
+    bottom: 12%; 
+    right: 8%; 
+  }
 
   @media (max-width: 900px){
     .hero{ grid-template-columns: 1fr; }
@@ -825,6 +837,14 @@
     margin-bottom: 16px;
     display:block;
   }
+  .trust-item h1{
+    font-family: var(--font-display);
+    font-weight: 560;
+    font-size: clamp(1.7rem, 3.6vw, 2.6rem);
+    letter-spacing: -0.01em;
+    margin: 0 0 14px;
+    color: #fff;
+  }
   .trust-item h4{
     font-family: var(--font-display);
     font-size: 1.05rem;
@@ -899,13 +919,16 @@
     flex-shrink: 0;
   }
   .about-h1{
-    font-family: var(--font-display);
-    font-size: clamp(2.4rem, 5vw, 3.8rem);
-    font-weight: 550;
-    line-height: 1.08;
-    letter-spacing: -0.02em;
-    color: var(--ink);
     margin: 0 0 22px;
+
+  font-family: 'Fraunces', serif;
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 500;
+
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+
+  color: var(--ink);
   }
   .about-intro{
     font-size: 1.02rem;

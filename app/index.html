@@ -9,7 +9,7 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>PsychMapVN</title>
+  <title>PsyMapVN</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,8 +33,8 @@
   <header class="site-header">
     <div class="header-top">
 
-      <a class="wordmark" href="#" aria-label="PsychMapVN">
-        <img src="assets/m-logo.png" alt="Logo of PsychMapVN">
+      <a class="wordmark" href="#" aria-label="PsyMapVN">
+        <img src="assets/m-logo.png" alt="Logo of PsyMapVN">
       </a>
 
       <button
@@ -147,7 +147,7 @@
           </div>
           <div class="mega-col">
             <h4><span lang-el="vi">Khám phá thêm</span><span lang-el="en">Explore</span></h4>
-            <a href="#" onclick="event.preventDefault(); showPage('about');"><span lang-el="vi">Về PsychMapVN</span><span lang-el="en">About PsychMapVN</span></a>
+            <a href="#" onclick="event.preventDefault(); showPage('about');"><span lang-el="vi">Về PsyMapVN</span><span lang-el="en">About PsyMapVN</span></a>
             <a href="#" onclick="event.preventDefault(); showPage('practice');"><span lang-el="vi">Bài tập thư giãn</span><span lang-el="en">Wellness exercises</span></a>
           </div>
         </div>
@@ -164,7 +164,7 @@
       <div class="mega-inner">
         <div class="mega-lead">
           <span class="mega-lead-label"><span lang-el="vi">Giới thiệu</span><span lang-el="en">About</span></span>
-          <p><span lang-el="vi">Tìm hiểu sứ mệnh và đội ngũ đứng sau PsychMapVN.</span><span lang-el="en">Learn about the mission and team behind PsychMapVN.</span></p>
+          <p><span lang-el="vi">Tìm hiểu sứ mệnh và đội ngũ đứng sau PsyMapVN.</span><span lang-el="en">Learn about the mission and team behind PsyMapVN.</span></p>
           <a class="mega-lead-link" href="#" onclick="event.preventDefault(); showPage('about');">
             <span lang-el="vi">Xem đầy đủ</span><span lang-el="en">See full page</span> <i class="fa-solid fa-arrow-right"></i>
           </a>
@@ -172,7 +172,7 @@
         <div class="mega-links">
           <div class="mega-col">
             <h4><span lang-el="vi">Nội dung</span><span lang-el="en">Contents</span></h4>
-            <a href="#" onclick="event.preventDefault(); showPage('about');"><span lang-el="vi">Về PsychMapVN</span><span lang-el="en">About PsychMapVN</span></a>
+            <a href="#" onclick="event.preventDefault(); showPage('about');"><span lang-el="vi">Về PsyMapVN</span><span lang-el="en">About PsyMapVN</span></a>
             <a href="#" onclick="event.preventDefault(); showPage('about'); setTimeout(()=>document.querySelector('.team-grid')?.scrollIntoView({behavior:'smooth'}),150);"><span lang-el="vi">Đội ngũ đồng hành</span><span lang-el="en">Our team</span></a>
           </div>
           <div class="mega-col">
@@ -220,7 +220,7 @@
       <div class="mega-inner">
         <div class="mega-lead">
           <span class="mega-lead-label"><span lang-el="vi">Trợ giúp</span><span lang-el="en">Help</span></span>
-          <p><span lang-el="vi">Hướng dẫn sử dụng và kênh gửi góp ý cho đội ngũ PsychMapVN.</span><span lang-el="en">How-to guides and feedback channels for the PsychMapVN team.</span></p>
+          <p><span lang-el="vi">Hướng dẫn sử dụng và kênh gửi góp ý cho đội ngũ PsyMapVN.</span><span lang-el="en">How-to guides and feedback channels for the PsyMapVN team.</span></p>
           <a class="mega-lead-link" href="#" onclick="event.preventDefault(); showPage('help');">
             <span lang-el="vi">Đến trang trợ giúp</span><span lang-el="en">Go to help center</span> <i class="fa-solid fa-arrow-right"></i>
           </a>
@@ -251,15 +251,14 @@
     <section class="hero">
       <div class="hero-copy">
         <div class="hero-eyebrow">
-          <span lang-el="vi">PsychMapVN · Bản đồ dịch vụ sức khoẻ tâm thần</span>
-          <span lang-el="en">PsychMapVN · Mental Health Service Directory</span>
+          <span lang-el="vi">PsyMapVN · Bản đồ dịch vụ sức khoẻ tâm thần</span>
+          <span lang-el="en">PsyMapVN · Mental Health Service Directory</span>
         </div>
         <h1 class="hero-title" id="heroTitle">
-          <span class="typing-line" lang-el="vi">
-            <span class="typing-text" id="heroTypingVi"></span><span class="typing-cursor" aria-hidden="true"></span>
-          </span>
-          <span class="typing-line" lang-el="en">
-            <span class="typing-text" id="heroTypingEn"></span><span class="typing-cursor" aria-hidden="true"></span>
+          <span class="typing-line">
+            <span class="typing-text" id="heroTypingVi" lang-el="vi"></span>
+            <span class="typing-text" id="heroTypingEn" lang-el="en"></span>
+            <span class="typing-cursor" aria-hidden="true"></span>
           </span>
         </h1>
         <p class="hero-sub">
@@ -268,12 +267,12 @@
         </p>
         <div class="hero-actions">
           <button class="cta-btn" id="startBtn" type="button">
-            <span lang-el="vi">Bắt đọc sàng lọc ngay!</span>
+            <span lang-el="vi">Bắt đầu sàng lọc ngay!</span>
             <span lang-el="en">Start screening now!</span>
           </button>
           <span class="hero-note">
-            <span lang-el="vi">Kết quả gợi ý từ AI sẽ được kết nối riêng sau bước sàng lọc này</span>
-            <span lang-el="en">AI-matched results will be connected separately after this screening</span>
+            <span lang-el="vi">Kết quả gợi ý sẽ được kết nối riêng sau bước sàng lọc này</span>
+            <span lang-el="en">Recommendations will be connected separately after this screening</span>
           </span>
         </div>
       </div>
@@ -329,7 +328,7 @@
                 <span>1:</span><span class="counter" data-target="100000">0</span>
               </div>
               <div class="stat-label">
-                <span lang-el="vi">tỷ lệ bác sĩ tâm thần trên dân số <a href="https://nhandan.vn/con-nhieu-khoang-trong-trong-cham-soc-suc-khoe-tam-than-post956100.html">(Báo Nhân dân)</a></span>
+                <span lang-el="vi">tỷ lệ bác sĩ tâm thần trên dân số <a href="https://nhandan.vn/con-nhieu-khoang-trong-trong-cham-soc-suc-khoe-tam-than-post956100.html"><br>(Báo Nhân dân)</a></span>
                 <span lang-el="en">psychiatrist-to-population ratio in Vietnam <a href="https://nhandan.vn/con-nhieu-khoang-trong-trong-cham-soc-suc-khoe-tam-than-post956100.html">(Nhan Dan Newspaper)</a></span>
               </div>
             </div>
@@ -409,6 +408,14 @@
       </div>
     </section>
 
+    <section class="journey-section">
+      <div class="journey-inner">
+        <h2 class="journey-heading">
+          <span>Testimonials</span>
+        </h2>
+      </div>
+    </section>
+
     <!-- ============ CLOSING CTA BANNER ============ -->
     <section class="cta-banner">
       <div class="cta-banner-inner">
@@ -419,7 +426,6 @@
         </button>
       </div>
     </section>
-
   </main>
 
   <main class="page hidden" id="pageHelp">
@@ -675,8 +681,8 @@
         <div class="practice-card-content">
 
           <span class="practice-card-label">
-            <span lang-el="vi">3 phút</span>
-            <span lang-el="en">3 min</span>
+            <span lang-el="vi">Bài tập thư giãn</span>
+            <span lang-el="en">Mental wellness exercises</span>
           </span>
 
           <h2>
@@ -1097,8 +1103,8 @@
       </div>
 
       <h1 class="about-h1">
-        <span lang-el="vi">Về PsychMapVN</span>
-        <span lang-el="en">About PsychMapVN</span>
+        <span lang-el="vi">Về PsyMapVN</span>
+        <span lang-el="en">About PsyMapVN</span>
       </h1>
 
       <p class="about-intro">
@@ -1184,8 +1190,8 @@
   <div class="footer-main">
 
     <div class="footer-brand">
-      <div class="footer-wordmark">PsychMapVN</div>
-
+      <div class="footer-wordmark">
+      <img src="assets/2.png" alt="Logo of PsyMapVN"></div>
       <p class="footer-description">
         <span lang-el="vi">
           Không gian tìm kiếm sự hỗ trợ tâm lý an toàn, tôn trọng và phù hợp
@@ -1317,12 +1323,16 @@
   <div class="footer-bottom">
 
     <p>
-      © 2026 PsychMapVN.
-      <span lang-el="vi">Bảo quyền thuộc PsychMapVN. </span>
-      <span lang-el="en">Copyrights owned by PsychMapVN. </span>
+      © 2026 PsyMapVN.
+      <span lang-el="vi">Bảo quyền thuộc PsyMapVN. </span>
+      <span lang-el="en">Copyrights owned by PsyMapVN. </span>
       <span lang-el="vi">Bảo lưu mọi quyền.</span>
       <span lang-el="en">All rights reserved.</span>
     </p>
+
+    <h1>
+      MADE WITH LOVE ❤️
+    </h1>
   </div>
 
 </footer>

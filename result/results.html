@@ -1,33 +1,15 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MappingSiteVN · Kết quả gợi ý</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap"
-    rel="stylesheet"
-  >
-
-  <!-- Dùng lại toàn bộ biến màu / font / reset đã có trong styles.css -->
+  <link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600;7..72,700&family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../app/styles.css">
   <link rel="stylesheet" href="results.css">
-
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-  >
-
-  <!-- Leaflet + OpenStreetMap: thư viện bản đồ mã nguồn mở, MIỄN PHÍ,
-       KHÔNG cần API key — dùng tạm thay Google Maps SDK trong lúc
-       chưa có gói Google Maps Pro. Khi có API key, chỉ cần thay khối
-       khởi tạo bản đồ trong results.js bằng Google Maps JS API,
-       phần logic lọc/điểm số/pipeline bên dưới giữ nguyên. -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-
 </head>
 <body data-theme="light" data-lang="vi">
 
@@ -51,23 +33,54 @@
   </nav>
 
   <main class="results-page" id="resultsPage">
+    <section class="rp-hero">
+      <div class="rp-hero-inner">
+        <div class="rp-hero-text">
+          <span class="rp-eyebrow">
+            <span lang-el="vi">Kết quả gợi ý · Mây đồng hành cùng bạn</span>
+            <span lang-el="en">Recommended results · Mây, guiding your way</span>
+          </span>
 
-    <div class="results-intro">
-      <span class="results-eyebrow">
-        <span lang-el="vi">KẾT QUẢ GỢI Ý · MÂY</span>
-        <span lang-el="en">RECOMMENDED RESULTS · MÂY</span>
-      </span>
+          <h1 id="resultsHeadline" class="rp-headline">
+            <span lang-el="vi">Đang tìm cơ sở phù hợp với bạn…</span>
+            <span lang-el="en">Finding facilities that fit you…</span>
+          </h1>
 
-      <h1 id="resultsHeadline">
-        <span lang-el="vi">Đang tìm cơ sở phù hợp với bạn…</span>
-        <span lang-el="en">Finding facilities that fit you…</span>
-      </h1>
+          <p id="resultsSub" class="rp-sub"></p>
+        </div>
+        <svg class="rp-hero-art" viewBox="0 0 300 190" fill="none" aria-hidden="true" focusable="false">
+          <ellipse cx="215" cy="46" rx="46" ry="22" class="rp-art-cloud"/>
+          <ellipse cx="182" cy="56" rx="30" ry="16" class="rp-art-cloud"/>
+          <path d="M40 150 C 80 120, 70 80, 120 90 S 190 130, 235 70" class="rp-art-path"/>
+          <circle cx="40" cy="150" r="7" class="rp-art-pin rp-art-pin-start"/>
+          <circle cx="235" cy="70" r="9" class="rp-art-pin rp-art-pin-end"/>
+          <path d="M235 55 l0 -14 M228 48 l14 0" class="rp-art-plus"/>
+        </svg>
+      </div>
+    </section>
 
-      <p id="resultsSub" class="results-sub"></p>
+    <div class="rp-trailbar">
+      <div class="rp-trail-field">
+        <label for="radiusSelect">
+          <i class="fa-solid fa-route" aria-hidden="true"></i>
+          <span lang-el="vi">Bán kính tìm kiếm</span>
+          <span lang-el="en">Search radius</span>
+        </label>
+        <select id="radiusSelect">
+          <option value="2">2 km</option>
+          <option value="5" selected>5 km</option>
+          <option value="8">8 km</option>
+          <option value="15">15 km</option>
+          <option value="25">25 km</option>
+          <option value="0">Không giới hạn</option>
+        </select>
+      </div>
+
+      <div class="rp-trail-count" id="resultsCount"></div>
     </div>
 
-    <div class="mock-banner hidden" id="mockBanner">
-      <i class="fa-solid fa-triangle-exclamation"></i>
+    <div class="rp-mock hidden" id="mockBanner">
+      <i class="fa-solid fa-flask-vial" aria-hidden="true"></i>
       <span lang-el="vi">
         Không kết nối được <code>/api/clinics</code> — đang hiển thị <b>DỮ LIỆU MẪU</b> để test giao diện, không phải phòng khám thật trong database.
       </span>
@@ -76,39 +89,18 @@
       </span>
     </div>
 
-    <div class="results-toolbar">
-      <div class="results-radius">
-        <label for="radiusSelect">
-          <span lang-el="vi">Bán kính tìm kiếm</span>
-          <span lang-el="en">Search radius</span>
-        </label>
-        <select id="radiusSelect">
-          <option value="2">2 km</option>
-          <option value="5" selected>5 km</option>
-          <option value="8">8 km</option>
-          <option value="0">—</option>
-        </select>
-      </div>
-
-      <div class="results-count" id="resultsCount"></div>
-    </div>
-
-    <div class="results-body">
-
-      <section class="results-stack">
-
-        <div class="results-card-shell" id="resultsCardShell">
-
-          <div class="results-loading" id="resultsLoading">
-            <div class="results-spinner"></div>
+    <div class="rp-layout">
+      <section class="rp-dossier">
+        <div class="rp-card-shell" id="resultsCardShell">
+          <div class="rp-loading" id="resultsLoading">
+            <div class="rp-spinner"></div>
             <p>
               <span lang-el="vi">Đang phân tích nhu cầu và đối chiếu với cơ sở dữ liệu…</span>
               <span lang-el="en">Analyzing your needs and matching against our database…</span>
             </p>
           </div>
-
-          <div class="results-empty hidden" id="resultsEmpty">
-            <i class="fa-solid fa-map-location-dot"></i>
+          <div class="rp-empty hidden" id="resultsEmpty">
+            <i class="fa-solid fa-map-location-dot" aria-hidden="true"></i>
             <h3>
               <span lang-el="vi">Chưa tìm thấy cơ sở phù hợp trong bán kính này</span>
               <span lang-el="en">No matching facility found within this radius</span>
@@ -118,96 +110,127 @@
               <span lang-el="en">Try expanding the search radius above.</span>
             </p>
           </div>
-
-          <article class="results-card hidden" id="resultsCard">
-
-            <div class="rc-top">
+          <article class="rp-card hidden" id="resultsCard">
+            <div class="rp-card-tab">
               <span class="rc-type-tag" id="rcTypeTag"></span>
             </div>
-
-            <h2 class="rc-name">
-              <span id="rcName"></span>
-              <span id="rcVerifiedBadge" class="rc-verified hidden">
-                <i class="fa-solid fa-circle-check"></i>
-              </span>
-            </h2>
-
-            <p class="rc-address" id="rcAddress"></p>
-            <p class="rc-distance" id="rcDistance"></p>
-
-            <a class="rc-directions-btn" id="rcDirections" href="#" target="_blank" rel="noopener noreferrer">
-              <i class="fa-solid fa-diamond-turn-right"></i>
-              <span lang-el="vi">Chỉ đường trên Google Maps</span>
-              <span lang-el="en">Get directions on Google Maps</span>
-            </a>
-
-            <div class="rc-info-grid">
-              <div class="rc-info-item">
-                <i class="fa-solid fa-phone"></i>
-                <span id="rcPhone">—</span>
-              </div>
-              <div class="rc-info-item">
-                <i class="fa-solid fa-clock"></i>
-                <span id="rcHours">—</span>
-              </div>
-              <div class="rc-info-item">
-                <i class="fa-solid fa-sack-dollar"></i>
-                <span id="rcPricing">—</span>
-              </div>
-              <div class="rc-info-item">
-                <i class="fa-solid fa-globe"></i>
-                <a id="rcWebsite" href="#" target="_blank" rel="noopener noreferrer">—</a>
+            <div class="rp-card-scroll">
+              <h2 class="rp-card-name">
+                <span id="rcName"></span>
+                <span id="rcVerifiedBadge" class="rp-verified hidden">
+                  <i class="fa-solid fa-stamp" aria-hidden="true"></i>
+                  <span lang-el="vi">Xác nhận</span>
+                  <span lang-el="en">Verified</span>
+                </span>
+              </h2>
+              <p class="rp-card-address" id="rcAddress"></p>
+              <p class="rp-card-distance" id="rcDistance"></p>
+              <a class="rp-directions-btn" id="rcDirections" href="#" target="_blank" rel="noopener noreferrer">
+                <i class="fa-solid fa-diamond-turn-right" aria-hidden="true"></i>
+                <span lang-el="vi">Chỉ đường trên Google Maps</span>
+                <span lang-el="en">Get directions on Google Maps</span>
+              </a>
+              <dl class="rp-card-grid">
+                <div class="rp-card-field">
+                  <dt><i class="fa-solid fa-phone" aria-hidden="true"></i><span lang-el="vi">Điện thoại</span><span lang-el="en">Phone</span></dt>
+                  <dd id="rcPhone">—</dd>
+                </div>
+                <div class="rp-card-field">
+                  <dt><i class="fa-solid fa-clock" aria-hidden="true"></i><span lang-el="vi">Giờ làm việc</span><span lang-el="en">Hours</span></dt>
+                  <dd id="rcHours">—</dd>
+                </div>
+                <div class="rp-card-field">
+                  <dt><i class="fa-solid fa-sack-dollar" aria-hidden="true"></i><span lang-el="vi">Chi phí</span><span lang-el="en">Pricing</span></dt>
+                  <dd id="rcPricing">—</dd>
+                </div>
+                <div class="rp-card-field">
+                  <dt><i class="fa-solid fa-globe" aria-hidden="true"></i><span lang-el="vi">Website</span><span lang-el="en">Website</span></dt>
+                  <dd><a id="rcWebsite" href="#" target="_blank" rel="noopener noreferrer">—</a></dd>
+                </div>
+              </dl>
+              <p class="rp-card-desc" id="rcDesc"></p>
+              <div class="rp-card-chips" id="rcTargetGroups"></div>
+              <div class="rp-card-license" id="rcLicense"></div>
+              <div class="rp-ai-box">
+                <div class="rp-ai-label">
+                  <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
+                  <span lang-el="vi">Vì sao Mây gợi ý cơ sở này</span>
+                  <span lang-el="en">Why Mây recommends this facility</span>
+                </div>
+                <p id="rcAiExplain"></p>
               </div>
             </div>
-
-            <p class="rc-desc" id="rcDesc"></p>
-
-            <div class="rc-chips" id="rcTargetGroups"></div>
-
-            <div class="rc-license" id="rcLicense"></div>
-
-            <div class="rc-ai-box">
-              <div class="rc-ai-label">
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
-                <span lang-el="vi">Vì sao Mây gợi ý cơ sở này</span>
-                <span lang-el="en">Why Mây recommends this facility</span>
-              </div>
-              <p id="rcAiExplain"></p>
-            </div>
-
           </article>
-
         </div>
-
-        <div class="results-nav">
-          <button class="wf-btn wf-back" id="prevClinic" type="button">
-            <span lang-el="vi">Quay lại</span>
-            <span lang-el="en">Back</span>
-          </button>
-
-          <div class="results-progress" id="resultsProgress">– / –</div>
-
-          <button class="wf-btn wf-next" id="nextClinic" type="button">
-            <span lang-el="vi">Đề xuất tiếp theo</span>
-            <span lang-el="en">Next suggestion</span>
-          </button>
-        </div>
-
       </section>
-
-      <section class="results-map-wrap">
+      <section class="rp-map-col">
         <div id="resultsMap"></div>
         <div class="map-legend">
           <span><i class="map-dot dot-public"></i><span lang-el="vi">Công lập</span><span lang-el="en">Public</span></span>
           <span><i class="map-dot dot-private"></i><span lang-el="vi">Tư nhân</span><span lang-el="en">Private</span></span>
           <span><i class="map-dot dot-community"></i><span lang-el="vi">Tổ chức cộng đồng</span><span lang-el="en">Community org.</span></span>
-          <span><i class="fa-solid fa-circle-check map-verified-ic"></i><span lang-el="vi">Đã xác nhận GPHĐ</span><span lang-el="en">Verified license</span></span>
+          <span><i class="fa-solid fa-circle-check map-verified-ic" aria-hidden="true"></i><span lang-el="vi">Đã xác nhận GPHĐ</span><span lang-el="en">Verified license</span></span>
         </div>
       </section>
+    </div>
+  </main>
+  <div class="rp-actionbar" role="navigation" aria-label="Điều hướng kết quả gợi ý">
+    <button class="rp-nav-btn rp-nav-prev" id="prevClinic" type="button">
+      <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+      <span lang-el="vi">Quay lại</span>
+      <span lang-el="en">Back</span>
+    </button>
+      <div class="rp-progress" id="resultsProgress">– / –</div>
+    <button class="rp-nav-btn rp-nav-next" id="nextClinic" type="button">
+      <span lang-el="vi">Đề xuất tiếp theo</span>
+      <span lang-el="en">Next suggestion</span>
+      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+    </button>
+  </div>
+
+  <footer class="rp-footer">
+    <div class="rp-footer-inner">
+      <div class="rp-footer-brand">
+        <span class="rp-footer-word">MappingSiteVN</span>
+        <p>
+          <span lang-el="vi">Công cụ do Mây hỗ trợ, giúp bạn tìm cơ sở chăm sóc sức khoẻ tinh thần phù hợp gần bạn tại TP. Hồ Chí Minh.</span>
+          <span lang-el="en">A Mây-assisted tool to help you find a nearby mental-health facility that fits you, in Ho Chi Minh City.</span>
+        </p>
+      </div>
+      <div class="rp-footer-crisis">
+        <div class="rp-footer-crisis-head">
+          <i class="fa-solid fa-heart-pulse" aria-hidden="true"></i>
+          <span lang-el="vi">Nếu bạn đang trong khủng hoảng ngay lúc này</span>
+          <span lang-el="en">If you're in crisis right now</span>
+        </div>
+        <ul>
+          <li>
+            <b>115</b>
+            <span lang-el="vi">— Cấp cứu y tế, hoạt động 24/7 trên toàn quốc.</span>
+            <span lang-el="en">— Medical emergency line, nationwide, 24/7.</span>
+          </li>
+          <li>
+            <b>111</b>
+            <span lang-el="vi">— Tổng đài quốc gia bảo vệ trẻ em, tư vấn tâm lý miễn phí 24/7 (ưu tiên dưới 16 tuổi).</span>
+            <span lang-el="en">— National child-protection line, free 24/7 counseling (priority under 16).</span>
+          </li>
+        </ul>
+        <p class="rp-footer-note">
+          <span lang-el="vi">MappingSiteVN là công cụ tra cứu, không thay thế cấp cứu y tế hoặc can thiệp khủng hoảng khẩn cấp.</span>
+          <span lang-el="en">MappingSiteVN is a directory tool — it does not replace emergency medical or crisis care.</span>
+        </p>
+      </div>
+
+      <div class="rp-footer-legal">
+        <p>
+          <span lang-el="vi">Thông tin cơ sở do MappingSiteVN tổng hợp và có thể chưa cập nhật. Vui lòng liên hệ trực tiếp để xác nhận trước khi đến.</span>
+          <span lang-el="en">Facility details are compiled by MappingSiteVN and may be out of date. Please confirm directly before visiting.</span>
+        </p>
+        <p class="rp-footer-copy">© 2026 MappingSiteVN</p>
+      </div>
 
     </div>
-
-  </main>
+  </footer>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="results.js"></script>

@@ -1,7 +1,8 @@
-  const LOCATIONS_API = 'https://provinces.open-api.vn/api/v2/?depth=2';
-  const SCOPE_PROVINCE_MATCH = ['Hồ Chí Minh']; 
+const LOCATIONS_API = 'https://provinces.open-api.vn/api/v2/?depth=2';
+  const SCOPE_PROVINCE_MATCH = ['Hồ Chí Minh', 'Đồng Nai']; 
   const PROVINCE_EN_NAMES = {
     'Hồ Chí Minh': 'Ho Chi Minh City',
+    'Đồng Nai': 'Dong Nai City',
   };
   function wardEnGuess(viName){
     if(viName.startsWith('Phường ')) return viName.replace('Phường ', '') + ' Ward';
@@ -70,6 +71,7 @@
       ]},
     { key:'q3', type:'single', required: false,
       q:{vi:'Giới tính của người cần tham vấn là gì?', en:'What is the gender of the person who needs counseling?'},
+      
       options:[
         {vi:'Nam', en:'Male'},
         {vi:'Nữ', en:'Female'},
@@ -78,7 +80,7 @@
         {vi:'Không muốn tiết lộ', en:'Prefer not to say'},
       ]},
     { key:'q4', type:'cascade', required:true,
-      q:{vi:'Bạn đang sinh sống tại địa phương nào?', en:'Where would you like to find a counseling facility?'},
+      q:{vi:'Bạn đang sinh sống tại địa phương nào?', en:'Where do you currently live now?'},
       hint:{vi:'Chọn Tỉnh/Thành trước, sau đó chọn Phường.', en:'Select a Province/City first, then a Ward.'}},
     
     { key:'q5', type:'single', required:true,
@@ -89,16 +91,6 @@
         {vi:'Tôi sẵn sàng đi xa để tìm cơ sở phù hợp', en:'I’m willing to travel farther to find a suitable facility.'},
       ]},
 
-    { key:'q5b', type:'single', required:true,
-      showIf:a => a.q5 === 0,
-      q:{vi:'Bạn sẵn sàng đi trong tối đa bao nhiêu lâu?', en:"How long are you willing to travel?"},
-      options:[
-        {vi:'15 phút', en:'15 minutes'},
-        {vi:'30 phút', en:'30 minutes'},
-        {vi:'45 phút', en:'45 minutes'},
-        {vi:'Không giới hạn', en:'No limit'},
-      ]},
-
     { key:'q6', type:'single', required:true,
       q:{vi:'Bạn muốn tìm cơ sở tham vấn nào?', en:'What type of facility are you looking for?'},
       options:[
@@ -107,14 +99,6 @@
         {vi:'Không quan trọng', en:'No preference'},
       ]},
 
-    { key:'q7', type:'single', required:true,
-      q:{vi:'Bạn muốn tìm cơ sở chi phí khám như nào?', en:'Pricing?'},
-      options:[
-        {vi:'100K-500K', en:'100K-500K'},
-        {vi:'500K-1000K', en:'500K-1000K'},
-        {vi:'Trên 1000K', en:'Over 1000K'},
-        {vi:'Không quan trọng', en:'No preference'},
-      ]},
     { key:'q8', type:'multi', required:true,
       q:{vi:'Chủ đề bạn đang quan tâm', en:'Which topics are you concerned about?'},
       hint:{vi:'Có thể chọn nhiều đáp án.', en:'You may select more than one.'},

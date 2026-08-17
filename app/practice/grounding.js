@@ -177,7 +177,7 @@ let groundingReturnTimeout = null;
 // ĐANG TEST
 // 1 giây mỗi bước
 
-const GROUNDING_STEP_DURATION = 25 * 1000;
+const GROUNDING_STEP_DURATION = 15 * 1000;
 
 
 // Khi hoàn thành test xong,

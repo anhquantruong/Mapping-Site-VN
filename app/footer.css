@@ -74,6 +74,11 @@ color: var(--ink);
 margin-bottom: 20px;
 }
 
+.footer-wordmark img {
+max-width: 150px; 
+max-height: 150px;
+}
+
 .footer-description {
 max-width: 420px;
 color: var(--ink-soft);
@@ -174,16 +179,25 @@ border-color: var(--plum);
 grid-column: 1 / -1;
 
 border-top: 1px solid var(--border);
-padding: 10px 10px 10px;
+padding: 10px 10px 5px;
 
 text-align: center;
 background: #ffffff;
 }
+
 .footer-bottom p {
 margin: 0;
 color: var(--ink-soft);
 font-size: 0.78rem;
 }
+
+.footer-bottom h1{
+  font-family: "Boldonse", system-ui;
+  font-size: clamp(1rem, 3vw, 2rem);
+  font-weight: 50;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  }
 
 .footer-disclaimer {
 max-width: 900px;
@@ -237,13 +251,13 @@ padding: 40px 24px 32px;
 grid-column: auto;
   }
 
-  .footer-partners {
+.footer-partners {
   grid-column: auto;
   gap: 20px;
   margin: 0 0 24px;
   }
 
-  .footer-partners img {
+.footer-partners img {
   height: 56px;
   }
 
